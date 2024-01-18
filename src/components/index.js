@@ -1,7 +1,5 @@
-import UTDWindow from "./UTDWindow/UTDWindow.vue";
-import UTDButton from "./UTDButton/UTDButton.vue"
+import Pickers from "./Pickers";
 
 export default {
-  // UTDWindow,
-  // UTDButton,
+  Pickers,
 };

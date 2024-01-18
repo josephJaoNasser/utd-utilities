@@ -1,30 +1,20 @@
 <template>
   <div id="app">
-    <UTDButton @click="test" variant="primary"> Hello world! </UTDButton>
+    <Pickers />
   </div>
 </template>
 
 <script>
 import UTDButton from "./components/UTDButton";
+import Pickers from "./components/Pickers";
 
 export default {
   name: "App",
-  components: { UTDButton },
+  components: { UTDButton, Pickers },
   methods: {
     test() {
-      alert("Hello world!");
+      alert("yo");
     },
   },
 };
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
