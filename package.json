@@ -1,17 +1,17 @@
 {
-  "name": "utd-pickers",
+  "name": "utd-utilities",
   "version": "0.1.0",
   "private": true,
-  "main": "dist/utd-pickers.common.js",
-  "module": "dist/utd-pickers.umd.min.js",
+  "main": "dist/utd-utilities.common.js",
+  "module": "dist/utd-utilities.umd.min.js",
   "files": [
     "dist"
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "npm run build:lib && npm run build:styles",
-    "build:lib": "vue-cli-service build --target lib --name utd-pickers src/index.js",
-    "build:styles": "sass src/styles:dist"
+    "build:lib": "vue-cli-service build --target lib --name utd-utilities src/index.js",
+    "build:styles": "sass src/assets/scss/utd-utilities.scss"
   },
   "dependencies": {
     "axios": "^1.6.5",

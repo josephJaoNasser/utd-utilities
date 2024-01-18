@@ -1,7 +1,7 @@
 import * as components from './components'
 
 const componentsList = components?.default
-const UTDPickers =  {
+const UTDUtilities =  {
   install(Vue) {
     console.log("build build build")
     Object.keys(componentsList).forEach(name => {
@@ -11,4 +11,4 @@ const UTDPickers =  {
   }
 }
 
-export default UTDPickers
+export default UTDUtilities

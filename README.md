@@ -1,4 +1,4 @@
-# utd-pickers
+# utd-utilities
 
 ## Project setup
 ```

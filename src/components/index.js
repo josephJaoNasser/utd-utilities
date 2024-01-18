@@ -1,5 +1,7 @@
-import Pickers from "./Pickers";
+import PhotoUtilities from "./PhotoUtilities";
+import UTDButton from "./UTDButton";
 
 export default {
-  Pickers,
+  PhotoUtilities,
+  UTDButton,
 };

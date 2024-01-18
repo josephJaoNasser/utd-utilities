@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <Pickers />
+    <PhotoUtilities />
   </div>
 </template>
 
 <script>
 import UTDButton from "./components/UTDButton";
-import Pickers from "./components/Pickers";
+import PhotoUtilities from "./components/PhotoUtilities";
 
 export default {
   name: "App",
-  components: { UTDButton, Pickers },
+  components: { UTDButton, PhotoUtilities },
   methods: {
     test() {
       alert("yo");
@@ -18,3 +18,4 @@ export default {
   },
 };
 </script>
+./components/PhotoUtilities
