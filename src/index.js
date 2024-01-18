@@ -1,14 +1,13 @@
-import * as components from './components'
+import * as components from "./components";
 
-const componentsList = components?.default
-const UTDUtilities =  {
+const componentsList = components?.default;
+console.log("building");
+const UTDUtilities = {
   install(Vue) {
-    console.log("build build build")
-    Object.keys(componentsList).forEach(name => {
-      console.log(name)
-      Vue.component(name, componentsList[name])
-    })
-  }
-}
+    Object.keys(componentsList).forEach((name) => {
+      Vue.component(name, componentsList[name]);
+    });
+  },
+};
 
-export default UTDUtilities
+export default UTDUtilities;
