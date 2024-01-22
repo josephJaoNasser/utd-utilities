@@ -5,6 +5,8 @@
  * @returns
  */
 export default function queryBuilder(obj) {
+  if (!obj) return "";
+
   const queryValues = Object.keys(obj)
     .filter(([key, value]) => value !== null && value !== undefined)
     .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)

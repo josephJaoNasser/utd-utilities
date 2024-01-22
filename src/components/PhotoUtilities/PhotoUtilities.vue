@@ -9,10 +9,17 @@
           style="background-color: #f1f4f7"
         >
           <div class="mb-5">
-            <UTDButton block variant="primay" class="mb-4">
+            <UTDButton
+              block
+              variant="primay"
+              class="mb-4"
+              @click="showUploader = true"
+            >
               Upload Photo
             </UTDButton>
-            <UTDButton block variant="primay">Create Album</UTDButton>
+            <UTDButton block variant="primay" @click="showCreateAlbum = true">
+              Create Album
+            </UTDButton>
           </div>
 
           <b-nav vertical>
@@ -49,18 +56,30 @@
 
         <!-- Main section -->
         <b-col sm="8" md="9" class="p-4">
-          <PhotoViewer v-if="currentUtility === UtilityTypes.photo" />
+          <PhotoViewer
+            :class="[currentUtility !== UtilityTypes.photo && 'd-none']"
+            :token="token"
+          />
+          <Albums
+            :class="[currentUtility !== UtilityTypes.album && 'd-none']"
+            :token="token"
+            :account-id="accountId"
+          />
         </b-col>
       </b-row>
     </b-container>
+    <Uploader :show="showUploader" @close="showUploader = false" />
+    <CreateAlbum :show="showCreateAlbum" @close="showCreateAlbum = false" />
   </b-card>
 </template>
 
 <script>
 import PhotoViewer from "../PhotoViewer";
-import AlbumPicker from "../AlbumPicker/AlbumPicker.vue";
+import Albums from "../Albums";
 import AIArtCreator from "../AIArtCreator/AIArtCreator.vue";
 import UTDButton from "../UTDButton";
+import Uploader from "./Uploader.vue";
+import CreateAlbum from "./CreateAlbum.vue";
 
 const utilTypes = {
   photo: "photo",
@@ -73,13 +92,22 @@ export default {
   name: "PhotoUtilities",
   components: {
     PhotoViewer,
-    AlbumPicker,
+    Albums,
     AIArtCreator,
     UTDButton,
+    Uploader,
+    CreateAlbum,
   },
   data() {
     return {
       currentUtility: utilTypes.photo,
+      showUploader: false,
+      showCreateAlbum: false,
+
+      // remove this during production
+      accountId: 180,
+      token:
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgwLCJpYXQiOjE3MDU2NTEwNzcsImV4cCI6MTcwODI0MzA3N30.QcMTNvHkH-cMCcNhWkADP9Q-OXfWt_r6dXnMdiEuyY8",
     };
   },
   methods: {

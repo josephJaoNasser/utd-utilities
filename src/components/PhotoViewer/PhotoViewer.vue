@@ -1,22 +1,33 @@
 <template>
-  <b-row no-gutters>
+  <b-row>
+    <div v-if="isPhotosLoading">Loading...</div>
     <b-col>
-      <b-row cols="3" cols-sm="4" cols-md="5" cols-lg="6" no-gutters>
+      <b-row
+        cols="3"
+        :cols-md="!selectedPhoto ? 4 : 2"
+        :cols-lg="!selectedPhoto ? 5 : 3"
+        no-gutters
+      >
         <!-- <b-col v-for="photo in photos"></b-col> -->
         <b-col
-          v-for="num in 10"
+          v-for="photo in photos"
           class="p-2"
-          @click="selectedPhoto = num"
-          :key="num"
+          @click="selectedPhoto = photo"
+          :key="photo.id"
         >
-          <div class="test-img-container">
-            {{ num }}
-          </div>
+          <PhotoListItem
+            :thumbnail-url="photo.thumbnail"
+            :active="!!selectedPhoto && selectedPhoto.id === photo.id"
+          />
         </b-col>
       </b-row>
     </b-col>
-    <b-col v-if="selectedPhoto" cols="4">
-      <Preview :photo-details="selectedPhoto" @close="selectedPhoto = null" />
+    <b-col v-if="selectedPhoto" cols="12" md="6" lg="5">
+      <Preview
+        v-if="!isPhotosLoading"
+        :photo-details="selectedPhoto"
+        @close="selectedPhoto = null"
+      />
     </b-col>
   </b-row>
 
@@ -25,10 +36,11 @@
 <script>
 import UTDService from "@/services/UTDService";
 import Preview from "./Preview.vue";
+import PhotoListItem from "./PhotoListItem.vue";
 
 export default {
   name: "PhotoPicker",
-  components: { Preview },
+  components: { Preview, PhotoListItem },
   props: {
     token: String,
     query: {
@@ -40,23 +52,24 @@ export default {
     return {
       photos: [],
       selectedPhoto: null,
+      isPhotosLoading: false,
     };
   },
   methods: {
     async getPhotos(token) {
-      const UTD = new UTDService(token);
-      const photos = await UTD.getPhotos();
+      this.isPhotosLoading = true;
+      try {
+        const UTD = new UTDService(token);
+        const { rows, count } = await UTD.getPhotos();
+        this.photos = rows;
+      } catch (e) {
+        console.log(e);
+      }
+      this.isPhotosLoading = false;
     },
   },
-  async mounted() {},
+  async mounted() {
+    await this.getPhotos(this.token);
+  },
 };
 </script>
-
-<style>
-.test-img-container {
-  height: 100%;
-  width: 100%;
-  aspect-ratio: 1;
-  border: 1px solid #aaaaaa;
-}
-</style>

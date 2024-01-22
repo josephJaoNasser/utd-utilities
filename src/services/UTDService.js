@@ -27,6 +27,7 @@ class UTDService {
       return data;
     } catch (e) {
       console.log(e);
+      throw e;
     }
   }
 
@@ -49,6 +50,7 @@ class UTDService {
       return data;
     } catch (e) {
       console.log(e);
+      throw e;
     }
   }
 
@@ -62,6 +64,7 @@ class UTDService {
       return data;
     } catch (e) {
       console.log(e);
+      throw e;
     }
   }
 
@@ -75,6 +78,7 @@ class UTDService {
       return data;
     } catch (e) {
       console.log(e);
+      throw e;
     }
   }
 }

@@ -65,8 +65,5 @@ export default {
       return this.$attrs.loading;
     },
   },
-  created() {
-    console.log(this.$attrs);
-  },
 };
 </script>
