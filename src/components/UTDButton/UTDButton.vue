@@ -1,5 +1,6 @@
 <template>
   <b-button
+    variant="primary"
     v-bind="$attrs"
     :type="nativeType"
     :disabled="disabled || loading"
@@ -33,7 +34,7 @@ export default {
     disabled: Boolean,
     type: {
       type: String,
-      default: "default",
+      default: "primary",
       description: "Button type (primary|secondary|danger etc)",
     },
     nativeType: {

@@ -1,5 +1,5 @@
 <template>
-  <b-modal v-model="modalShow" title="Upload Photos">
+  <b-modal v-model="modalShow" title="Upload Photos" centered size="xl"  hide-footer>
     Upload photos
   </b-modal>
 </template>
