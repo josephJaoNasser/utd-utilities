@@ -72,10 +72,31 @@ class UTDService {
    * self explanatory
    * @returns
    */
-  async uploadFile() {
+  async uploadFile(file) {
     try {
-      const { data } = await this.axiosInstance.post(`/file/upload`);
+      const { data } = await this.axiosInstance.post(`/file/upload`, file);
       return data;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
+  /**
+   * Use DALL-E to generate images
+   * @param {string} query
+   */
+  async generateAIImage(query) {
+    try {
+      const { data } = await this.axiosInstance.get(
+        "https://www.uptodateconnect.com/api/ai/image-generation",
+        {
+          model: "dall-e-3", // dall-e-3 or dall-e-2
+          n: 1, // if dall-e-3 or 1-4 if dall-e-2
+          size: "1024x1024", // (["1792x1024", "1024x1024", "1024x1792"])
+          query,
+        }
+      );
     } catch (e) {
       console.log(e);
       throw e;

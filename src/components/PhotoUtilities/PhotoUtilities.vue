@@ -28,6 +28,7 @@
               :active="currentUtility === UtilityTypes.photo"
               @click="onUtilityChange(UtilityTypes.photo)"
             >
+              <b-icon-image></b-icon-image>
               Photos
             </b-nav-item>
             <b-nav-item
@@ -35,6 +36,7 @@
               :active="currentUtility === UtilityTypes.album"
               @click="onUtilityChange(UtilityTypes.album)"
             >
+              <b-icon-images></b-icon-images>
               Albums
             </b-nav-item>
             <b-nav-item
@@ -42,6 +44,7 @@
               :active="currentUtility === UtilityTypes.moments"
               @click="onUtilityChange(UtilityTypes.moments)"
             >
+              <b-icon-calendar-fill></b-icon-calendar-fill>
               Moments
             </b-nav-item>
             <b-nav-item
@@ -49,6 +52,7 @@
               :active="currentUtility === UtilityTypes.ai"
               @click="onUtilityChange(UtilityTypes.ai)"
             >
+              <b-icon-brush></b-icon-brush>
               AI Image Builder
             </b-nav-item>
           </b-nav>
@@ -68,15 +72,23 @@
         </b-col>
       </b-row>
     </b-container>
-    <Uploader :show="showUploader" @close="showUploader = false" />
-    <CreateAlbum :show="showCreateAlbum" @close="showCreateAlbum = false" />
+    <Uploader
+      :token="token"
+      :show="showUploader"
+      @close="showUploader = false"
+    />
+    <CreateAlbum
+      :token="token"
+      :show="showCreateAlbum"
+      @close="showCreateAlbum = false"
+    />
   </b-card>
 </template>
 
 <script>
-import PhotoViewer from "../PhotoViewer";
-import Albums from "../Albums";
-import AIArtCreator from "../AIArtCreator/AIArtCreator.vue";
+import PhotoViewer from "./PhotoViewer";
+import Albums from "./Albums";
+import AIArtCreator from "./AIArtCreator/AIArtCreator.vue";
 import UTDButton from "../UTDButton";
 import Uploader from "./Uploader.vue";
 import CreateAlbum from "./CreateAlbum.vue";
