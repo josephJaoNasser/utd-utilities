@@ -49,13 +49,20 @@
       </b-col>
     </b-container>
 
-    <b-container v-else></b-container>
+    <b-container v-else>
+      <div class="mb-4">
+        <UTDButton @click="selectedAlbum = null" type="light">
+          <b-icon-chevron-left></b-icon-chevron-left>
+        </UTDButton>
+      </div>
+    </b-container>
   </b-row>
 </template>
 
 <script>
 import UTDInput from "@/components/UTDInput";
 import UTDService from "@/services/UTDService.js";
+import UTDButton from "@/components/UTDButton";
 
 export default {
   name: "Moments",
@@ -67,7 +74,7 @@ export default {
     token: String,
     accountId: Number,
   },
-  components: { UTDInput },
+  components: { UTDInput, UTDService },
   emits: ["load"],
   data() {
     return {

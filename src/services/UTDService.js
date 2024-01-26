@@ -86,27 +86,21 @@ class UTDService {
   /**
    * Use DALL-E to generate images
    * @param {string} query
-   * @param {{
-   *  token: string,
-   *  accountId: number,
-   * }} credentials
+   * @param {number} accountId
    */
-  static async generateAIImages(query, credentials) {
+  async generateAIImages(query, accountId) {
     try {
-      const { data } = await axios.post(
-        "https://www.uptodateconnect.com/api/ai/image-generation",
-        {
-          model: "dall-e-3", // dall-e-3 or dall-e-2
-          n: 1, // if dall-e-3 or 1-4 if dall-e-2
-          size: "1024x1024", // (["1792x1024", "1024x1024", "1024x1792"])
-          query,
-          accountId: credentials.accountId,
-        },
-        {
-          headers: {
-            Authorization: "Bearer " + credentials.token,
-          },
-        }
+      const config = {
+        model: "dall-e-3", // dall-e-3 or dall-e-2
+        n: 1, // if dall-e-3 or 1-4 if dall-e-2
+        size: "1024x1024", // (["1792x1024", "1024x1024", "1024x1792"])
+        query,
+        accountId,
+      };
+
+      const { data } = await this.axiosInstance.post(
+        `/ai/image-generation`,
+        config
       );
 
       return data;

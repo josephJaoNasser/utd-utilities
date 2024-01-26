@@ -87,7 +87,6 @@
       content-class="border-0 rounded-0"
       body-class="p-0"
       centered
-      title="Upload photos"
       hide-footer
       hide-header
       size="lg"

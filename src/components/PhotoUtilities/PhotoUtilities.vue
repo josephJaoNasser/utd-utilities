@@ -63,7 +63,7 @@
         </b-col>
 
         <!-- Main section -->
-        <b-col sm="8" md="9" class=" p-3 p-sm-4">
+        <b-col sm="8" md="9" class="p-3 p-sm-4">
           <PhotoViewer
             v-if="currentUtility === UtilityTypes.photo"
             :token="token"
@@ -87,6 +87,8 @@
           <AIArtCreator
             :token="token"
             v-if="currentUtility === UtilityTypes.ai"
+            :default-images="aiArt"
+            @image-created="(e) => (aiArt = e)"
           />
         </b-col>
       </b-row>
