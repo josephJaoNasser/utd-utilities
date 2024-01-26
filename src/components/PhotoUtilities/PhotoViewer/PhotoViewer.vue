@@ -2,7 +2,7 @@
   <b-row>
     <b-container>
       <b-row class="mb-4">
-        <b-col>
+        <b-col cols="12" md="6" lg="7">
           <UTDInput
             v-model="searchString"
             icon="search"
@@ -16,7 +16,7 @@
     <b-container>
       <b-row>
         <b-col v-if="isPhotosLoading">Loading photos...</b-col>
-        <b-col>
+        <b-col order="2" order-md="1">
           <b-row
             cols="3"
             :cols-md="!selectedPhoto ? 4 : 2"
@@ -26,7 +26,7 @@
             <!-- <b-col v-for="photo in photos"></b-col> -->
             <b-col
               v-for="photo in filteredPhotos"
-              class="p-2"
+              class="p-1 p-md-2"
               @click="selectedPhoto = photo"
               :key="photo.id"
             >
@@ -37,7 +37,15 @@
             </b-col>
           </b-row>
         </b-col>
-        <b-col v-if="selectedPhoto" cols="12" md="6" lg="5">
+        <b-col
+          v-if="selectedPhoto"
+          cols="12"
+          md="6"
+          lg="5"
+          order="1"
+          order-md="2"
+          class="mb-3"
+        >
           <Preview
             v-if="!isPhotosLoading"
             :photo-details="selectedPhoto"

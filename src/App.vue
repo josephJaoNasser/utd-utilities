@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <PhotoUtilities
-      :accountId="process.env.accountId"
-      :token="process.env.token"
+      :accountId="credentials.accountId"
+      :token="credentials.token"
     />
   </div>
 </template>
@@ -14,16 +14,11 @@ import PhotoUtilities from "./components/PhotoUtilities";
 export default {
   name: "App",
   components: { UTDButton, PhotoUtilities },
-  methods: {
-    test() {
-      alert("yo");
-    },
-  },
   computed: {
     credentials() {
       return {
-        token: process.env.VUE_APP_TOKEN,
-        accountId: process.env.VUE_APP_ACCOUNT_ID,
+        token: process.env.VUE_APP_TOKEN || "",
+        accountId: +process.env.VUE_APP_ACCOUNT_ID || "",
       };
     },
   },

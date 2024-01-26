@@ -26,7 +26,7 @@
             </UTDButton>
           </div>
 
-          <b-nav class="photo-utilities-nav" vertical>
+          <b-nav class="photo-utilities-nav flex-md-column">
             <b-nav-item
               class="p-1"
               :active="currentUtility === UtilityTypes.photo"
@@ -63,7 +63,7 @@
         </b-col>
 
         <!-- Main section -->
-        <b-col sm="8" md="9" class="p-4">
+        <b-col sm="8" md="9" class=" p-3 p-sm-4">
           <PhotoViewer
             v-if="currentUtility === UtilityTypes.photo"
             :token="token"
