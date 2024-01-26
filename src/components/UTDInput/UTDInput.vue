@@ -1,7 +1,16 @@
 <template>
-  <div class="border rounded">
-    <component v-if="icon?.length" :is="'b-icon-' + icon" />
-    <b-input class="border-0"></b-input>
+  <div ref="inputParent" class="utd-utilities__input border rounded">
+    <div v-if="icon?.length" class="px-2 border-right">
+      <b-icon :icon="icon"></b-icon>
+    </div>
+    <b-input
+      class="border-0 shadow-none"
+      v-bind="$attrs"
+      @input="$emit('input', $event)"
+      @focus="handleFocus"
+      @blur="handleBlur"
+      :placeholder="placeholder"
+    ></b-input>
   </div>
 </template>
 
@@ -10,11 +19,31 @@ export default {
   name: "UTDInput",
   props: {
     icon: String,
+    placeholder: String,
+    value: String,
   },
-  model: {},
-  props: {},
-  data() {
-    return {};
+  methods: {
+    handleFocus() {
+      this.$refs.inputParent.classList.add("focused");
+    },
+
+    handleBlur() {
+      this.$refs.inputParent.classList.remove("focused");
+    },
   },
 };
 </script>
+
+<style scoped lang="scss">
+.utd-utilities {
+  &__input {
+    display: flex;
+    align-items: center;
+
+    &.focused {
+      outline: 1px solid #2a99d6;
+      border-color: #2a99d6 !important;
+    }
+  }
+}
+</style>

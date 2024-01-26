@@ -5,14 +5,22 @@
     style="background-color: rgb(0, 0, 0, 0.05)"
   >
     <div class="mb-4">
-      <div @click="onClose">X</div>
+      <UTDButton
+        @click="onClose"
+        class="utd-utilities__back-button"
+        type="light"
+      >
+        <b-icon-chevron-left></b-icon-chevron-left>
+      </UTDButton>
     </div>
-    <b-img
-      fluid-grow
-      class="mb-5"
-      :src="photoDetails.url"
-      style="margin: 0 auto"
-    />
+    <b-container>
+      <b-img
+        fluid-grow
+        class="mb-5 checkered-background"
+        :src="photoDetails.url"
+        style="margin: 0 auto"
+      />
+    </b-container>
     <b-container fluid class="p-0">
       <b-row align-v="center" class="mb-2">
         <b-col cols="4" class="text-right">
@@ -71,6 +79,8 @@
   </b-container>
 </template>
 <script>
+import UTDButton from "@/components/UTDButton";
+
 export default {
   name: "Preview",
   props: {
@@ -78,7 +88,6 @@ export default {
   },
   data() {
     const { fileName, url } = this.photoDetails;
-
     return {
       fileName,
       url,
@@ -91,5 +100,18 @@ export default {
       this.$emit("close");
     },
   },
+  components: { UTDButton },
 };
 </script>
+
+<style scoped lang="scss">
+.utd-utilities {
+  &__back-button {
+    border: none;
+  }
+}
+.checkered-background {
+  background: repeating-conic-gradient(#cacaca 0% 25%, transparent 0% 50%) 50% /
+    20px 20px;
+}
+</style>

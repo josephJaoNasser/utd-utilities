@@ -34,7 +34,7 @@
         <h5 class="mb-0">Import using image URL</h5>
       </label>
       <p>Insert image by pasting the image URL of the image</p>
-      <UTDInput icon="brush" />
+      <UTDInput icon="link" />
     </div>
     <div class="mt-3">
       <UTDButton @click="handleUpload">Upload</UTDButton>

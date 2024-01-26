@@ -69,6 +69,10 @@
             :token="token"
             :account-id="accountId"
           />
+          <AIArtCreator
+            :token="token"
+            :class="[currentUtility !== UtilityTypes.ai && 'd-none']"
+          />
         </b-col>
       </b-row>
     </b-container>
