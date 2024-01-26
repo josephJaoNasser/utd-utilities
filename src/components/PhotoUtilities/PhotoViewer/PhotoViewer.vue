@@ -15,7 +15,7 @@
     </b-container>
     <b-container>
       <b-row>
-        <b-col v-if="isPhotosLoading">Loading...</b-col>
+        <b-col v-if="isPhotosLoading">Loading photos...</b-col>
         <b-col>
           <b-row
             cols="3"
@@ -60,15 +60,20 @@ export default {
   name: "PhotoPicker",
   components: { Preview, PhotoListItem, UTDInput },
   props: {
+    defaultPhotos: {
+      type: Array,
+      default: () => [],
+    },
     token: String,
     query: {
       type: Object,
       default: () => {},
     },
   },
+  emits: ["load"],
   data() {
     return {
-      photos: [],
+      photos: this.defaultPhotos,
       selectedPhoto: null,
       isPhotosLoading: false,
       searchString: "",
@@ -89,12 +94,13 @@ export default {
     },
   },
   methods: {
-    async getPhotos(token) {
+    async getPhotos() {
       this.isPhotosLoading = true;
       try {
-        const UTD = new UTDService(token);
+        const UTD = new UTDService(this.token);
         const { rows, count } = await UTD.getPhotos();
         this.photos = rows;
+        this.$emit("load", this.photos);
       } catch (e) {
         console.log(e);
       }
@@ -102,7 +108,9 @@ export default {
     },
   },
   async mounted() {
-    await this.getPhotos(this.token);
+    if (!this.defaultPhotos.length) {
+      await this.getPhotos();
+    }
   },
 };
 </script>

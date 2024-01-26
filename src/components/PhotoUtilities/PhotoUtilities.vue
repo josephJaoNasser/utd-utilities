@@ -65,17 +65,28 @@
         <!-- Main section -->
         <b-col sm="8" md="9" class="p-4">
           <PhotoViewer
-            :class="[currentUtility !== UtilityTypes.photo && 'd-none']"
+            v-if="currentUtility === UtilityTypes.photo"
             :token="token"
+            @load="(e) => (photos = e)"
+            :default-photos="photos"
           />
           <Albums
-            :class="[currentUtility !== UtilityTypes.album && 'd-none']"
+            v-if="currentUtility === UtilityTypes.album"
             :token="token"
             :account-id="accountId"
+            @load="(e) => (albums = e)"
+            :default-albums="albums"
+          />
+          <Moments
+            v-if="currentUtility === UtilityTypes.moments"
+            :token="token"
+            :account-id="accountId"
+            @load="(e) => (moments = e)"
+            :default-moments="moments"
           />
           <AIArtCreator
             :token="token"
-            :class="[currentUtility !== UtilityTypes.ai && 'd-none']"
+            v-if="currentUtility === UtilityTypes.ai"
           />
         </b-col>
       </b-row>
@@ -100,6 +111,7 @@ import AIArtCreator from "./AIArtCreator/AIArtCreator.vue";
 import UTDButton from "../UTDButton";
 import Uploader from "./Uploader.vue";
 import CreateAlbum from "./CreateAlbum.vue";
+import Moments from "./Moments";
 
 const utilTypes = {
   photo: "photo",
@@ -117,12 +129,17 @@ export default {
     UTDButton,
     Uploader,
     CreateAlbum,
+    Moments,
   },
   data() {
     return {
       currentUtility: utilTypes.photo,
       showUploader: false,
       showCreateAlbum: false,
+      photos: [],
+      albums: [],
+      moments: [],
+      aiArt: [],
 
       // remove this during production
       accountId: 180,

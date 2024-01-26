@@ -15,11 +15,11 @@
     </b-container>
 
     <b-container v-if="!selectedAlbum">
-      <div v-if="isAlbumsLoading">Loading albums...</div>
+      <div v-if="isMomentsLoading">Loading moments...</div>
       <b-col class="px-0">
         <b-row cols="1" cols-md="2" cols-lg="3" no-gutters>
           <b-col
-            v-for="album in filteredAlbums"
+            v-for="album in filteredMoments"
             :key="album.id"
             class="p-2"
             @click="selectedAlbum = album.id"
@@ -58,9 +58,9 @@ import UTDInput from "@/components/UTDInput";
 import UTDService from "@/services/UTDService.js";
 
 export default {
-  name: "Albums",
+  name: "Moments",
   props: {
-    defaultAlbums: {
+    defaultMoments: {
       type: Array,
       default: () => [],
     },
@@ -71,34 +71,33 @@ export default {
   emits: ["load"],
   data() {
     return {
-      albums: this.defaultAlbums,
-      isAlbumsLoading: false,
+      moments: this.defaultMoments,
+      isMomentsLoading: false,
       selectedAlbum: null,
       searchString: "",
     };
   },
   methods: {
-    async getAlbums() {
-      this.isAlbumsLoading = true;
+    async getMoments() {
       try {
         const UTD = new UTDService(this.token);
-        const { payload } = await UTD.getAlbums(this.accountId);
-        this.albums = payload;
+        const { payload } = await UTD.getMoments(this.accountId);
+
+        this.moments = payload;
         this.$emit("load", payload);
       } catch (e) {
         console.log(e);
       }
-      this.isAlbumsLoading = false;
     },
   },
   computed: {
-    filteredAlbums() {
+    filteredMoments() {
       if (!this.searchString.length) {
-        return this.albums;
+        return this.moments;
       }
       const searchLowerCase = this.searchString.toLowerCase();
 
-      const filteredList = this.albums.filter((album) =>
+      const filteredList = this.moments.filter((album) =>
         album.albumName.toLowerCase().includes(searchLowerCase)
       );
 
@@ -106,8 +105,8 @@ export default {
     },
   },
   async mounted() {
-    if (!this.defaultAlbums?.length) {
-      await this.getAlbums();
+    if (!this.defaultMoments?.length) {
+      await this.getMoments();
     }
   },
 };

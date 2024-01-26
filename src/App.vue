@@ -24,4 +24,8 @@ export default {
 
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-vue/src/index.scss";
+
+#app {
+  margin: 30px auto;
+}
 </style>
