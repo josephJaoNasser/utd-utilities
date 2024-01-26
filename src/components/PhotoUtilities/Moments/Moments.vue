@@ -74,7 +74,7 @@ export default {
     token: String,
     accountId: Number,
   },
-  components: { UTDInput, UTDService },
+  components: { UTDInput, UTDService, UTDButton },
   emits: ["load"],
   data() {
     return {
