@@ -1,7 +1,7 @@
 <template>
   <b-container
     fluid
-    class="p-4 rounded"
+    class="p-4 rounded utd-utilities__photo-preview"
     style="background-color: rgb(0, 0, 0, 0.05)"
   >
     <div class="mb-4">
@@ -13,10 +13,16 @@
         <b-icon-chevron-left></b-icon-chevron-left>
       </UTDButton>
     </div>
-    <b-container>
+    <b-container
+      class="position-relative mb-5 p-0 img-container"
+      @click="showPreviewModal = true"
+    >
+      <div class="btn-zoom">
+        <b-icon-zoom-in class="h4"></b-icon-zoom-in>
+      </div>
       <b-img
         fluid-grow
-        class="mb-5 checkered-background"
+        class="checkered-background"
         :src="photoDetails.url"
         style="margin: 0 auto"
       />
@@ -76,6 +82,23 @@
         </b-col>
       </b-row>
     </b-container>
+    <b-modal
+      v-model="showPreviewModal"
+      content-class="border-0 rounded-0"
+      body-class="p-0"
+      centered
+      title="Upload photos"
+      hide-footer
+      hide-header
+      size="lg"
+    >
+      <b-img
+        fluid-grow
+        class="checkered-background"
+        :src="photoDetails.url"
+        style="margin: 0 auto"
+      />
+    </b-modal>
   </b-container>
 </template>
 <script>
@@ -83,6 +106,7 @@ import UTDButton from "@/components/UTDButton";
 
 export default {
   name: "Preview",
+  components: { UTDButton },
   props: {
     photoDetails: Object,
   },
@@ -93,6 +117,7 @@ export default {
       url,
       caption: "",
       description: "",
+      showPreviewModal: false,
     };
   },
   methods: {
@@ -100,12 +125,55 @@ export default {
       this.$emit("close");
     },
   },
-  components: { UTDButton },
+  watch: {
+    photoDetails: {
+      deep: true,
+      immediate: true,
+      handler(newData) {
+        const { fileName, url } = newData;
+        this.fileName = fileName;
+        this.url = url;
+      },
+    },
+  },
 };
 </script>
 
 <style scoped lang="scss">
 .utd-utilities {
+  &__photo-preview {
+    cursor: pointer;
+
+    & .img-container:hover {
+      .btn-zoom {
+        opacity: 0.6;
+      }
+    }
+    .btn-zoom {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      opacity: 0;
+      background-color: rgba(0, 0, 0);
+      border-radius: 10px;
+      padding: 5px;
+      height: 35px;
+      width: 35px;
+      color: white;
+      transition: opacity 0.1s ease-in-out;
+
+      svg {
+        margin: 0;
+      }
+    }
+
+    .img-preview-modal {
+      .modal-body {
+        padding: 0px !important;
+      }
+    }
+  }
+
   &__back-button {
     border: none;
   }

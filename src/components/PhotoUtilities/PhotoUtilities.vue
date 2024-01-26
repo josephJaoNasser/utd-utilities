@@ -1,5 +1,9 @@
 <template>
-  <b-card no-body style="max-width: 1200px; margin: 0 auto">
+  <b-card
+    class="utd-utilities__photo-utilities"
+    no-body
+    style="max-width: 1200px; margin: 0 auto"
+  >
     <b-container fluid>
       <b-row cols="1" cols-md="2">
         <b-col
@@ -22,7 +26,7 @@
             </UTDButton>
           </div>
 
-          <b-nav vertical>
+          <b-nav class="photo-utilities-nav" vertical>
             <b-nav-item
               class="p-1"
               :active="currentUtility === UtilityTypes.photo"
@@ -138,3 +142,16 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+.utd-utilities {
+  &__photo-utilities {
+    .photo-utilities-nav {
+      font-weight: 600;
+      .nav-link:not(.active) {
+        color: #929292;
+      }
+    }
+  }
+}
+</style>

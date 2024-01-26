@@ -18,4 +18,10 @@ export default {
   },
 };
 </script>
-./components/PhotoUtilities
+
+<style lang="scss">
+@import "@/assets/scss/utd-utilities.scss";
+
+@import "~bootstrap/scss/bootstrap.scss";
+@import "~bootstrap-vue/src/index.scss";
+</style>
