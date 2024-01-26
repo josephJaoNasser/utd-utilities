@@ -63,7 +63,7 @@
         </b-col>
 
         <!-- Main section -->
-        <b-col sm="8" md="9" class="p-3 p-sm-4">
+        <b-col sm="8" md="9" class="photo-utilities__main p-3 p-sm-4">
           <PhotoViewer
             v-if="currentUtility === UtilityTypes.photo"
             :token="token"
@@ -164,10 +164,17 @@ export default {
 <style scoped lang="scss">
 .utd-utilities {
   &__photo-utilities {
-    .photo-utilities-nav {
-      font-weight: 600;
-      .nav-link:not(.active) {
-        color: #929292;
+    .photo-utilities {
+      &__main {
+        max-height: 700px;
+        overflow: auto;
+      }
+
+      &__nav {
+        font-weight: 600;
+        .nav-link:not(.active) {
+          color: #929292;
+        }
       }
     }
   }

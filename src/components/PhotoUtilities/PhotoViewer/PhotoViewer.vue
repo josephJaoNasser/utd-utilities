@@ -1,5 +1,8 @@
 <template>
   <b-row>
+    <b-container class="mb-3">
+      <h2 class="font-weight-bold">Photos</h2>
+    </b-container>
     <b-container>
       <b-row class="mb-4">
         <b-col cols="12" md="6" lg="7">
@@ -68,11 +71,15 @@ export default {
   name: "PhotoPicker",
   components: { Preview, PhotoListItem, UTDInput },
   props: {
+    token: String,
+    source: {
+      type: String,
+      default: "all",
+    },
     defaultPhotos: {
       type: Array,
       default: () => [],
     },
-    token: String,
     query: {
       type: Object,
       default: () => {},
@@ -116,7 +123,7 @@ export default {
     },
   },
   async mounted() {
-    if (!this.defaultPhotos.length) {
+    if (!this.defaultPhotos.length && this.source === "all") {
       await this.getPhotos();
     }
   },

@@ -1,6 +1,9 @@
 <template>
   <b-row>
-    <b-container>
+    <b-container v-if="!selectedAlbum" class="mb-3">
+      <h2 class="font-weight-bold">Moments</h2>
+    </b-container>
+    <b-container v-if="!selectedAlbum">
       <b-row class="mb-4">
         <b-col>
           <UTDInput
@@ -22,7 +25,7 @@
             v-for="album in filteredMoments"
             :key="album.id"
             class="p-2"
-            @click="selectedAlbum = album.id"
+            @click="selectedAlbum = album"
           >
             <div class="card bg-dark text-white border-0 utd-utilities__album">
               <div class="position-relative img-container">
@@ -53,8 +56,10 @@
       <div class="mb-4">
         <UTDButton @click="selectedAlbum = null" type="light">
           <b-icon-chevron-left></b-icon-chevron-left>
+          Back to albums
         </UTDButton>
       </div>
+      <AlbumViewer :token="this.token" :selected-album="selectedAlbum" />
     </b-container>
   </b-row>
 </template>
@@ -63,6 +68,7 @@
 import UTDInput from "@/components/UTDInput";
 import UTDService from "@/services/UTDService.js";
 import UTDButton from "@/components/UTDButton";
+import AlbumViewer from "../Albums/AlbumViewer.vue";
 
 export default {
   name: "Moments",
@@ -74,7 +80,7 @@ export default {
     token: String,
     accountId: Number,
   },
-  components: { UTDInput, UTDService, UTDButton },
+  components: { UTDInput, UTDService, UTDButton, AlbumViewer },
   emits: ["load"],
   data() {
     return {
