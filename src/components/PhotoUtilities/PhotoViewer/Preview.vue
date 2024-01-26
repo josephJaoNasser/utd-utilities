@@ -84,7 +84,7 @@
     </b-container>
     <b-modal
       v-model="showPreviewModal"
-      content-class="border-0 rounded-0"
+      content-class="border-0 rounded-0 bg-transparent"
       body-class="p-0"
       centered
       hide-footer
@@ -93,7 +93,7 @@
     >
       <b-img
         fluid-grow
-        class="checkered-background"
+        class="bg-transparent"
         :src="photoDetails.url"
         style="margin: 0 auto"
       />
