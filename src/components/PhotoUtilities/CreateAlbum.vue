@@ -1,5 +1,18 @@
 <template>
-  <b-modal v-model="modalShow" title="Create Album">
+  <b-modal
+    v-model="modalShow"
+    hide-footer
+    hide-header
+    centered
+    size="lg"
+    content-class="p-3"
+  >
+    <h3 class="mb-4 font-weight-bold">Create album</h3>
+    <div class="position-absolute" style="right: -30px; top: -30px">
+      <b-button variant="danger" @click="modalShow = false">
+        <b-icon-x></b-icon-x>
+      </b-button>
+    </div>
     <b-form>
       <b-form-group label="Album Title" label-for="albumTitle">
         <b-form-input
@@ -29,22 +42,30 @@
         ></b-form-input>
       </b-form-group>
     </b-form>
+    <UTDButton @click="handleUpload">Create Album</UTDButton>
   </b-modal>
 </template>
 
 <script>
+import UTDButton from "../UTDButton";
 export default {
   name: "CreateAlbum",
   props: {
     show: Boolean,
   },
-  emits: ["close"],
+  components: {
+    UTDButton,
+  },
+  emits: ["close", "album-create"],
   data() {
     return {
       albumTitle: "",
       albumDescription: "",
       albumLabel: "",
     };
+  },
+  methods: {
+    handleUpload() {},
   },
   computed: {
     modalShow: {

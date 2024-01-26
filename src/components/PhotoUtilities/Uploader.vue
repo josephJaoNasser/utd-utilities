@@ -1,5 +1,18 @@
 <template>
-  <b-modal v-model="modalShow" title="Upload photos" hide-footer>
+  <b-modal
+    v-model="modalShow"
+    hide-footer
+    hide-header
+    centered
+    size="lg"
+    content-class="p-3"
+  >
+    <h3 class="mb-4 font-weight-bold">Upload photos</h3>
+    <div class="position-absolute" style="right: -30px; top: -30px">
+      <b-button variant="danger" @click="modalShow = false">
+        <b-icon-x></b-icon-x>
+      </b-button>
+    </div>
     <div
       :class="['drop-area', image && 'has-image']"
       @dragover.prevent="handleDragOver"
@@ -54,7 +67,7 @@ export default {
     show: Boolean,
   },
   components: { UTDButton, UTDInput },
-  emits: ["close"],
+  emits: ["close", "album-create"],
   data() {
     return {
       image: null,
