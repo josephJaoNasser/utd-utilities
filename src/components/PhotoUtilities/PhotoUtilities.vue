@@ -122,6 +122,10 @@ const utilTypes = {
 
 export default {
   name: "PhotoUtilities",
+  props: {
+    accountId: Number,
+    token: String,
+  },
   components: {
     PhotoViewer,
     Albums,
@@ -140,11 +144,6 @@ export default {
       albums: [],
       moments: [],
       aiArt: [],
-
-      // remove this during production
-      accountId: 180,
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTgwLCJpYXQiOjE3MDU2NTEwNzcsImV4cCI6MTcwODI0MzA3N30.QcMTNvHkH-cMCcNhWkADP9Q-OXfWt_r6dXnMdiEuyY8",
     };
   },
   methods: {

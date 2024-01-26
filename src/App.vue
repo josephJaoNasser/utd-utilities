@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <PhotoUtilities />
+    <PhotoUtilities
+      :accountId="process.env.accountId"
+      :token="process.env.token"
+    />
   </div>
 </template>
 
@@ -14,6 +17,14 @@ export default {
   methods: {
     test() {
       alert("yo");
+    },
+  },
+  computed: {
+    credentials() {
+      return {
+        token: process.env.VUE_APP_TOKEN,
+        accountId: process.env.VUE_APP_ACCOUNT_ID,
+      };
     },
   },
 };
