@@ -1,22 +1,24 @@
 <template>
-  <b-row>
-    <b-container class="mb-3">
-      <h2 class="font-weight-bold">Photos</h2>
+  <b-row class="position-relative">
+    <b-container fluid class="sticky-top pt-4" style="background-color: white;">
+      <b-container class="mb-3" v-if="source === 'all'">
+        <h2 class="font-weight-bold">Photos</h2>
+      </b-container>
+      <b-container v-if="source !== 'ai'">
+        <b-row class="mb-4">
+          <b-col cols="12" md="6" lg="7">
+            <UTDInput
+              v-model="searchString"
+              icon="search"
+              class="p-2"
+              placeholder="Type to search"
+            />
+          </b-col>
+          <b-col></b-col>
+        </b-row>
+      </b-container>
     </b-container>
-    <b-container>
-      <b-row class="mb-4">
-        <b-col cols="12" md="6" lg="7">
-          <UTDInput
-            v-model="searchString"
-            icon="search"
-            class="p-2"
-            placeholder="Type to search"
-          />
-        </b-col>
-        <b-col></b-col>
-      </b-row>
-    </b-container>
-    <b-container>
+    <b-container fluid>
       <b-row>
         <b-col v-if="isPhotosLoading">Loading photos...</b-col>
         <b-col order="2" order-md="1">
@@ -51,8 +53,10 @@
         >
           <Preview
             v-if="!isPhotosLoading"
+            :source="source"
             :photo-details="selectedPhoto"
             @close="selectedPhoto = null"
+            @photo-selected="onSelect"
           />
         </b-col>
       </b-row>
@@ -85,7 +89,7 @@ export default {
       default: () => {},
     },
   },
-  emits: ["load"],
+  emits: ["load", "photo-selected"],
   data() {
     return {
       photos: this.defaultPhotos,
@@ -120,6 +124,10 @@ export default {
         console.log(e);
       }
       this.isPhotosLoading = false;
+    },
+
+    onSelect(e) {
+      this.$emit("photo-selected", e);
     },
   },
   async mounted() {

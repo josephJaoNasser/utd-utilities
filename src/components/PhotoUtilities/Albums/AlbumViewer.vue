@@ -26,7 +26,12 @@
         </div>
       </div>
     </b-container>
-    <PhotoViewer :token="token" :default-photos="photos" :source="'album'" />
+    <PhotoViewer
+      :token="token"
+      :default-photos="photos"
+      :source="'album'"
+      @photo-selected="onSelect"
+    />
   </div>
 </template>
 
@@ -44,6 +49,7 @@ export default {
       default: () => {},
     },
   },
+  emits: ["photo-selected"],
   data() {
     return {
       photos: [],
@@ -56,6 +62,10 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+
+    onSelect(e) {
+      this.$emit("photo-selected", e);
     },
   },
   async mounted() {

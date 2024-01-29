@@ -2,7 +2,7 @@
   <div>
     <h2 class="font-weight-bold">Create AI Art</h2>
     <p>Create AI Art with our free AI image generator.</p>
-    <b-row>
+    <b-row :class="[formattedImages.length ? 'mb-4' : '']">
       <b-col cols="12" lg="7" class="mb-2">
         <UTDInput v-model="prompt" placeholder="What do you want to create?" />
       </b-col>
@@ -17,39 +17,13 @@
     </b-row>
     <b-row>
       <b-col v-if="isGenerating">Generating image/s...</b-col>
-      <b-row v-else cols="3" cols-md="2" cols-lg="3" no-gutters>
-        <b-col
-          v-for="(image, index) in images"
-          class="p-1 p-md-2"
-          @click="
-            () => {
-              selectedPhoto = image.url;
-              showPreviewModal = true;
-            }
-          "
-          :key="index"
-        >
-          <PhotoListItem :thumbnail-url="image.url" />
-        </b-col>
-      </b-row>
-    </b-row>
-
-    <b-modal
-      v-model="showPreviewModal"
-      content-class="border-0 rounded-0"
-      body-class="p-0"
-      centered
-      hide-footer
-      hide-header
-      size="lg"
-    >
-      <b-img
-        fluid-grow
-        class="checkered-background"
-        :src="selectedPhoto"
-        style="margin: 0 auto"
+      <PhotoViewer
+        v-else
+        source="ai"
+        :default-photos="formattedImages"
+        @photo-selected="onSelect"
       />
-    </b-modal>
+    </b-row>
   </div>
 </template>
 <script>
@@ -57,6 +31,8 @@ import UTDButton from "@/components/UTDButton";
 import UTDInput from "@/components/UTDInput";
 import UTDService from "@/services/UTDService";
 import PhotoListItem from "../PhotoViewer/PhotoListItem.vue";
+import PhotoViewer from "../PhotoViewer";
+import PhotoSources from "@/constants/PhotoSources";
 
 export default {
   name: "AIArtCreator",
@@ -67,8 +43,8 @@ export default {
       default: () => [],
     },
   },
-  components: { UTDInput, UTDButton, PhotoListItem },
-  emits: ["image-created"],
+  components: { UTDInput, UTDButton, PhotoListItem, PhotoViewer },
+  emits: ["image-created", "photo-selected"],
   data() {
     return {
       prompt: "",
@@ -97,6 +73,19 @@ export default {
         console.log(e);
       }
       this.isGenerating = false;
+    },
+
+    onSelect(e) {
+      this.$emit("photo-selected", e);
+    },
+  },
+  computed: {
+    formattedImages() {
+      return this.images.map((imgObj, index) => ({
+        ...imgObj,
+        thumbnail: imgObj.url,
+        id: index,
+      }));
     },
   },
 };

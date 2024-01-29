@@ -39,6 +39,7 @@ export default {
   &__input {
     display: flex;
     align-items: center;
+    background-color: white;
 
     &.focused {
       outline: 1px solid #2a99d6;

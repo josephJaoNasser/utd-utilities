@@ -59,7 +59,11 @@
           Back to albums
         </UTDButton>
       </div>
-      <AlbumViewer :token="this.token" :selected-album="selectedAlbum" />
+      <AlbumViewer
+        :token="this.token"
+        :selected-album="selectedAlbum"
+        @photo-selected="onSelect"
+      />
     </b-container>
   </b-row>
 </template>
@@ -81,7 +85,7 @@ export default {
     accountId: Number,
   },
   components: { UTDInput, UTDService, UTDButton, AlbumViewer },
-  emits: ["load"],
+  emits: ["load", "onSelect"],
   data() {
     return {
       moments: this.defaultMoments,
@@ -101,6 +105,10 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+
+    onSelect(e) {
+      this.$emit("photo-selected", e);
     },
   },
   computed: {

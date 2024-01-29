@@ -4,13 +4,21 @@
     class="p-4 rounded utd-utilities__photo-preview"
     style="background-color: rgb(0, 0, 0, 0.05)"
   >
-    <div class="mb-4">
+    <div class="mb-4 d-flex justify-content-between">
       <UTDButton
         @click="onClose"
         class="utd-utilities__back-button"
         type="light"
       >
         <b-icon-chevron-left></b-icon-chevron-left>
+      </UTDButton>
+      <UTDButton
+        @click="onSelect"
+        class="utd-utilities__select-button"
+        type="primary"
+      >
+        <b-icon-plus></b-icon-plus>
+        Select photo
       </UTDButton>
     </div>
     <b-container
@@ -27,7 +35,7 @@
         style="margin: 0 auto"
       />
     </b-container>
-    <b-container fluid class="p-0">
+    <b-container v-if="source !== 'ai'" fluid class="p-0">
       <b-row align-v="center" class="mb-2">
         <b-col cols="4" class="text-right">
           <label class="mb-0" for="title">Title</label>
@@ -108,7 +116,12 @@ export default {
   components: { UTDButton },
   props: {
     photoDetails: Object,
+    source: {
+      type: String,
+      default: "all",
+    },
   },
+  emits: ["photo-selected"],
   data() {
     const { fileName, url } = this.photoDetails;
     return {
@@ -122,6 +135,10 @@ export default {
   methods: {
     onClose() {
       this.$emit("close");
+    },
+
+    onSelect() {
+      this.$emit("photo-selected", this.photoDetails);
     },
   },
   watch: {

@@ -23,7 +23,7 @@ class UTDService {
   async getAlbums(accountId) {
     try {
       const { data } = await this.axiosInstance.get(
-        `/albums?accountId=${accountId}`
+        `/site-builder/albums?accountId=11` //${accountId}`
       );
       return data;
     } catch (e) {

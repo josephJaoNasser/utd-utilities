@@ -1,20 +1,22 @@
 <template>
-  <b-row>
-    <b-container v-if="!selectedAlbum" class="mb-3">
-      <h2 class="font-weight-bold">Albums</h2>
-    </b-container>
-    <b-container v-if="!selectedAlbum">
-      <b-row class="mb-4">
-        <b-col cols="12" md="6" lg="7">
-          <UTDInput
-            v-model="searchString"
-            icon="search"
-            class="p-2"
-            placeholder="Type to search"
-          />
-        </b-col>
-        <b-col></b-col>
-      </b-row>
+  <b-row class="position-relative">
+    <b-container fluid class="sticky-top pt-4" style="background-color: white">
+      <b-container v-if="!selectedAlbum" class="mb-3">
+        <h2 class="font-weight-bold">Albums</h2>
+      </b-container>
+      <b-container v-if="!selectedAlbum">
+        <b-row class="mb-4">
+          <b-col cols="12" md="6" lg="7">
+            <UTDInput
+              v-model="searchString"
+              icon="search"
+              class="p-2"
+              placeholder="Type to search"
+            />
+          </b-col>
+          <b-col></b-col>
+        </b-row>
+      </b-container>
     </b-container>
 
     <b-container v-if="!selectedAlbum">
@@ -59,7 +61,11 @@
           Back to albums
         </UTDButton>
       </div>
-      <AlbumViewer :token="this.token" :selected-album="selectedAlbum" />
+      <AlbumViewer
+        :token="this.token"
+        :selected-album="selectedAlbum"
+        @photo-selected="onSelect"
+      />
     </b-container>
   </b-row>
 </template>
@@ -81,7 +87,7 @@ export default {
     accountId: Number,
   },
   components: { UTDInput, UTDButton, AlbumViewer },
-  emits: ["load"],
+  emits: ["load", "photo-selected"],
   data() {
     return {
       albums: this.defaultAlbums,
@@ -102,6 +108,10 @@ export default {
         console.log(e);
       }
       this.isAlbumsLoading = false;
+    },
+
+    onSelect(e) {
+      this.$emit("photo-selected", e);
     },
   },
   computed: {

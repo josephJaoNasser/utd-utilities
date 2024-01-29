@@ -3,7 +3,16 @@
     <PhotoUtilities
       :accountId="credentials.accountId"
       :token="credentials.token"
+      @photo-selected="(e) => (selectedPhoto = e)"
     />
+    <b-container fluid class="mt-5">
+      <button style="margin: 0 auto" @click="selectedPhoto = null">
+        Clear image
+      </button>
+      <br />
+      <br />
+      <b-img fluid v-if="selectedPhoto" :src="selectedPhoto?.url" />
+    </b-container>
   </div>
 </template>
 
@@ -14,6 +23,11 @@ import PhotoUtilities from "./components/PhotoUtilities";
 export default {
   name: "App",
   components: { UTDButton, PhotoUtilities },
+  data() {
+    return {
+      selectedPhoto: null,
+    };
+  },
   computed: {
     credentials() {
       return {

@@ -5,11 +5,12 @@
     style="max-width: 1200px; margin: 0 auto"
   >
     <b-container fluid>
-      <b-row cols="1" cols-md="2">
+      <b-row cols="1" cols-md="2" cols-lg="3">
         <b-col
           sm="4"
           md="3"
-          class="py-5 px-4"
+          lg="2"
+          class="py-4 px-3"
           style="background-color: #f1f4f7"
         >
           <div class="mb-5">
@@ -26,7 +27,7 @@
             </UTDButton>
           </div>
 
-          <b-nav class="photo-utilities-nav flex-md-column">
+          <b-nav class="photo-utilities__nav flex-md-column">
             <b-nav-item
               class="p-1"
               :active="currentUtility === UtilityTypes.photo"
@@ -63,11 +64,12 @@
         </b-col>
 
         <!-- Main section -->
-        <b-col sm="8" md="9" class="photo-utilities__main p-3 p-sm-4">
+        <b-col sm="8" md="9" lg="10" class="photo-utilities__main pb-3">
           <PhotoViewer
             v-if="currentUtility === UtilityTypes.photo"
             :token="token"
             @load="(e) => (photos = e)"
+            @photo-selected="onSelect"
             :default-photos="photos"
           />
           <Albums
@@ -75,6 +77,7 @@
             :token="token"
             :account-id="accountId"
             @load="(e) => (albums = e)"
+            @photo-selected="onSelect"
             :default-albums="albums"
           />
           <Moments
@@ -82,6 +85,7 @@
             :token="token"
             :account-id="accountId"
             @load="(e) => (moments = e)"
+            @photo-selected="onSelect"
             :default-moments="moments"
           />
           <AIArtCreator
@@ -89,6 +93,7 @@
             v-if="currentUtility === UtilityTypes.ai"
             :default-images="aiArt"
             @image-created="(e) => (aiArt = e)"
+            @photo-selected="onSelect"
           />
         </b-col>
       </b-row>
@@ -137,6 +142,7 @@ export default {
     CreateAlbum,
     Moments,
   },
+  emits: ["photo-selected"],
   data() {
     return {
       currentUtility: utilTypes.photo,
@@ -151,6 +157,10 @@ export default {
   methods: {
     onUtilityChange(util) {
       this.currentUtility = util;
+    },
+
+    onSelect(e) {
+      this.$emit("photo-selected", e);
     },
   },
   computed: {
@@ -172,8 +182,13 @@ export default {
 
       &__nav {
         font-weight: 600;
+        padding: 15px 10px;
         .nav-link:not(.active) {
-          color: #929292;
+          color: #929292 !important;
+        }
+
+        .nav-link {
+          padding: 10px 0;
         }
       }
     }
