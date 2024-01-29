@@ -46,6 +46,6 @@ export default {
 @import "~bootstrap-vue/src/index.scss";
 
 #app {
-  margin: 30px auto;
+  //margin: 30px auto;
 }
 </style>

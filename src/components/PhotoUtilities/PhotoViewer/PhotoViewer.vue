@@ -1,10 +1,10 @@
 <template>
   <b-row class="position-relative">
-    <b-container fluid class="sticky-top pt-4" style="background-color: white;">
-      <b-container class="mb-3" v-if="source === 'all'">
-        <h2 class="font-weight-bold">Photos</h2>
-      </b-container>
-      <b-container v-if="source !== 'ai'">
+    <b-container fluid class="sticky-top" style="background-color: white">
+      <div class="mb-3" v-if="source === 'all'">
+        <h2 class="font-weight-bold mt-3">Photos</h2>
+      </div>
+      <div v-if="source !== 'ai'">
         <b-row class="mb-4">
           <b-col cols="12" md="6" lg="7">
             <UTDInput
@@ -16,7 +16,7 @@
           </b-col>
           <b-col></b-col>
         </b-row>
-      </b-container>
+      </div>
     </b-container>
     <b-container fluid>
       <b-row>

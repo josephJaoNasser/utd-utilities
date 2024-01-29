@@ -65,6 +65,8 @@ export default {
   props: {
     token: String,
     show: Boolean,
+    userId: String,
+    accountId: String,
   },
   components: { UTDButton, UTDInput },
   emits: ["close", "album-create"],
@@ -115,8 +117,11 @@ export default {
       try {
         const formData = new FormData();
         formData.append("file", this.file);
+        formData.append("userId", this.userId);
+        formData.append("accountId", this.accountId);
         const UTD = new UTDService(this.token);
         const res = await UTD.uploadFile(formData);
+        console.log(res);
       } catch (e) {
         console.log(e);
       }

@@ -1,66 +1,64 @@
 <template>
-  <b-card
-    class="utd-utilities__photo-utilities"
-    no-body
-    style="max-width: 1200px; margin: 0 auto"
-  >
+  <b-card class="utd-utilities__photo-utilities" no-body>
     <b-container fluid>
       <b-row cols="1" cols-md="2" cols-lg="3">
         <b-col
           sm="4"
           md="3"
           lg="2"
-          class="py-4 px-3"
+          class="px-3"
           style="background-color: #f1f4f7"
         >
-          <div class="mb-5">
-            <UTDButton
-              block
-              variant="primay"
-              class="mb-4"
-              @click="showUploader = true"
-            >
-              Upload Photo
-            </UTDButton>
-            <UTDButton block variant="primay" @click="showCreateAlbum = true">
-              Create Album
-            </UTDButton>
-          </div>
+          <div class="sticky-top pt-3">
+            <div class="mb-5">
+              <UTDButton
+                block
+                variant="primay"
+                class="mb-4"
+                @click="showUploader = true"
+              >
+                Upload Photo
+              </UTDButton>
+              <UTDButton block variant="primay" @click="showCreateAlbum = true">
+                Create Album
+              </UTDButton>
+            </div>
 
-          <b-nav class="photo-utilities__nav flex-md-column">
-            <b-nav-item
-              class="p-1"
-              :active="currentUtility === UtilityTypes.photo"
-              @click="onUtilityChange(UtilityTypes.photo)"
-            >
-              <b-icon-image></b-icon-image>
-              Photos
-            </b-nav-item>
-            <b-nav-item
-              class="p-1"
-              :active="currentUtility === UtilityTypes.album"
-              @click="onUtilityChange(UtilityTypes.album)"
-            >
-              <b-icon-images></b-icon-images>
-              Albums
-            </b-nav-item>
-            <b-nav-item
-              class="p-1"
-              :active="currentUtility === UtilityTypes.moments"
-              @click="onUtilityChange(UtilityTypes.moments)"
-            >
-              <b-icon-calendar-fill></b-icon-calendar-fill>
-              Moments
-            </b-nav-item>
-            <b-nav-item
-              class="p-1"
-              :active="currentUtility === UtilityTypes.ai"
-              @click="onUtilityChange(UtilityTypes.ai)"
-            >
-              <b-icon-brush></b-icon-brush>
-              AI Image Builder
-            </b-nav-item>
-          </b-nav>
+            <b-nav class="photo-utilities__nav flex-md-column">
+              <b-nav-item
+                class="p-1"
+                :active="currentUtility === UtilityTypes.photo"
+                @click="onUtilityChange(UtilityTypes.photo)"
+              >
+                <b-icon-image></b-icon-image>
+                Photos
+              </b-nav-item>
+              <b-nav-item
+                class="p-1"
+                :active="currentUtility === UtilityTypes.album"
+                @click="onUtilityChange(UtilityTypes.album)"
+              >
+                <b-icon-images></b-icon-images>
+                Albums
+              </b-nav-item>
+              <b-nav-item
+                class="p-1"
+                :active="currentUtility === UtilityTypes.moments"
+                @click="onUtilityChange(UtilityTypes.moments)"
+              >
+                <b-icon-calendar-fill></b-icon-calendar-fill>
+                Moments
+              </b-nav-item>
+              <b-nav-item
+                class="p-1"
+                :active="currentUtility === UtilityTypes.ai"
+                @click="onUtilityChange(UtilityTypes.ai)"
+              >
+                <b-icon-brush></b-icon-brush>
+                AI Image Builder
+              </b-nav-item>
+            </b-nav>
+          </div>
         </b-col>
 
         <!-- Main section -->
@@ -172,13 +170,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+/* Using SCSS variables to store breakpoints */
+$breakpoint-tablet: 768px;
+
 .utd-utilities {
   &__photo-utilities {
     .photo-utilities {
-      &__main {
-        max-height: 700px;
-        overflow: auto;
-      }
+      // &__main {
+      //   height: 100%;
+      //   overflow: auto;
+      // }
 
       &__nav {
         font-weight: 600;
@@ -187,8 +188,10 @@ export default {
           color: #929292 !important;
         }
 
-        .nav-link {
-          padding: 10px 0;
+        @media (min-width: $breakpoint-tablet) {
+          .nav-link {
+            padding: 10px 0;
+          }
         }
       }
     }

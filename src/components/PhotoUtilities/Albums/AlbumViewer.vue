@@ -1,34 +1,39 @@
 <template>
   <div>
     <b-container fluid class="p-0 mb-3">
+      <UTDButton @click="$emit('back')" type="light" class="mb-3">
+        <b-icon-chevron-left></b-icon-chevron-left>
+        Back to albums
+      </UTDButton>
       <div class="card bg-dark text-white border-0 utd-utilities__album-cover">
         <div class="position-relative img-container">
           <div class="album-bg-overlay absolute"></div>
-          <img class="card-img" :src="selectedAlbum.albumImage" />
+          <img class="card-img" :src="selectedAlbum.image" />
         </div>
         <div class="card-img-overlay p-0">
           <div class="card-body h-100">
             <h4 class="card-title">
               {{
-                selectedAlbum.albumName.length
-                  ? selectedAlbum.albumName
+                selectedAlbum.title.length
+                  ? selectedAlbum.title
                   : "Untitled Album"
               }}
             </h4>
             <p class="card-text">
-              {{ selectedAlbum.albumDescription }}
+              {{ selectedAlbum.description }}
             </p>
             <p class="card-text">
-              {{ photos.length }}
-              {{ photos.length === 1 ? "photo" : "photos" }}
+              {{ formattedGallery.length }}
+              {{ formattedGallery.length === 1 ? "photo" : "photos" }}
             </p>
           </div>
         </div>
       </div>
     </b-container>
     <PhotoViewer
+    class="pt-5"
       :token="token"
-      :default-photos="photos"
+      :default-photos="formattedGallery"
       :source="'album'"
       @photo-selected="onSelect"
     />
@@ -37,11 +42,12 @@
 
 <script>
 import UTDService from "@/services/UTDService";
+import UTDButton from "@/components/UTDButton";
 import PhotoViewer from "../PhotoViewer";
 
 export default {
   name: "AlbumViewer",
-  components: { PhotoViewer },
+  components: { PhotoViewer, UTDButton },
   props: {
     token: String,
     selectedAlbum: {
@@ -49,7 +55,7 @@ export default {
       default: () => {},
     },
   },
-  emits: ["photo-selected"],
+  emits: ["photo-selected", "back"],
   data() {
     return {
       photos: [],
@@ -66,6 +72,16 @@ export default {
 
     onSelect(e) {
       this.$emit("photo-selected", e);
+    },
+  },
+  computed: {
+    formattedGallery() {
+      return this.selectedAlbum.gallery.map((image, index) => ({
+        id: index,
+        fileName: image.fileName,
+        thumbnail: image.imageThumbnail,
+        url: image.image,
+      }));
     },
   },
   async mounted() {

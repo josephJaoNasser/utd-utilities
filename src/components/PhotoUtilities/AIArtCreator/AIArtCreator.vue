@@ -1,24 +1,29 @@
 <template>
   <div>
-    <h2 class="font-weight-bold">Create AI Art</h2>
-    <p>Create AI Art with our free AI image generator.</p>
-    <b-row :class="[formattedImages.length ? 'mb-4' : '']">
-      <b-col cols="12" lg="7" class="mb-2">
-        <UTDInput v-model="prompt" placeholder="What do you want to create?" />
-      </b-col>
-      <b-col cols="12" lg="5">
-        <UTDButton class="mr-2 mb-2" @click="getAIArt(false)">
-          Generate Images
-        </UTDButton>
-        <UTDButton class="mr-2 mb-2" @click="getAIArt(true)">
-          Create random image
-        </UTDButton>
-      </b-col>
-    </b-row>
+    <b-container fluid class="sticky-top pt-4" style="background-color: white">
+      <h2 class="font-weight-bold">Create AI Art</h2>
+      <p>Create AI Art with our free AI image generator.</p>
+      <b-row :class="[formattedImages.length ? 'mb-4' : '']">
+        <b-col cols="12" lg="7" class="mb-2">
+          <UTDInput
+            v-model="prompt"
+            placeholder="What do you want to create?"
+          />
+        </b-col>
+        <b-col cols="12" lg="5">
+          <UTDButton class="mr-2 mb-2" @click="getAIArt(false)">
+            Generate Images
+          </UTDButton>
+          <UTDButton class="mr-2 mb-2" @click="getAIArt(true)">
+            Create random image
+          </UTDButton>
+        </b-col>
+      </b-row>
+    </b-container>
     <b-row>
       <b-col v-if="isGenerating">Generating image/s...</b-col>
       <PhotoViewer
-        v-else
+        v-else-if="images.length"
         source="ai"
         :default-photos="formattedImages"
         @photo-selected="onSelect"

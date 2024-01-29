@@ -1,10 +1,10 @@
 <template>
   <b-row class="position-relative">
     <b-container fluid class="sticky-top pt-4" style="background-color: white">
-      <b-container v-if="!selectedAlbum" class="mb-3">
+      <div v-if="!selectedAlbum" class="mb-3">
         <h2 class="font-weight-bold">Albums</h2>
-      </b-container>
-      <b-container v-if="!selectedAlbum">
+      </div>
+      <div v-if="!selectedAlbum">
         <b-row class="mb-4">
           <b-col cols="12" md="6" lg="7">
             <UTDInput
@@ -16,10 +16,10 @@
           </b-col>
           <b-col></b-col>
         </b-row>
-      </b-container>
+      </div>
     </b-container>
 
-    <b-container v-if="!selectedAlbum">
+    <b-container fluid v-if="!selectedAlbum">
       <div v-if="isAlbumsLoading">Loading albums...</div>
       <b-col class="px-0">
         <b-row cols="1" cols-md="2" cols-lg="3" no-gutters>
@@ -32,19 +32,15 @@
             <div class="card bg-dark text-white border-0 utd-utilities__album">
               <div class="position-relative img-container">
                 <div class="album-bg-overlay absolute"></div>
-                <img class="card-img" :src="album.albumImage" />
+                <img class="card-img" :src="album.image" />
               </div>
               <div class="card-img-overlay p-0">
                 <div class="card-body h-100">
                   <h5 class="card-title">
-                    {{
-                      album.albumName.length
-                        ? album.albumName
-                        : "Untitled Album"
-                    }}
+                    {{ album.title.length ? album.title : "Untitled Album" }}
                   </h5>
                   <p class="card-text">
-                    {{ album.albumDescription }}
+                    {{ album.description }}
                   </p>
                 </div>
               </div>
@@ -55,16 +51,11 @@
     </b-container>
 
     <b-container v-else>
-      <div class="mb-4">
-        <UTDButton @click="selectedAlbum = null" type="light">
-          <b-icon-chevron-left></b-icon-chevron-left>
-          Back to albums
-        </UTDButton>
-      </div>
       <AlbumViewer
         :token="this.token"
         :selected-album="selectedAlbum"
         @photo-selected="onSelect"
+        @back="selectedAlbum = null"
       />
     </b-container>
   </b-row>
@@ -122,7 +113,7 @@ export default {
       const searchLowerCase = this.searchString.toLowerCase();
 
       const filteredList = this.albums.filter((album) =>
-        album.albumName.toLowerCase().includes(searchLowerCase)
+        album.title.toLowerCase().includes(searchLowerCase)
       );
 
       return filteredList;

@@ -1,23 +1,25 @@
 <template>
   <b-row>
-    <b-container v-if="!selectedAlbum" class="mb-3">
-      <h2 class="font-weight-bold">Moments</h2>
-    </b-container>
-    <b-container v-if="!selectedAlbum">
-      <b-row class="mb-4">
-        <b-col>
-          <UTDInput
-            v-model="searchString"
-            icon="search"
-            class="p-2"
-            placeholder="Type to search"
-          />
-        </b-col>
-        <b-col></b-col>
-      </b-row>
+    <b-container fluid class="sticky-top pt-4" style="background-color: white">
+      <div v-if="!selectedAlbum" class="mb-3">
+        <h2 class="font-weight-bold">Moments</h2>
+      </div>
+      <div v-if="!selectedAlbum">
+        <b-row class="mb-4">
+          <b-col>
+            <UTDInput
+              v-model="searchString"
+              icon="search"
+              class="p-2"
+              placeholder="Type to search"
+            />
+          </b-col>
+          <b-col></b-col>
+        </b-row>
+      </div>
     </b-container>
 
-    <b-container v-if="!selectedAlbum">
+    <b-container fluid v-if="!selectedAlbum">
       <div v-if="isMomentsLoading">Loading moments...</div>
       <b-col class="px-0">
         <b-row cols="1" cols-md="2" cols-lg="3" no-gutters>
@@ -53,16 +55,11 @@
     </b-container>
 
     <b-container v-else>
-      <div class="mb-4">
-        <UTDButton @click="selectedAlbum = null" type="light">
-          <b-icon-chevron-left></b-icon-chevron-left>
-          Back to albums
-        </UTDButton>
-      </div>
       <AlbumViewer
         :token="this.token"
         :selected-album="selectedAlbum"
         @photo-selected="onSelect"
+        @back="selectedAlbum = null"
       />
     </b-container>
   </b-row>
