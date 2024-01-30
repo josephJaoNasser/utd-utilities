@@ -17,8 +17,8 @@
       { disabled: disabled },
     ]"
   >
-    <slot v-if="!isLoading"></slot>
-    <div v-else>Loading...</div>
+    <slot v-if="!loading"></slot>
+    <b-spinner v-else small></b-spinner>
   </b-button>
 </template>
 
@@ -59,11 +59,6 @@ export default {
   methods: {
     handleClick(evt) {
       this.$emit("click", evt);
-    },
-  },
-  computed: {
-    isLoading() {
-      return this.$attrs.loading;
     },
   },
 };

@@ -20,8 +20,15 @@
     </b-container>
 
     <b-container fluid v-if="!selectedAlbum">
-      <div v-if="isMomentsLoading">Loading moments...</div>
-      <b-col class="px-0">
+      <b-container fluid class="text-center mb-3 p-4" v-if="isMomentsLoading">
+        <b-spinner label="Loading..." variant="primary" type="grow"></b-spinner>
+      </b-container>
+      <b-col v-else class="px-0">
+        <b-container fluid v-if="!moments.length">
+          <p class="text-center p-4">
+            <i> You have no moments... </i>
+          </p>
+        </b-container>
         <b-row cols="1" cols-md="2" cols-lg="3" no-gutters>
           <b-col
             v-for="album in filteredMoments"
@@ -58,6 +65,7 @@
       <AlbumViewer
         :token="this.token"
         :selected-album="selectedAlbum"
+        :organization-id="organizationId"
         @photo-selected="onSelect"
         @back="selectedAlbum = null"
       />
@@ -80,6 +88,7 @@ export default {
     },
     token: String,
     accountId: Number,
+    organizationId: Number,
   },
   components: { UTDInput, UTDService, UTDButton, AlbumViewer },
   emits: ["load", "onSelect"],
@@ -93,6 +102,7 @@ export default {
   },
   methods: {
     async getMoments() {
+      this.isMomentsLoading = true;
       try {
         const UTD = new UTDService(this.token);
         const { payload } = await UTD.getMoments(this.accountId);
@@ -102,6 +112,7 @@ export default {
       } catch (e) {
         console.log(e);
       }
+      this.isMomentsLoading = false;
     },
 
     onSelect(e) {

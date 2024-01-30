@@ -23,11 +23,80 @@ class UTDService {
   async getAlbums(accountId) {
     try {
       const { data } = await this.axiosInstance.get(
-        `/site-builder/albums?accountId=11` //${accountId}`
+        //`/site-builder/albums?accountId=11`
+        `/site-builder/albums?accountId=${accountId}`
       );
       return data;
     } catch (e) {
       console.log(e);
+      throw e;
+    }
+  }
+
+  /**
+   * Creates a new album
+   * @param {{
+   * albumName: string,
+   * albumDescription: string,
+   * albumImage: string,
+   * parentAlbumId: number,
+   * siteId: string,
+   * accountId: number,
+   * albumType: string
+   * }} albumDetails
+   * @returns
+   */
+  async createAlbum(albumDetails = {}) {
+    try {
+      const { data } = await this.axiosInstance.post(`/albums`, albumDetails);
+      return data;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
+  /**
+   * Upload photos to an album
+   * @param {{
+   *  siteId: string,
+   *  accountId: number,
+   *  photos: Array, // array of form data
+   *  albumId: number,
+   * }} options
+   */
+  async addAlbumPhotos(options) {
+    try {
+      const photoPromises = options.photos.map((photoFile) => {
+        return this.uploadFile(photoFile);
+      });
+
+      const uploadResponses = await Promise.all(photoPromises);
+
+      const addToAlbumResponses = uploadResponses.map(({ payload }) => {
+        const { url, thumbnail } = payload;
+        console.log({
+          payload: {
+            image: url,
+            imageThumbnail: thumbnail,
+            albumId: options.albumId,
+          },
+          siteId: options.siteId,
+        });
+
+        return this.axiosInstance.post(`/site-builder/gallery`, {
+          payload: {
+            image: url,
+            imageThumbnail: thumbnail,
+            albumId: options.albumId,
+          },
+          siteId: options.siteId,
+        });
+      });
+
+      const albumLinkResponses = await Promise.all(addToAlbumResponses);
+      return albumLinkResponses.map(({ data }) => data);
+    } catch (e) {
       throw e;
     }
   }

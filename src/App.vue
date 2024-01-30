@@ -2,6 +2,7 @@
   <div id="app">
     <PhotoUtilities
       :accountId="credentials.accountId"
+      :organization-id="credentials.organizationId"
       :token="credentials.token"
       @photo-selected="(e) => (selectedPhoto = e)"
     />
@@ -32,7 +33,8 @@ export default {
     credentials() {
       return {
         token: process.env.VUE_APP_TOKEN || "",
-        accountId: +process.env.VUE_APP_ACCOUNT_ID || "",
+        accountId: +process.env.VUE_APP_ACCOUNT_ID || null,
+        organizationId: +process.env.VUE_APP_ORGANIZATION_ID || null,
       };
     },
   },

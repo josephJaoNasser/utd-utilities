@@ -33,39 +33,62 @@
         ></b-form-textarea>
       </b-form-group>
 
-      <b-form-group label="Label" label-for="albumTitle">
+      <!-- <b-form-group label="Label" label-for="albumTitle">
         <b-form-input
           id="albumLabel"
           v-model="albumLabel"
           type="text"
           required
         ></b-form-input>
-      </b-form-group>
+      </b-form-group> -->
     </b-form>
-    <UTDButton @click="handleUpload">Create Album</UTDButton>
+    <UTDButton @click="handleCreateAlbum" :loading="isCreatingAlbum">
+      Create Album
+    </UTDButton>
   </b-modal>
 </template>
 
 <script>
+import UTDService from "@/services/UTDService";
 import UTDButton from "../UTDButton";
 export default {
   name: "CreateAlbum",
   props: {
     show: Boolean,
+    token: String,
+    accountId: Number,
+    organizationId: Number,
   },
   components: {
     UTDButton,
   },
-  emits: ["close", "album-create"],
+  emits: ["close", "album-created"],
   data() {
     return {
       albumTitle: "",
       albumDescription: "",
       albumLabel: "",
+      isCreatingAlbum: false,
     };
   },
   methods: {
-    handleUpload() {},
+    async handleCreateAlbum() {
+      this.isCreatingAlbum = true;
+      try {
+        const UTD = new UTDService();
+        const res = await UTD.createAlbum({
+          albumName: this.albumTitle,
+          albumDescription: this.albumDescription,
+          accountId: this.accountId,
+        });
+
+        this.$emit("album-created", res);
+        this.$emit("close");
+      } catch (e) {
+        console.log(e);
+      }
+      this.isCreatingAlbum = false;
+    },
   },
   computed: {
     modalShow: {

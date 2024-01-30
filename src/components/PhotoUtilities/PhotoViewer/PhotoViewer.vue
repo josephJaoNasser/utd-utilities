@@ -20,8 +20,19 @@
     </b-container>
     <b-container fluid>
       <b-row>
-        <b-col v-if="isPhotosLoading">Loading photos...</b-col>
-        <b-col order="2" order-md="1">
+        <b-container fluid class="text-center mb-3 p-4" v-if="isPhotosLoading">
+          <b-spinner
+            label="Loading..."
+            variant="primary"
+            type="grow"
+          ></b-spinner>
+        </b-container>
+        <b-col order="2" order-md="1" v-else>
+          <b-container fluid v-if="!photos.length">
+            <p class="text-center p-4">
+              <i> No photos to show... </i>
+            </p>
+          </b-container>
           <b-row
             cols="3"
             :cols-md="!selectedPhoto ? 4 : 2"
@@ -76,6 +87,8 @@ export default {
   components: { Preview, PhotoListItem, UTDInput },
   props: {
     token: String,
+    accountId: Number,
+    organizationId: Number,
     source: {
       type: String,
       default: "all",
@@ -117,7 +130,9 @@ export default {
       this.isPhotosLoading = true;
       try {
         const UTD = new UTDService(this.token);
-        const { rows, count } = await UTD.getPhotos();
+        const { rows, count } = await UTD.getPhotos({
+          accountId: this.accountId,
+        });
         this.photos = rows;
         this.$emit("load", this.photos);
       } catch (e) {

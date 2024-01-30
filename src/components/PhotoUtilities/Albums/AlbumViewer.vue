@@ -1,10 +1,17 @@
 <template>
-  <div>
+  <b-container fluid>
     <b-container fluid class="p-0 mb-3">
-      <UTDButton @click="$emit('back')" type="light" class="mb-3">
-        <b-icon-chevron-left></b-icon-chevron-left>
-        Back to albums
-      </UTDButton>
+      <div class="d-flex justify-content-between">
+        <UTDButton @click="$emit('back')" type="light" class="mb-3">
+          <b-icon-chevron-left></b-icon-chevron-left>
+          Back to albums
+        </UTDButton>
+        <UTDButton @click="showUploader = true" type="primary" class="mb-3">
+          <b-icon-plus></b-icon-plus>
+          Add photos
+        </UTDButton>
+      </div>
+
       <div class="card bg-dark text-white border-0 utd-utilities__album-cover">
         <div class="position-relative img-container">
           <div class="album-bg-overlay absolute"></div>
@@ -31,25 +38,37 @@
       </div>
     </b-container>
     <PhotoViewer
-    class="pt-5"
+      class="pt-5"
       :token="token"
       :default-photos="formattedGallery"
       :source="'album'"
       @photo-selected="onSelect"
     />
-  </div>
+    <Uploader
+      :token="token"
+      :show="showUploader"
+      :account-id="accountId"
+      :organization-id="organizationId"
+      site-id="ef6c9ff73237e166d797df0b8ded24f5"
+      :album-id="selectedAlbum.id"
+      @close="showUploader = false"
+    />
+  </b-container>
 </template>
 
 <script>
 import UTDService from "@/services/UTDService";
 import UTDButton from "@/components/UTDButton";
 import PhotoViewer from "../PhotoViewer";
+import Uploader from "../Uploader.vue";
 
 export default {
   name: "AlbumViewer",
-  components: { PhotoViewer, UTDButton },
+  components: { PhotoViewer, UTDButton, Uploader },
   props: {
     token: String,
+    accountId: Number,
+    organizationId: Number,
     selectedAlbum: {
       type: Object,
       default: () => {},
@@ -59,6 +78,7 @@ export default {
   data() {
     return {
       photos: [],
+      showUploader: false,
     };
   },
   methods: {

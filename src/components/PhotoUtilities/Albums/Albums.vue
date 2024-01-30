@@ -20,8 +20,15 @@
     </b-container>
 
     <b-container fluid v-if="!selectedAlbum">
-      <div v-if="isAlbumsLoading">Loading albums...</div>
-      <b-col class="px-0">
+      <b-container fluid class="text-center mb-3 p-4" v-if="isAlbumsLoading">
+        <b-spinner label="Loading..." variant="primary" type="grow"></b-spinner>
+      </b-container>
+      <b-col class="px-0" v-else>
+        <b-container fluid v-if="!albums.length">
+          <p class="text-center p-4">
+            <i> You have no albums... </i>
+          </p>
+        </b-container>
         <b-row cols="1" cols-md="2" cols-lg="3" no-gutters>
           <b-col
             v-for="album in filteredAlbums"
@@ -54,6 +61,8 @@
       <AlbumViewer
         :token="this.token"
         :selected-album="selectedAlbum"
+        :account-id="accountId"
+        :organization-id="organizationId"
         @photo-selected="onSelect"
         @back="selectedAlbum = null"
       />
@@ -76,6 +85,7 @@ export default {
     },
     token: String,
     accountId: Number,
+    organizationId: Number,
   },
   components: { UTDInput, UTDButton, AlbumViewer },
   emits: ["load", "photo-selected"],

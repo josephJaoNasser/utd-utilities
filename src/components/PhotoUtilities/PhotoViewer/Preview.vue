@@ -1,9 +1,5 @@
 <template>
-  <b-container
-    fluid
-    class="p-4 rounded utd-utilities__photo-preview"
-    style="background-color: rgb(0, 0, 0, 0.05)"
-  >
+  <b-container fluid class="p-4 rounded utd-utilities__photo-preview">
     <div class="mb-4 d-flex justify-content-between">
       <UTDButton
         @click="onClose"
@@ -158,7 +154,9 @@ export default {
 <style scoped lang="scss">
 .utd-utilities {
   &__photo-preview {
-    cursor: pointer;
+    position: sticky;
+    top: 150px;
+    background-color: rgb(0, 0, 0, 0.05);
 
     & .img-container:hover {
       .btn-zoom {

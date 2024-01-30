@@ -9,7 +9,7 @@
           class="px-3"
           style="background-color: #f1f4f7"
         >
-          <div class="sticky-top pt-3">
+          <div class="pt-3">
             <div class="mb-5">
               <UTDButton
                 block
@@ -66,6 +66,8 @@
           <PhotoViewer
             v-if="currentUtility === UtilityTypes.photo"
             :token="token"
+            :account-id="accountId"
+            :organization-id="organizationId"
             @load="(e) => (photos = e)"
             @photo-selected="onSelect"
             :default-photos="photos"
@@ -74,6 +76,7 @@
             v-if="currentUtility === UtilityTypes.album"
             :token="token"
             :account-id="accountId"
+            :organization-id="organizationId"
             @load="(e) => (albums = e)"
             @photo-selected="onSelect"
             :default-albums="albums"
@@ -82,6 +85,7 @@
             v-if="currentUtility === UtilityTypes.moments"
             :token="token"
             :account-id="accountId"
+            :organization-id="organizationId"
             @load="(e) => (moments = e)"
             @photo-selected="onSelect"
             :default-moments="moments"
@@ -99,11 +103,15 @@
     <Uploader
       :token="token"
       :show="showUploader"
+      :account-id="accountId"
+      :organization-id="organizationId"
       @close="showUploader = false"
     />
     <CreateAlbum
       :token="token"
       :show="showCreateAlbum"
+      :account-id="accountId"
+      :organization-id="organizationId"
       @close="showCreateAlbum = false"
     />
   </b-card>
@@ -129,6 +137,7 @@ export default {
   name: "PhotoUtilities",
   props: {
     accountId: Number,
+    organizationId: Number,
     token: String,
   },
   components: {

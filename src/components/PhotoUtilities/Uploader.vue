@@ -50,7 +50,7 @@
       <UTDInput icon="link" />
     </div>
     <div class="mt-3">
-      <UTDButton @click="handleUpload">Upload</UTDButton>
+      <UTDButton @click="handleUpload" :loading="isUploading">Upload</UTDButton>
     </div>
   </b-modal>
 </template>
@@ -65,8 +65,10 @@ export default {
   props: {
     token: String,
     show: Boolean,
-    userId: String,
-    accountId: String,
+    organizationId: Number,
+    accountId: Number,
+    albumId: Number,
+    siteId: String,
   },
   components: { UTDButton, UTDInput },
   emits: ["close", "album-create"],
@@ -74,6 +76,7 @@ export default {
     return {
       image: null,
       file: null,
+      isUploading: false,
     };
   },
   computed: {
@@ -114,17 +117,33 @@ export default {
       }
     },
     async handleUpload() {
+      this.isUploading = true;
+      const formData = new FormData();
+      formData.append("file", this.file);
+      formData.append("userId", this.organizationId);
+      formData.append("accountId", this.accountId);
+
       try {
-        const formData = new FormData();
-        formData.append("file", this.file);
-        formData.append("userId", this.userId);
-        formData.append("accountId", this.accountId);
         const UTD = new UTDService(this.token);
-        const res = await UTD.uploadFile(formData);
+        let res;
+
+        if (this.albumId) {
+          res = await UTD.addAlbumPhotos({
+            accountId: this.accountId,
+            albumId: this.albumId,
+            photos: [formData],
+            siteId: this.siteId,
+          });
+        } else {
+          res = await UTD.uploadFile(formData);
+        }
+
         console.log(res);
+        this.$emit("close");
       } catch (e) {
         console.log(e);
       }
+      this.isUploading = false;
     },
   },
 };
