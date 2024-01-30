@@ -47,7 +47,9 @@
               :key="photo.id"
             >
               <PhotoListItem
-                :thumbnail-url="photo.thumbnail"
+                :thumbnail-url="
+                  photo.thumbnail?.length ? photo.thumbnail : photo.url
+                "
                 :active="!!selectedPhoto && selectedPhoto.id === photo.id"
               />
             </b-col>

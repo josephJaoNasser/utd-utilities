@@ -154,8 +154,6 @@ export default {
 <style scoped lang="scss">
 .utd-utilities {
   &__photo-preview {
-    position: sticky;
-    top: 150px;
     background-color: rgb(0, 0, 0, 0.05);
 
     & .img-container:hover {

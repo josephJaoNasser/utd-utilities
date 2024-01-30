@@ -39,15 +39,15 @@
             <div class="card bg-dark text-white border-0 utd-utilities__album">
               <div class="position-relative img-container">
                 <div class="album-bg-overlay absolute"></div>
-                <img class="card-img" :src="album.image" />
+                <img class="card-img" :src="album.albumImage" />
               </div>
               <div class="card-img-overlay p-0">
                 <div class="card-body h-100">
                   <h5 class="card-title">
-                    {{ album.title.length ? album.title : "Untitled Album" }}
+                    {{ album.albumName.length ? album.albumName : "Untitled Album" }}
                   </h5>
                   <p class="card-text">
-                    {{ album.description }}
+                    {{ album.albumDescription }}
                   </p>
                 </div>
               </div>
@@ -123,7 +123,7 @@ export default {
       const searchLowerCase = this.searchString.toLowerCase();
 
       const filteredList = this.albums.filter((album) =>
-        album.title.toLowerCase().includes(searchLowerCase)
+        album.albumName.toLowerCase().includes(searchLowerCase)
       );
 
       return filteredList;

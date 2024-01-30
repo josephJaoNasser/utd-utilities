@@ -13,23 +13,37 @@ class UTDService {
   }
 
   /**
-   * shows albums of images of the client
-   * We have two images entry point, show by user's upload or show all the images uploaded in the account (organization),
-   * if you pass accountId = x, then it will show all the images in the account,
-   * if no accountId is found, then it will get only all the images in uploaded by the user.
+   * Get all albums general information
    * @param {*} accountId
    * @returns
    */
   async getAlbums(accountId) {
     try {
       const { data } = await this.axiosInstance.get(
-        //`/site-builder/albums?accountId=11`
-        `/site-builder/albums?accountId=${accountId}`
+        `/albums?accountId=${accountId}`
       );
+
       return data;
     } catch (e) {
       console.log(e);
       throw e;
+    }
+  }
+
+  /**
+   * Get album with photos
+   * @returns
+   */
+  async getAlbumGallery(albumId, siteId) {
+    try {
+      const { data } = await this.axiosInstance.get(
+        //`/site-builder/albums?accountId=11`
+        `/site-builder/gallery?siteId=${siteId}&albumId=${albumId}`
+      );
+
+      return data;
+    } catch (e) {
+      console.log(e);
     }
   }
 

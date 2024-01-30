@@ -15,19 +15,19 @@
       <div class="card bg-dark text-white border-0 utd-utilities__album-cover">
         <div class="position-relative img-container">
           <div class="album-bg-overlay absolute"></div>
-          <img class="card-img" :src="selectedAlbum.image" />
+          <img class="card-img" :src="selectedAlbum.albumImage" />
         </div>
         <div class="card-img-overlay p-0">
           <div class="card-body h-100">
             <h4 class="card-title">
               {{
-                selectedAlbum.title.length
-                  ? selectedAlbum.title
+                selectedAlbum.albumName.length
+                  ? selectedAlbum.albumName
                   : "Untitled Album"
               }}
             </h4>
             <p class="card-text">
-              {{ selectedAlbum.description }}
+              {{ selectedAlbum.albumDescription }}
             </p>
             <p class="card-text">
               {{ formattedGallery.length }}
@@ -37,7 +37,11 @@
         </div>
       </div>
     </b-container>
+    <b-container fluid class="text-center mb-3 p-4" v-if="isPhotosLoading">
+      <b-spinner label="Loading..." variant="primary" type="grow"></b-spinner>
+    </b-container>
     <PhotoViewer
+      v-else
       class="pt-5"
       :token="token"
       :default-photos="formattedGallery"
@@ -50,7 +54,7 @@
       :account-id="accountId"
       :organization-id="organizationId"
       site-id="ef6c9ff73237e166d797df0b8ded24f5"
-      :album-id="selectedAlbum.id"
+      :album-id="selectedAlbum.encryptedId"
       @close="showUploader = false"
     />
   </b-container>
@@ -61,6 +65,8 @@ import UTDService from "@/services/UTDService";
 import UTDButton from "@/components/UTDButton";
 import PhotoViewer from "../PhotoViewer";
 import Uploader from "../Uploader.vue";
+
+const SITE_ID_REMOVE_DURING_PRACTICAL = "ef6c9ff73237e166d797df0b8ded24f5";
 
 export default {
   name: "AlbumViewer",
@@ -77,17 +83,26 @@ export default {
   emits: ["photo-selected", "back"],
   data() {
     return {
-      photos: [],
       showUploader: false,
+      isPhotosLoading: false,
+      gallery: [],
     };
   },
   methods: {
     async getAlbumPhotos() {
+      this.isPhotosLoading = true;
       try {
         const UTD = new UTDService(this.token);
+        const albumData = await UTD.getAlbumGallery(
+          this.selectedAlbum.encryptedId,
+          SITE_ID_REMOVE_DURING_PRACTICAL
+        );
+
+        this.gallery = albumData.payload;
       } catch (e) {
         console.log(e);
       }
+      this.isPhotosLoading = false;
     },
 
     onSelect(e) {
@@ -96,7 +111,7 @@ export default {
   },
   computed: {
     formattedGallery() {
-      return this.selectedAlbum.gallery.map((image, index) => ({
+      return this.gallery.map((image, index) => ({
         id: index,
         fileName: image.fileName,
         thumbnail: image.imageThumbnail,
