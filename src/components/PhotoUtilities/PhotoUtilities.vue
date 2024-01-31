@@ -106,6 +106,7 @@
       :account-id="accountId"
       :organization-id="organizationId"
       @close="showUploader = false"
+      @upload-completed="handleUploadComplete"
     />
     <CreateAlbum
       :token="token"
@@ -113,6 +114,7 @@
       :account-id="accountId"
       :organization-id="organizationId"
       @close="showCreateAlbum = false"
+      @album-created="handleAlbumCreate"
     />
   </b-card>
 </template>
@@ -168,6 +170,16 @@ export default {
 
     onSelect(e) {
       this.$emit("photo-selected", e);
+    },
+
+    handleUploadComplete(newPhotos) {
+      for (const photo of newPhotos) {
+        this.photos.unshift(photo);
+      }
+    },
+
+    handleAlbumCreate(albumData) {
+      this.albums.unshift(albumData);
     },
   },
   computed: {

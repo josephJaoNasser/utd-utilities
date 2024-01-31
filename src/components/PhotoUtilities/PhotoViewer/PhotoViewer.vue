@@ -147,6 +147,15 @@ export default {
       this.$emit("photo-selected", e);
     },
   },
+  watch: {
+    defaultPhotos: {
+      deep: true,
+      immediate: true,
+      handler(newVal) {
+        this.photos = newVal;
+      },
+    },
+  },
   async mounted() {
     if (!this.defaultPhotos.length && this.source === "all") {
       await this.getPhotos();

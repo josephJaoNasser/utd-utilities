@@ -44,7 +44,11 @@
               <div class="card-img-overlay p-0">
                 <div class="card-body h-100">
                   <h5 class="card-title">
-                    {{ album.albumName.length ? album.albumName : "Untitled Album" }}
+                    {{
+                      album.albumName.length
+                        ? album.albumName
+                        : "Untitled Album"
+                    }}
                   </h5>
                   <p class="card-text">
                     {{ album.albumDescription }}
@@ -127,6 +131,15 @@ export default {
       );
 
       return filteredList;
+    },
+  },
+  watch: {
+    defaultAlbums: {
+      deep: true,
+      immediate: true,
+      handler(newVal) {
+        this.albums = newVal;
+      },
     },
   },
   async mounted() {

@@ -75,28 +75,16 @@ class UTDService {
    * @param {{
    *  siteId: string,
    *  accountId: number,
-   *  photos: Array, // array of form data
+   *  photos: FormData[],
    *  albumId: number,
    * }} options
    */
   async addAlbumPhotos(options) {
     try {
-      const photoPromises = options.photos.map((photoFile) => {
-        return this.uploadFile(photoFile);
-      });
-
-      const uploadResponses = await Promise.all(photoPromises);
+      const uploadResponses = await this.uploadFiles(options.photos);
 
       const addToAlbumResponses = uploadResponses.map(({ payload }) => {
         const { url, thumbnail } = payload;
-        console.log({
-          payload: {
-            image: url,
-            imageThumbnail: thumbnail,
-            albumId: options.albumId,
-          },
-          siteId: options.siteId,
-        });
 
         return this.axiosInstance.post(`/site-builder/gallery`, {
           payload: {
@@ -154,12 +142,16 @@ class UTDService {
 
   /**
    * self explanatory
-   * @returns
+   * @param { FormData[] } files
    */
-  async uploadFile(file) {
+  async uploadFiles(files) {
     try {
-      const { data } = await this.axiosInstance.post(`/file/upload`, file);
-      return data;
+      const fileUploadPromises = files.map((file) => {
+        return this.axiosInstance.post(`/file/upload`, file);
+      });
+
+      const responses = await Promise.all(fileUploadPromises);
+      return responses.map((response) => response.data);
     } catch (e) {
       console.log(e);
       throw e;

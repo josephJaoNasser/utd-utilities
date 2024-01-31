@@ -56,6 +56,7 @@
       site-id="ef6c9ff73237e166d797df0b8ded24f5"
       :album-id="selectedAlbum.encryptedId"
       @close="showUploader = false"
+      @upload-completed="handleUploadComplete"
     />
   </b-container>
 </template>
@@ -98,11 +99,17 @@ export default {
           SITE_ID_REMOVE_DURING_PRACTICAL
         );
 
-        this.gallery = albumData.payload;
+        this.gallery = albumData.payload || [];
       } catch (e) {
         console.log(e);
       }
       this.isPhotosLoading = false;
+    },
+
+    handleUploadComplete(newPhotos) {
+      for (const photo of newPhotos) {
+        this.gallery.unshift(photo);
+      }
     },
 
     onSelect(e) {

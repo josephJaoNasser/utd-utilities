@@ -14,41 +14,97 @@
       </b-button>
     </div>
     <div
-      :class="['drop-area', image && 'has-image']"
+      ref="dropArea"
+      :class="['drop-area', files.length && 'has-image']"
       @dragover.prevent="handleDragOver"
       @dragleave.prevent="handleDragLeave"
       @drop.prevent="handleDrop"
     >
-      <img v-if="image" :src="image" alt="Uploaded Image" />
+      <b-container fluid v-if="files.length">
+        <b-row no-gutters cols="2" cols-sm="3" cols-lg="4">
+          <b-col
+            v-for="(file, index) in files"
+            class="p-1 p-md-2 position-relative photo-column"
+          >
+            <b-button
+              size="sm"
+              variant="light"
+              class="position-absolute"
+              style="top: 15px; right: 15px"
+              @click="handleFileRemove(index)"
+            >
+              <b-icon-trash></b-icon-trash>
+            </b-button>
+            <b-img :src="getImageFromFile(file)" alt="Uploaded Image" />
+          </b-col>
+          <b-col class="p-1 p-md-2 photo-column">
+            <b-container
+              fluid
+              class="rounded h-100 p-0"
+              style="opacity: 0.15; border: 2px solid black"
+            >
+              <label
+                for="utd-utilities__upload-select"
+                class="h-100 w-100 cursor-pointer"
+              >
+                <b-icon-plus class="h-100 w-100"></b-icon-plus>
+              </label>
+            </b-container>
+            <input
+              id="utd-utilities__upload-select"
+              type="file"
+              ref="fileInput"
+              accept="image/*"
+              multiple
+              hidden
+              @change="handleFileSelect"
+            />
+          </b-col>
+        </b-row>
+      </b-container>
       <div v-else>
-        <div>
+        <b-container fluid class="drag-drop-label">
+          <b-icon-upload font-scale="5" class="mb-3"></b-icon-upload>
           <h4>Drop files to upload</h4>
           <input
             type="file"
             ref="fileInput"
             accept="image/*"
             style="display: none"
+            multiple
             @change="handleFileSelect"
           />
-        </div>
+        </b-container>
         or
-        <div class="text-center">
+        <div class="text-center mt-2">
+          <UTDButton class="cursor-pointer">
+            <label
+              for="utd-utilities__upload-select"
+              class="mb-0 cursor-pointer"
+            >
+              <b-icon-folder-plus class="mr-2"></b-icon-folder-plus>
+              Select files
+            </label>
+          </UTDButton>
           <input
+            id="utd-utilities__upload-select"
             type="file"
             ref="fileInput"
             accept="image/*"
+            multiple
+            hidden
             @change="handleFileSelect"
           />
         </div>
       </div>
     </div>
-    <div class="mt-3">
+    <!-- <div class="mt-3">
       <label for="urlUpload">
         <h5 class="mb-0">Import using image URL</h5>
       </label>
       <p>Insert image by pasting the image URL of the image</p>
       <UTDInput icon="link" />
-    </div>
+    </div> -->
     <div class="mt-3">
       <UTDButton @click="handleUpload" :loading="isUploading">Upload</UTDButton>
     </div>
@@ -61,21 +117,20 @@ import UTDButton from "../UTDButton";
 import UTDInput from "../UTDInput";
 
 export default {
-  name: "UploadPhotos",
+  name: "Uploader",
   props: {
     token: String,
     show: Boolean,
     organizationId: Number,
     accountId: Number,
-    albumId: Number,
+    albumId: String,
     siteId: String,
   },
   components: { UTDButton, UTDInput },
-  emits: ["close", "album-create"],
+  emits: ["close", "upload-completed"],
   data() {
     return {
-      image: null,
-      file: null,
+      files: [],
       isUploading: false,
     };
   },
@@ -86,60 +141,78 @@ export default {
       },
       set(val) {
         this.image = null;
-        this.$emit("close");
+        this.handleClose();
       },
     },
   },
   methods: {
     handleDragOver(evt) {
-      evt.target.classList.add("drag-over");
+      const dropArea = this.$refs.dropArea;
+      dropArea.classList.add("drag-over");
     },
     handleDragLeave(evt) {
-      evt.target.classList.remove("drag-over");
+      const dropArea = this.$refs.dropArea;
+      dropArea.classList.remove("drag-over");
     },
     handleDrop(evt) {
       evt.preventDefault();
       evt.target.classList.remove("drag-over");
-      const file = evt.dataTransfer.files[0];
-      this.handleFile(file);
+      const files = evt.dataTransfer.files;
+      this.handleFiles(files);
     },
     handleFileSelect() {
       const fileInput = this.$refs.fileInput;
-      const file = fileInput.files[0];
-      this.handleFile(file);
+      const files = fileInput.files;
+      this.handleFiles(files);
     },
-    handleFile(file) {
-      if (file && file.type.startsWith("image/")) {
-        this.image = URL.createObjectURL(file);
-        this.file = file;
-      } else {
-        this.image = null;
+    handleFileRemove(index) {
+      this.files.splice(index, 1);
+    },
+    getImageFromFile(file) {
+      return URL.createObjectURL(file);
+    },
+    handleFiles(files) {
+      for (const file of files) {
+        if (file && file.type.startsWith("image/")) {
+          this.files.push(file);
+        }
       }
     },
-    async handleUpload() {
-      this.isUploading = true;
+    handleClose() {
+      this.files = [];
+      this.$emit("close");
+    },
+    packagePhoto(file) {
       const formData = new FormData();
-      formData.append("file", this.file);
+      formData.append("file", file);
       formData.append("userId", this.organizationId);
       formData.append("accountId", this.accountId);
 
+      return formData;
+    },
+    async handleUpload() {
+      this.isUploading = true;
+
       try {
         const UTD = new UTDService(this.token);
-        let res;
+        const photos = this.files.map((file) => this.packagePhoto(file));
+
+        let responses;
 
         if (this.albumId) {
-          res = await UTD.addAlbumPhotos({
+          responses = await UTD.addAlbumPhotos({
             accountId: this.accountId,
             albumId: this.albumId,
-            photos: [formData],
+            photos: photos,
             siteId: this.siteId,
           });
         } else {
-          res = await UTD.uploadFile(formData);
+          responses = await UTD.uploadFiles(photos);
         }
 
-        console.log(res);
-        this.$emit("close");
+        const photosData = responses.map(({ payload }) => payload);
+        this.$emit("upload-completed", photosData);
+        this.handleClose();
       } catch (e) {
         console.log(e);
       }
@@ -150,27 +223,41 @@ export default {
 </script>
 
 <style scoped lang="scss">
+$primary: #2a99d6;
 .drop-area {
   border: 2px dashed #ccc;
   text-align: center;
   cursor: pointer;
   border-radius: 10px;
 
+  .drag-drop-label {
+    color: #555;
+  }
+
+  &.drag-over {
+    border-color: $primary;
+    .drag-drop-label {
+      color: $primary;
+    }
+  }
+
   &:not(.has-image) {
     padding: 2rem;
   }
 
   &.has-image {
-    padding: 10px;
+    padding: 0px;
+  }
+
+  .photo-column {
+    aspect-ratio: 1;
   }
 
   img {
-    height: 100%;
+    object-fit: cover;
     width: 100%;
+    height: 100%;
+    border-radius: 8px;
   }
-}
-
-.drag-over {
-  border-color: #2a99d6;
 }
 </style>

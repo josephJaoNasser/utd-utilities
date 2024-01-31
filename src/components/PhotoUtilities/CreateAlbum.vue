@@ -82,7 +82,7 @@ export default {
           accountId: this.accountId,
         });
 
-        this.$emit("album-created", res);
+        this.$emit("album-created", res.payload);
         this.$emit("close");
       } catch (e) {
         console.log(e);
