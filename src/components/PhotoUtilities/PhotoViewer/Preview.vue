@@ -18,7 +18,7 @@
       </UTDButton>
     </div>
     <b-container
-      class="position-relative mb-5 p-0 img-container"
+      class="position-relative mb-5 img-container"
       @click="showPreviewModal = true"
     >
       <div class="btn-zoom">
@@ -29,7 +29,7 @@
         fluid-grow
         class="checkered-background"
         :src="photoDetails.url"
-        style="margin: 0 auto"
+        style="margin: 0 auto; max-height: 250px; object-fit: contain"
       />
     </b-container>
     <b-container v-if="source !== 'ai'" fluid class="p-0">
@@ -158,11 +158,20 @@ export default {
   &__photo-preview {
     background-color: rgb(0, 0, 0, 0.05);
 
-    & .img-container:hover {
-      .btn-zoom {
-        opacity: 0.6;
+    & .img-container {
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 4px;
+      overflow: hidden;
+
+      &:hover {
+        .btn-zoom {
+          opacity: 0.6;
+        }
       }
     }
+
     .btn-zoom {
       position: absolute;
       bottom: 5px;
@@ -192,8 +201,8 @@ export default {
     border: none;
   }
 }
-.checkered-background {
-  background: repeating-conic-gradient(#cacaca 0% 25%, transparent 0% 50%) 50% /
-    20px 20px;
-}
+// .checkered-background {
+//   background: repeating-conic-gradient(#cacaca 0% 25%, transparent 0% 50%) 50% /
+//     20px 20px;
+// }
 </style>

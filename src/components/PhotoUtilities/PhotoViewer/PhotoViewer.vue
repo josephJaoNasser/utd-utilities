@@ -34,6 +34,7 @@
             </p>
           </b-container>
           <b-row
+            class="utd-utilities__photo-grid"
             cols="3"
             :cols-md="!selectedPhoto ? 4 : 2"
             :cols-lg="!selectedPhoto ? 5 : 3"
@@ -163,3 +164,15 @@ export default {
   },
 };
 </script>
+
+<style scoped lang="scss">
+$md: 768px;
+.utd-utilities {
+  @media screen and (min-width: $md) {
+    &__photo-grid {
+      max-height: 700px;
+      overflow: auto;
+    }
+  }
+}
+</style>

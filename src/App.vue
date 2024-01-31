@@ -6,7 +6,7 @@
       :token="credentials.token"
       @photo-selected="(e) => (selectedPhoto = e)"
     />
-    <b-container fluid class="mt-5">
+    <!-- <b-container fluid class="mt-5">
       <button style="margin: 0 auto" @click="selectedPhoto = null">
         Clear image
       </button>
@@ -18,7 +18,7 @@
         v-if="selectedPhoto"
         :src="selectedPhoto?.url"
       />
-    </b-container>
+    </b-container> -->
   </div>
 </template>
 
