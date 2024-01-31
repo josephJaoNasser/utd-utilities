@@ -77,7 +77,7 @@
         </b-container>
         or
         <div class="text-center mt-2">
-          <UTDButton class="cursor-pointer">
+          <UTDButton class="cursor-pointer" outline>
             <label
               for="utd-utilities__upload-select"
               class="mb-0 cursor-pointer"
@@ -106,7 +106,10 @@
       <UTDInput icon="link" />
     </div> -->
     <div class="mt-3">
-      <UTDButton @click="handleUpload" :loading="isUploading">Upload</UTDButton>
+      <UTDButton @click="handleUpload" :loading="isUploading">
+        <b-icon-cloud-arrow-up-fill class="mr-2"></b-icon-cloud-arrow-up-fill>
+        Upload
+      </UTDButton>
     </div>
   </b-modal>
 </template>

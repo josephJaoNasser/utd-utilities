@@ -43,6 +43,7 @@
       </b-form-group> -->
     </b-form>
     <UTDButton @click="handleCreateAlbum" :loading="isCreatingAlbum">
+      <b-icon-plus-square-fill class="mr-2"></b-icon-plus-square-fill>
       Create Album
     </UTDButton>
   </b-modal>
