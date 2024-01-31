@@ -35,7 +35,11 @@
             >
               <b-icon-trash></b-icon-trash>
             </b-button>
-            <b-img :src="getImageFromFile(file)" alt="Uploaded Image" />
+            <b-img-lazy
+              blankColor="#bbb"
+              :src="getImageFromFile(file)"
+              alt="Uploaded Image"
+            />
           </b-col>
           <b-col class="p-1 p-md-2 photo-column">
             <b-container

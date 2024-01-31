@@ -30,7 +30,7 @@
                 :active="currentUtility === UtilityTypes.photo"
                 @click="onUtilityChange(UtilityTypes.photo)"
               >
-                <b-icon-image></b-icon-image>
+                <b-icon-image class="mr-2"></b-icon-image>
                 Photos
               </b-nav-item>
               <b-nav-item
@@ -38,7 +38,7 @@
                 :active="currentUtility === UtilityTypes.album"
                 @click="onUtilityChange(UtilityTypes.album)"
               >
-                <b-icon-images></b-icon-images>
+                <b-icon-images class="mr-2"></b-icon-images>
                 Albums
               </b-nav-item>
               <b-nav-item
@@ -46,7 +46,7 @@
                 :active="currentUtility === UtilityTypes.moments"
                 @click="onUtilityChange(UtilityTypes.moments)"
               >
-                <b-icon-calendar-fill></b-icon-calendar-fill>
+                <b-icon-calendar-fill class="mr-2"></b-icon-calendar-fill>
                 Moments
               </b-nav-item>
               <b-nav-item
@@ -54,7 +54,7 @@
                 :active="currentUtility === UtilityTypes.ai"
                 @click="onUtilityChange(UtilityTypes.ai)"
               >
-                <b-icon-brush></b-icon-brush>
+                <b-icon-brush class="mr-2"></b-icon-brush>
                 AI Image Builder
               </b-nav-item>
             </b-nav>
