@@ -61,16 +61,15 @@
       </b-col>
     </b-container>
 
-    <b-container v-else>
-      <AlbumViewer
-        :token="this.token"
-        :selected-album="selectedAlbum"
-        :account-id="accountId"
-        :organization-id="organizationId"
-        @photo-selected="onSelect"
-        @back="selectedAlbum = null"
-      />
-    </b-container>
+    <AlbumViewer
+      v-else
+      :token="this.token"
+      :selected-album="selectedAlbum"
+      :account-id="accountId"
+      :organization-id="organizationId"
+      @photo-selected="onSelect"
+      @back="selectedAlbum = null"
+    />
   </b-row>
 </template>
 
