@@ -10,7 +10,7 @@
             <UTDInput
               v-model="searchString"
               icon="search"
-              class="p-2"
+              class="p-1 p-sm-2"
               placeholder="Type to search"
             />
           </b-col>
