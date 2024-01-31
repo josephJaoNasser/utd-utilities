@@ -1,7 +1,8 @@
 <template>
-  <b-img
+  <b-img-lazy
     :class="['cursor-pointer', active && 'img-active border-5 border-primary']"
     fluid-grow
+    blankColor="#bbb"
     :src="thumbnailUrl"
   />
 </template>

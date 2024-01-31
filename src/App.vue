@@ -12,7 +12,12 @@
       </button>
       <br />
       <br />
-      <b-img fluid v-if="selectedPhoto" :src="selectedPhoto?.url" />
+      <b-img-lazy
+        blankColor="#bbb"
+        fluid
+        v-if="selectedPhoto"
+        :src="selectedPhoto?.url"
+      />
     </b-container>
   </div>
 </template>

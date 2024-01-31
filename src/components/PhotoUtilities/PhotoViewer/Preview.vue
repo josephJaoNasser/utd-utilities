@@ -24,7 +24,8 @@
       <div class="btn-zoom">
         <b-icon-zoom-in class="h4"></b-icon-zoom-in>
       </div>
-      <b-img
+      <b-img-lazy
+        blankColor="#bbb"
         fluid-grow
         class="checkered-background"
         :src="photoDetails.url"
@@ -95,7 +96,8 @@
       hide-header
       size="lg"
     >
-      <b-img
+      <b-img-lazy
+        blankColor="#bbb"
         fluid-grow
         class="bg-transparent"
         :src="photoDetails.url"
