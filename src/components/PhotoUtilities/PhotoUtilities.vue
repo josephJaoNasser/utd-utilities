@@ -9,7 +9,7 @@
           class="px-3"
           style="background-color: #f1f4f7"
         >
-          <div class="pt-3">
+          <div class="pt-3 sticky-top">
             <div class="mb-5">
               <UTDButton
                 block

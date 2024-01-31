@@ -10,7 +10,7 @@
             <UTDInput
               v-model="searchString"
               icon="search"
-              class="p-2"
+              class="p-1 p-sm-2"
               placeholder="Type to search"
             />
           </b-col>
@@ -61,15 +61,14 @@
       </b-col>
     </b-container>
 
-    <b-container v-else>
-      <AlbumViewer
-        :token="this.token"
-        :selected-album="selectedAlbum"
-        :organization-id="organizationId"
-        @photo-selected="onSelect"
-        @back="selectedAlbum = null"
-      />
-    </b-container>
+    <AlbumViewer
+      v-else
+      :token="this.token"
+      :selected-album="selectedAlbum"
+      :organization-id="organizationId"
+      @photo-selected="onSelect"
+      @back="selectedAlbum = null"
+    />
   </b-row>
 </template>
 
