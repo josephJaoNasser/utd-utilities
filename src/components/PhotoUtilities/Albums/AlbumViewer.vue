@@ -65,7 +65,7 @@
 import UTDService from "@/services/UTDService";
 import UTDButton from "@/components/UTDButton";
 import PhotoViewer from "../PhotoViewer";
-import Uploader from "../Uploader.vue";
+import Uploader from "../Utils/Uploader.vue";
 
 const SITE_ID_REMOVE_DURING_PRACTICAL = "ef6c9ff73237e166d797df0b8ded24f5";
 

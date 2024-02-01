@@ -40,7 +40,6 @@
             :cols-lg="!selectedPhoto ? 5 : 3"
             no-gutters
           >
-            <!-- <b-col v-for="photo in photos"></b-col> -->
             <b-col
               v-for="photo in filteredPhotos"
               class="p-1 p-md-2"
@@ -65,7 +64,7 @@
           order-md="2"
           class="mb-3"
         >
-          <Preview
+          <PhotoDetails
             v-if="!isPhotosLoading"
             :source="source"
             :photo-details="selectedPhoto"
@@ -76,18 +75,16 @@
       </b-row>
     </b-container>
   </b-row>
-
-  <!-- <Preview /> -->
 </template>
 <script>
 import UTDService from "@/services/UTDService";
-import Preview from "./Preview.vue";
+import PhotoDetails from "./PhotoDetails.vue";
 import PhotoListItem from "./PhotoListItem.vue";
 import UTDInput from "@/components/UTDInput";
 
 export default {
   name: "PhotoPicker",
-  components: { Preview, PhotoListItem, UTDInput },
+  components: { PhotoDetails, PhotoListItem, UTDInput },
   props: {
     token: String,
     accountId: Number,

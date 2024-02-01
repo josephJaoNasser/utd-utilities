@@ -17,21 +17,9 @@
         Select photo
       </UTDButton>
     </div>
-    <b-container
-      class="position-relative mb-5 img-container"
-      @click="showPreviewModal = true"
-    >
-      <div class="btn-zoom">
-        <b-icon-zoom-in class="h4"></b-icon-zoom-in>
-      </div>
-      <b-img-lazy
-        blankColor="#bbb"
-        fluid-grow
-        class="checkered-background"
-        :src="photoDetails.url"
-        style="margin: 0 auto; max-height: 250px; object-fit: contain"
-      />
-    </b-container>
+
+    <PhotoWindow :url="photoDetails.url" max-height="250" borders />
+
     <b-container v-if="source !== 'ai'" fluid class="p-0">
       <b-row align-v="center" class="mb-2">
         <b-col cols="4" class="text-right">
@@ -87,31 +75,15 @@
         </b-col>
       </b-row>
     </b-container>
-    <b-modal
-      v-model="showPreviewModal"
-      content-class="border-0 rounded-0 bg-transparent"
-      body-class="p-0"
-      centered
-      hide-footer
-      hide-header
-      size="lg"
-    >
-      <b-img-lazy
-        blankColor="#bbb"
-        fluid-grow
-        class="bg-transparent"
-        :src="photoDetails.url"
-        style="margin: 0 auto"
-      />
-    </b-modal>
   </b-container>
 </template>
 <script>
 import UTDButton from "@/components/UTDButton";
+import PhotoWindow from "../Utils/PhotoWindow.vue";
 
 export default {
   name: "Preview",
-  components: { UTDButton },
+  components: { UTDButton, PhotoWindow },
   props: {
     photoDetails: Object,
     source: {
@@ -127,7 +99,6 @@ export default {
       url,
       caption: "",
       description: "",
-      showPreviewModal: false,
     };
   },
   methods: {
@@ -157,52 +128,10 @@ export default {
 .utd-utilities {
   &__photo-preview {
     background-color: rgb(0, 0, 0, 0.05);
-
-    & .img-container {
-      cursor: pointer;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 4px;
-      overflow: hidden;
-
-      &:hover {
-        .btn-zoom {
-          opacity: 0.6;
-        }
-      }
-    }
-
-    .btn-zoom {
-      position: absolute;
-      bottom: 5px;
-      right: 5px;
-      opacity: 0;
-      background-color: rgba(0, 0, 0);
-      border-radius: 10px;
-      padding: 5px;
-      height: 35px;
-      width: 35px;
-      color: white;
-      transition: opacity 0.1s ease-in-out;
-
-      svg {
-        margin: 0;
-      }
-    }
-
-    .img-preview-modal {
-      .modal-body {
-        padding: 0px !important;
-      }
-    }
   }
 
   &__back-button {
     border: none;
   }
 }
-// .checkered-background {
-//   background: repeating-conic-gradient(#cacaca 0% 25%, transparent 0% 50%) 50% /
-//     20px 20px;
-// }
 </style>

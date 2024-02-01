@@ -120,8 +120,8 @@
 
 <script>
 import UTDService from "@/services/UTDService";
-import UTDButton from "../UTDButton";
-import UTDInput from "../UTDInput";
+import UTDButton from "@/components/UTDButton";
+import UTDInput from "@/components/UTDInput";
 
 export default {
   name: "Uploader",

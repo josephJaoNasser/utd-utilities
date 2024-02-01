@@ -1,6 +1,6 @@
 import PhotoUtilities from "./PhotoUtilities.vue";
-import Uploader from "./Uploader.vue";
-import CreateAlbum from "./CreateAlbum.vue";
+import Uploader from "./Utils/Uploader.vue";
+import CreateAlbum from "./Utils/CreateAlbum.vue";
 import PhotoViewer from "./PhotoViewer";
 import AIArtCreator from "./AIArtCreator";
 

@@ -124,8 +124,8 @@ import PhotoViewer from "./PhotoViewer";
 import Albums from "./Albums";
 import AIArtCreator from "./AIArtCreator/AIArtCreator.vue";
 import UTDButton from "../UTDButton";
-import Uploader from "./Uploader.vue";
-import CreateAlbum from "./CreateAlbum.vue";
+import Uploader from "./Utils/Uploader.vue";
+import CreateAlbum from "./Utils/CreateAlbum.vue";
 import Moments from "./Moments";
 
 const utilTypes = {

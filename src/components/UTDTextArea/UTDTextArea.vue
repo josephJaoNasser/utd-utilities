@@ -1,43 +1,39 @@
 <template>
-  <div ref="inputParent" class="utd-utilities__input border rounded">
-    <div v-if="icon?.length" class="px-2 border-right">
-      <b-icon :icon="icon"></b-icon>
-    </div>
-    <b-input
-      class="border-0 shadow-none"
+  <div ref="textAreaParent" class="utd-utilities__textarea border rounded">
+    <b-form-textarea
       v-bind="$attrs"
+      class="border-0 shadow-none"
+      no-resize
       @input="$emit('input', $event)"
       @focus="handleFocus"
       @blur="handleBlur"
       :placeholder="placeholder"
-    ></b-input>
+    ></b-form-textarea>
   </div>
 </template>
 
 <script>
 export default {
-  name: "UTDInput",
+  name: "UTDTextArea",
   props: {
-    icon: String,
     placeholder: String,
+    value: String,
   },
   methods: {
     handleFocus() {
-      this.$refs.inputParent.classList.add("focused");
+      this.$refs.textAreaParent.classList.add("focused");
     },
 
     handleBlur() {
-      this.$refs.inputParent.classList.remove("focused");
+      this.$refs.textAreaParent.classList.remove("focused");
     },
   },
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .utd-utilities {
-  &__input {
-    display: flex;
-    align-items: center;
+  &__textarea {
     background-color: white;
 
     &.focused {

@@ -51,7 +51,7 @@
 
 <script>
 import UTDService from "@/services/UTDService";
-import UTDButton from "../UTDButton";
+import UTDButton from "@/components/UTDButton";
 export default {
   name: "CreateAlbum",
   props: {
