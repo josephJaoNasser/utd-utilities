@@ -37,6 +37,16 @@
           >
             Create random image
           </UTDButton>
+          <div v-if="images.length" class="border-top pt-3">
+            <UTDButton
+              type="success"
+              block
+              @click="onSelect({ url: images[0].url })"
+            >
+            <b-icon-check class="mr-1"></b-icon-check>
+              Use image
+            </UTDButton>
+          </div>
         </b-container>
       </b-col>
       <b-col cols="12" md="7" lg="8">
@@ -49,11 +59,17 @@
           <p>
             <b-icon-stars style="height: 100px; width: 100px"></b-icon-stars>
           </p>
-          <p class="text-center" v-if="!isGeneratingFromPrompt && !isGeneratingRandom">
+          <p
+            class="text-center"
+            v-if="!isGeneratingFromPrompt && !isGeneratingRandom"
+          >
             Tell us what you want to create!<br />
             Your image will appear here
           </p>
-          <p v-else-if="isGeneratingFromPrompt || isGeneratingRandom" class="text-center">
+          <p
+            v-else-if="isGeneratingFromPrompt || isGeneratingRandom"
+            class="text-center"
+          >
             Creating your image! Please wait a moment...
           </p>
         </b-container>
@@ -116,7 +132,7 @@ export default {
       }
 
       try {
-        this.images = []
+        this.images = [];
         const UTD = new UTDService(this.token);
         const { payload } = await UTD.generateAIImages(prompt, 11);
 
