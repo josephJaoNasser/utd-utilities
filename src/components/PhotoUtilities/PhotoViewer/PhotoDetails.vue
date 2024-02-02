@@ -82,7 +82,7 @@ import UTDButton from "@/components/UTDButton";
 import PhotoWindow from "../Utils/PhotoWindow.vue";
 
 export default {
-  name: "Preview",
+  name: "PhotoDetails",
   components: { UTDButton, PhotoWindow },
   props: {
     photoDetails: Object,

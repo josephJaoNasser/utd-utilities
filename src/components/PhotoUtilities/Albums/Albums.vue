@@ -5,7 +5,13 @@
         <h2 class="font-weight-bold">Albums</h2>
       </div>
       <div v-if="!selectedAlbum">
-        <b-row class="mb-4">
+        <UTDInput
+          v-model="searchString"
+          icon="search"
+          class="p-1 p-sm-2 mb-3"
+          placeholder="Type to search"
+        />
+        <!-- <b-row class="mb-4">
           <b-col cols="12" md="6" lg="7">
             <UTDInput
               v-model="searchString"
@@ -15,7 +21,7 @@
             />
           </b-col>
           <b-col></b-col>
-        </b-row>
+        </b-row> -->
       </div>
     </b-container>
 

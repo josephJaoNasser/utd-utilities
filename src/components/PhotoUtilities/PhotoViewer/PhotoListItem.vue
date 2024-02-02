@@ -4,6 +4,7 @@
     fluid-grow
     blankColor="#bbb"
     :src="thumbnailUrl"
+    style="aspect-ratio: 1; object-fit: cover;"
   />
 </template>
 

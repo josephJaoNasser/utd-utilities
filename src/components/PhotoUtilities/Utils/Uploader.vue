@@ -23,21 +23,51 @@
       <b-container fluid v-if="files.length">
         <b-row no-gutters cols="2" cols-sm="3" cols-lg="4">
           <b-col
-            v-for="(file, index) in files"
+            v-for="fileObj in files"
             class="p-1 p-md-2 position-relative photo-column"
           >
             <b-button
+              v-if="isIdle(fileObj)"
               size="sm"
               variant="light"
               class="position-absolute"
               style="top: 15px; right: 15px"
-              @click="handleFileRemove(index)"
+              @click="handleFileRemove(fileObj.index)"
             >
               <b-icon-trash></b-icon-trash>
             </b-button>
+
+            <b-badge
+              v-else-if="fileObj.isUploading"
+              variant="primary"
+              class="p-1 position-absolute"
+              style="top: 15px; right: 15px"
+            >
+              <b-spinner small></b-spinner>
+            </b-badge>
+
+            <b-badge
+              v-else-if="fileObj.isComplete"
+              variant="success"
+              class="p-1 position-absolute"
+              style="top: 15px; right: 15px"
+            >
+              <b-icon-check class="h5 mb-0"></b-icon-check>
+            </b-badge>
+            <b-badge
+              v-else-if="fileObj.hasError"
+              variant="danger"
+              class="p-1 position-absolute"
+              style="top: 15px; right: 15px"
+            >
+              <b-icon-exclamation-circle
+                class="h5 mb-0"
+              ></b-icon-exclamation-circle>
+            </b-badge>
             <b-img-lazy
               blankColor="#bbb"
-              :src="getImageFromFile(file)"
+              :src="getImageFromFile(fileObj.file)"
+              :class="[isIdle(fileObj) ? 'img-idle' : '']"
               alt="Uploaded Image"
             />
           </b-col>
@@ -173,15 +203,22 @@ export default {
       this.handleFiles(files);
     },
     handleFileRemove(index) {
-      this.files.splice(index, 1);
+      this.files = this.files.filter((fileObj) => fileObj.index !== index);
     },
     getImageFromFile(file) {
       return URL.createObjectURL(file);
     },
     handleFiles(files) {
-      for (const file of files) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
         if (file && file.type.startsWith("image/")) {
-          this.files.push(file);
+          this.files.push({
+            file,
+            index: i,
+            isUploading: false,
+            isComplete: false,
+            hasError: false,
+          });
         }
       }
     },
@@ -197,29 +234,66 @@ export default {
 
       return formData;
     },
+    isIdle(fileObj) {
+      const { isUploading, isComplete, hasError } = fileObj;
+      return !isUploading && !isComplete && !hasError;
+    },
+
     async handleUpload() {
       this.isUploading = true;
 
+      for (let i = 0; i < this.files.length; i++) {
+        this.files[i].isUploading = true;
+      }
+
       try {
         const UTD = new UTDService(this.token);
-        const photos = this.files.map((file) => this.packagePhoto(file));
+        const photos = this.files.map((fileObj) => ({
+          file: this.packagePhoto(fileObj.file),
+          index: fileObj.index,
+        }));
 
-        let responses;
+        const onUploadComplete = (data, index) => {
+          this.$emit("upload-completed", data.payload);
+
+          const fileIndex = this.files.findIndex(
+            (fileObj) => fileObj.index === index
+          );
+          this.files[fileIndex].isUploading = false;
+
+          if (data.success) {
+            this.files[fileIndex].isComplete = true;
+          } else {
+            this.files[fileIndex].hasError = true;
+          }
+        };
 
         if (this.albumId) {
-          responses = await UTD.addAlbumPhotos({
-            accountId: this.accountId,
-            albumId: this.albumId,
-            photos: photos,
-            siteId: this.siteId,
-          });
+          const uploadPromises = photos.map((photoObj) =>
+            UTD.addAlbumPhotos({
+              accountId: this.accountId,
+              albumId: this.albumId,
+              photos: [photoObj.file],
+              siteId: this.siteId,
+            })
+              .then((data) => onUploadComplete(data[0], photoObj.index))
+              .catch((err) => onUploadComplete({ succes: false }))
+          );
+
+          await Promise.all(uploadPromises);
         } else {
-          responses = await UTD.uploadFiles(photos);
+          const uploadPromises = photos.map((photoObj) =>
+            UTD.uploadSingleFile(photoObj.file)
+              .then((data) => onUploadComplete(data, photoObj.index))
+              .catch((err) => onUploadComplete({ succes: false }))
+          );
+
+          await Promise.all(uploadPromises);
         }
 
-        const photosData = responses.map(({ payload }) => payload);
-        this.$emit("upload-completed", photosData);
-        this.handleClose();
+        setTimeout(() => {
+          this.handleClose();
+        }, 700);
       } catch (e) {
         console.log(e);
       }
@@ -232,7 +306,7 @@ export default {
 <style scoped lang="scss">
 $primary: #2a99d6;
 .drop-area {
-  border: 2px dashed #ccc;
+  border: 3px dashed #ccc;
   text-align: center;
   cursor: pointer;
   border-radius: 10px;
@@ -265,6 +339,11 @@ $primary: #2a99d6;
     width: 100%;
     height: 100%;
     border-radius: 8px;
+
+    &:not(.img-idle) {
+      cursor: default;
+      opacity: 0.4;
+    }
   }
 }
 </style>

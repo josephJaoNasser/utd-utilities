@@ -159,6 +159,20 @@ class UTDService {
   }
 
   /**
+   * self explanatory
+   * @param {FormData} file
+   */
+  async uploadSingleFile(file) {
+    try {
+      const { data } = await this.axiosInstance.post(`/file/upload`, file);
+      return data;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
+  /**
    * Use DALL-E to generate images
    * @param {string} query
    * @param {number} accountId

@@ -52,7 +52,9 @@ export default {
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-vue/src/index.scss";
 
+html,
 #app {
-  //margin: 30px auto;
+  height: 100%;
+  margin: 0;
 }
 </style>

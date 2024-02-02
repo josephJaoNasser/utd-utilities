@@ -42,7 +42,6 @@
     </b-container>
     <PhotoViewer
       v-else
-      class="pt-5"
       :token="token"
       :default-photos="formattedGallery"
       :source="'album'"
@@ -107,6 +106,11 @@ export default {
     },
 
     handleUploadComplete(newPhotos) {
+      if (!Array.isArray(newPhotos)) {
+        this.gallery.unshift(newPhotos);
+        return;
+      }
+
       for (const photo of newPhotos) {
         this.gallery.unshift(photo);
       }

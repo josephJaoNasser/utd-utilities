@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="sticky-top pt-4" style="background-color: white">
+  <b-container fluid class="sticky-top p-0 pt-4" style="background-color: white">
     <h2 class="font-weight-bold">Create AI Art</h2>
     <p>Create AI Art with our free AI image generator.</p>
 

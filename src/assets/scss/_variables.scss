@@ -6,3 +6,12 @@ $primary: #2a99d6;
 // fonts
 $font-family-sans-serif: Cabin, sans-serif !default;
 $font-family-base: $font-family-sans-serif !default;
+
+$theme-colors: () !default;
+$theme-colors: map-merge((
+  "primary":      $primary,
+), $theme-colors);
+
+* {
+  font-family: $font-family-base;
+}
