@@ -1,7 +1,7 @@
 import * as components from "./components";
 
 const componentsList = components?.default;
-console.log("building");
+
 const UTDUtilities = {
   install(Vue) {
     Object.keys(componentsList).forEach((name) => {

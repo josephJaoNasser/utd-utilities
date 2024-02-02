@@ -1,6 +1,6 @@
 <template>
-  <b-card class="utd-utilities__photo-utilities" no-body>
-    <b-container fluid>
+  <b-container fluid class="p-0 m-0">
+    <b-container fluid class="utd-utilities__photo-utilities">
       <b-row cols="1" cols-md="2" cols-lg="3">
         <b-col
           sm="4"
@@ -116,7 +116,7 @@
       @close="showCreateAlbum = false"
       @album-created="handleAlbumCreate"
     />
-  </b-card>
+  </b-container>
 </template>
 
 <script>
