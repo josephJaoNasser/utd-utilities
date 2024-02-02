@@ -10,7 +10,10 @@ yarn add utd-utilities bootstrap-vue
 
 
 ### Import the necessary files
-In your main.js file, add the following
+In your main.js file, add the following imports. 
+
+**IMPORTANT:** Import the bootstrap styling BEFORE importing the UTD Utilities styling
+
 ```javascript
 // ... other imports
 
