@@ -1,104 +1,134 @@
 <template>
-  <b-container fluid class="p-0 m-0">
-    <b-container fluid class="utd-utilities__photo-utilities">
-      <b-row cols="1" cols-md="2" cols-lg="3">
-        <b-col
-          sm="4"
-          md="3"
-          lg="2"
-          class="px-3"
-          style="background-color: #f1f4f7"
-        >
-          <div class="pt-3 sticky-top">
-            <div class="mb-5">
+  <b-container
+    fluid
+    class="p-0 m-0 utd-utilities__photo-utilities d-flex h-100"
+  >
+    <div
+      class="photo-utilities__nav"
+      style="background-color: #f1f4f7; z-index: 1040"
+    >
+      <div class="position-sticky" style="top: 15px">
+        <div class="border-bottom mb-2 pb-3 position-relative">
+          <UTDButton pill @click="toggleUploadMenu">
+            <b-icon-plus></b-icon-plus>
+          </UTDButton>
+          <ul
+            v-if="showUploadMenu"
+            class="photo-utilities__nav-dropdown text-primary position-absolute top-0"
+            style="list-style: none"
+          >
+            <li>
               <UTDButton
                 block
-                variant="primay"
-                class="mb-4"
-                @click="showUploader = true"
-              >
-                Upload Photo
-              </UTDButton>
-              <UTDButton block variant="primay" @click="showCreateAlbum = true">
-                Create Album
-              </UTDButton>
-            </div>
-
-            <b-nav class="photo-utilities__nav flex-md-column">
-              <b-nav-item
-                class="p-1"
-                :active="currentUtility === UtilityTypes.photo"
-                @click="onUtilityChange(UtilityTypes.photo)"
+                type="light"
+                class="text-primary"
+                @click="toggleUploader"
               >
                 <b-icon-image class="mr-2"></b-icon-image>
-                Photos
-              </b-nav-item>
-              <b-nav-item
-                class="p-1"
-                :active="currentUtility === UtilityTypes.album"
-                @click="onUtilityChange(UtilityTypes.album)"
+                Photo
+              </UTDButton>
+            </li>
+            <li>
+              <UTDButton
+                block
+                type="light"
+                class="text-primary"
+                @click="toggleCreateAlbum"
               >
                 <b-icon-images class="mr-2"></b-icon-images>
-                Albums
-              </b-nav-item>
-              <b-nav-item
-                class="p-1"
-                :active="currentUtility === UtilityTypes.moments"
-                @click="onUtilityChange(UtilityTypes.moments)"
-              >
-                <b-icon-calendar-fill class="mr-2"></b-icon-calendar-fill>
-                Moments
-              </b-nav-item>
-              <b-nav-item
-                class="p-1"
-                :active="currentUtility === UtilityTypes.ai"
-                @click="onUtilityChange(UtilityTypes.ai)"
-              >
-                <b-icon-brush class="mr-2"></b-icon-brush>
-                AI Image Builder
-              </b-nav-item>
-            </b-nav>
-          </div>
-        </b-col>
-
-        <!-- Main section -->
-        <b-col sm="8" md="9" lg="10" class="photo-utilities__main pb-3">
-          <PhotoViewer
-            v-if="currentUtility === UtilityTypes.photo"
-            :token="token"
-            :account-id="accountId"
-            :organization-id="organizationId"
-            @load="(e) => (photos = e)"
-            @photo-selected="onSelect"
-            :default-photos="photos"
-          />
-          <Albums
-            v-if="currentUtility === UtilityTypes.album"
-            :token="token"
-            :account-id="accountId"
-            :organization-id="organizationId"
-            @load="(e) => (albums = e)"
-            @photo-selected="onSelect"
-            :default-albums="albums"
-          />
-          <Moments
-            v-if="currentUtility === UtilityTypes.moments"
-            :token="token"
-            :account-id="accountId"
-            :organization-id="organizationId"
-            @load="(e) => (moments = e)"
-            @photo-selected="onSelect"
-            :default-moments="moments"
-          />
-          <AIArtCreator
-            :token="token"
-            v-if="currentUtility === UtilityTypes.ai"
-            :default-images="aiArt"
-            @image-created="(e) => (aiArt = e)"
-            @photo-selected="onSelect"
-          />
-        </b-col>
-      </b-row>
+                Album
+              </UTDButton>
+            </li>
+          </ul>
+        </div>
+        <div class="d-flex flex-column">
+          <UTDButton
+            type="light"
+            :class="[
+              'mb-2',
+              currentUtility === UtilityTypes.photo
+                ? 'text-primary'
+                : 'text-secondary',
+            ]"
+            @click="onUtilityChange(UtilityTypes.photo)"
+          >
+            <b-icon-image></b-icon-image>
+          </UTDButton>
+          <UTDButton
+            type="light"
+            :class="[
+              'mb-2',
+              currentUtility === UtilityTypes.album
+                ? 'text-primary'
+                : 'text-secondary',
+            ]"
+            @click="onUtilityChange(UtilityTypes.album)"
+          >
+            <b-icon-images></b-icon-images>
+          </UTDButton>
+          <UTDButton
+            type="light"
+            :class="[
+              'mb-2',
+              currentUtility === UtilityTypes.moments
+                ? 'text-primary'
+                : 'text-secondary',
+            ]"
+            @click="onUtilityChange(UtilityTypes.moments)"
+          >
+            <b-icon-calendar-fill></b-icon-calendar-fill>
+          </UTDButton>
+          <UTDButton
+            type="light"
+            :class="[
+              'mb-2',
+              currentUtility === UtilityTypes.ai
+                ? 'text-primary'
+                : 'text-secondary',
+            ]"
+            @click="onUtilityChange(UtilityTypes.ai)"
+          >
+            <b-icon-stars></b-icon-stars>
+          </UTDButton>
+        </div>
+      </div>
+    </div>
+    <b-container fluid class="">
+      <!-- Main section -->
+      <PhotoViewer
+        v-if="currentUtility === UtilityTypes.photo"
+        :token="token"
+        :account-id="accountId"
+        :organization-id="organizationId"
+        @load="(e) => (photos = e)"
+        @photo-selected="onSelect"
+        :default-photos="photos"
+      />
+      <Albums
+        v-if="currentUtility === UtilityTypes.album"
+        :token="token"
+        :account-id="accountId"
+        :organization-id="organizationId"
+        @load="(e) => (albums = e)"
+        @photo-selected="onSelect"
+        :default-albums="albums"
+      />
+      <Moments
+        v-if="currentUtility === UtilityTypes.moments"
+        :token="token"
+        :account-id="accountId"
+        :organization-id="organizationId"
+        @load="(e) => (moments = e)"
+        @photo-selected="onSelect"
+        :default-moments="moments"
+      />
+      <AIArtCreator
+        :token="token"
+        v-if="currentUtility === UtilityTypes.ai"
+        :default-images="aiArt"
+        @image-created="(e) => (aiArt = e)"
+        @photo-selected="onSelect"
+      />
     </b-container>
     <Uploader
       :token="token"
@@ -157,6 +187,7 @@ export default {
       currentUtility: utilTypes.photo,
       showUploader: false,
       showCreateAlbum: false,
+      showUploadMenu: false,
       photos: [],
       albums: [],
       moments: [],
@@ -180,6 +211,20 @@ export default {
 
     handleAlbumCreate(albumData) {
       this.albums.unshift(albumData);
+    },
+
+    toggleUploadMenu() {
+      this.showUploadMenu = !this.showUploadMenu;
+    },
+
+    toggleCreateAlbum() {
+      this.showCreateAlbum = true;
+      this.toggleUploadMenu();
+    },
+
+    toggleUploader() {
+      this.showUploader = true;
+      this.toggleUploadMenu();
     },
   },
   computed: {
@@ -205,14 +250,17 @@ $breakpoint-tablet: 768px;
       &__nav {
         font-weight: 600;
         padding: 15px 10px;
-        .nav-link:not(.active) {
-          color: #929292 !important;
-        }
 
-        @media (min-width: $breakpoint-tablet) {
-          .nav-link {
-            padding: 10px 0;
-          }
+        &-dropdown {
+          list-style: none;
+          top: 0;
+          left: 55px;
+          border: 1px solid #dedede;
+          background: white;
+          padding: 0;
+          border-radius: 5px;
+          overflow: hidden;
+          width: max-content;
         }
       }
     }

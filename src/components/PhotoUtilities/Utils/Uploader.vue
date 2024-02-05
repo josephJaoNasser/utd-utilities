@@ -31,45 +31,39 @@
               size="sm"
               variant="light"
               class="position-absolute"
-              style="top: 15px; right: 15px"
+              style="top: 15px; right: 15px; z-index: 1;"
               @click="handleFileRemove(fileObj.index)"
             >
               <b-icon-trash></b-icon-trash>
             </b-button>
 
-            <b-badge
-              v-else-if="fileObj.isUploading"
-              variant="primary"
-              class="p-1 position-absolute"
-              style="top: 15px; right: 15px"
-            >
-              <b-spinner small></b-spinner>
-            </b-badge>
+            <b-overlay :show="!isIdle(fileObj)" class="d-inline-block h-100">
+              <template #overlay>
+                <div class="text-center">
+                  <b-spinner
+                    v-if="fileObj.isUploading"
+                    small
+                    variant="primary"
+                  ></b-spinner>
 
-            <b-badge
-              v-else-if="fileObj.isComplete"
-              variant="success"
-              class="p-1 position-absolute"
-              style="top: 15px; right: 15px"
-            >
-              <b-icon-check class="h5 mb-0"></b-icon-check>
-            </b-badge>
-            <b-badge
-              v-else-if="fileObj.hasError"
-              variant="danger"
-              class="p-1 position-absolute"
-              style="top: 15px; right: 15px"
-            >
-              <b-icon-exclamation-circle
-                class="h5 mb-0"
-              ></b-icon-exclamation-circle>
-            </b-badge>
-            <b-img-lazy
-              blankColor="#bbb"
-              :src="getImageFromFile(fileObj.file)"
-              :class="[isIdle(fileObj) ? 'img-idle' : '']"
-              alt="Uploaded Image"
-            />
+                  <b-icon-check-circle-fill
+                    v-else-if="fileObj.isComplete"
+                    class="h5 mb-0 text-success"
+                  ></b-icon-check-circle-fill>
+
+                  <b-icon-exclamation-circle-fill
+                    v-else-if="fileObj.hasError"
+                    class="h5 mb-0 text-danger"
+                  ></b-icon-exclamation-circle-fill>
+                </div>
+              </template>
+              <b-img-lazy
+                blankColor="#bbb"
+                :src="getImageFromFile(fileObj.file)"
+                :class="[isIdle(fileObj) ? 'img-idle' : '']"
+                alt="Uploaded Image"
+              />
+            </b-overlay>
           </b-col>
           <b-col class="p-1 p-md-2 photo-column">
             <b-container
