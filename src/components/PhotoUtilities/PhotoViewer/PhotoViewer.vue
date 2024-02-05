@@ -3,7 +3,7 @@
     <b-container
       fluid
       :class="['sticky-top', source === 'all' ? 'pt-4' : '']"
-      style="background-color: white"
+      :style="headerStyle"
     >
       <div class="mb-3" v-if="source === 'all'">
         <h2 class="font-weight-bold">Photos</h2>
@@ -134,6 +134,12 @@ export default {
       );
 
       return filteredList;
+    },
+    headerStyle() {
+      return {
+        backgroundColor: "white",
+        ...(this.source !== "all" ? { top: "15px" } : {}),
+      };
     },
   },
   methods: {

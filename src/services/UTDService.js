@@ -172,6 +172,24 @@ class UTDService {
   }
 
   /**
+   * Uploads an image via url
+   * @param {string} url
+   * @param {number} accountId
+   */
+  async uploadImageViaURL(url, accountId) {
+    try {
+      const { data } = await this.axiosInstance.post(`/utils/photos`, {
+        imageURL: url,
+        accountId,
+      });
+
+      return data;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  /**
    * Use DALL-E to generate images
    * @param {string} query
    * @param {number} accountId
