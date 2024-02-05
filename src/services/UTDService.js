@@ -1,6 +1,5 @@
 import queryBuilder from "@/helpers/queryBuilder";
 import axiosInstance from "./AxiosInstance";
-import axios from "axios";
 
 class UTDService {
   constructor(token) {
