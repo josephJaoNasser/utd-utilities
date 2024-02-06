@@ -1,6 +1,6 @@
 <template>
   <b-container
-    :class="['position-relative mb-5 img-container', borders ? 'border' : '']"
+    :class="['position-relative img-container', borders ? 'border' : '']"
     @click="showPreviewModal = true"
   >
     <div class="btn-zoom">
@@ -25,7 +25,14 @@ export default {
   components: { ImageModal },
   props: {
     url: String,
-    maxHeight: String,
+    maxHeight: {
+      type: String,
+      default: "250",
+    },
+    minHeight: {
+      type: String,
+      default: "250",
+    },
     borders: {
       type: Boolean,
       default: false,
@@ -34,6 +41,7 @@ export default {
       type: Boolean,
       default: false,
     },
+    backgroundColor: String,
   },
   data() {
     return {
@@ -51,9 +59,17 @@ export default {
         styles.maxHeight = this.maxHeight + "px";
       }
 
+      if (this.minHeight) {
+        styles.minHeight = this.minHeight + "px";
+      }
+
       if (this.roundedImage) {
         styles.borderRadius = "15px";
         styles.overflow = "hidden";
+      }
+
+      if (this.backgroundColor) {
+        styles.backgroundColor = this.backgroundColor;
       }
 
       return styles;
@@ -65,7 +81,6 @@ export default {
 <style lang="scss" scoped>
 .img-container {
   cursor: pointer;
-  border-radius: 10px;
   padding: 4px;
   overflow: hidden;
 

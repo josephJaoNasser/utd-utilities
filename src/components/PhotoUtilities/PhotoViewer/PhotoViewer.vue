@@ -2,7 +2,7 @@
   <b-row class="position-relative">
     <b-container
       fluid
-      :class="['sticky-top', source === 'all' ? 'pt-4' : '']"
+      :class="['sticky-top border-bottom', source === 'all' ? 'pt-4' : '']"
       :style="headerStyle"
     >
       <div class="mb-3" v-if="source === 'all'">
@@ -28,7 +28,7 @@
         </b-row> -->
       </div>
     </b-container>
-    <b-container fluid>
+    <b-container fluid >
       <b-row>
         <b-container fluid class="text-center mb-3 p-4" v-if="isPhotosLoading">
           <b-spinner
@@ -37,7 +37,7 @@
             type="grow"
           ></b-spinner>
         </b-container>
-        <b-col order="2" order-md="1" v-else>
+        <b-col order="2" order-sm="1" v-else class="mt-4">
           <b-container fluid v-if="!photos.length">
             <p class="text-center p-4">
               <i> No photos to show... </i>
@@ -46,9 +46,10 @@
           <b-row
             class="utd-utilities__photo-grid"
             cols="3"
-            cols-md="4"
-            cols-lg="5"
-            cols-xl="6"
+            :cols-sm="!selectedPhoto ? 4 : 2"
+            :cols-md="!selectedPhoto ? 4 : 3"
+            :cols-lg="!selectedPhoto ? 5 : 4"
+            :cols-xl="!selectedPhoto ? 6 : 5"
             no-gutters
           >
             <b-col
@@ -62,30 +63,40 @@
                   photo.thumbnail?.length ? photo.thumbnail : photo.url
                 "
                 :active="!!selectedPhoto && selectedPhoto.id === photo.id"
+                @edit-click="onPhotoEdit(photo.id)"
               />
             </b-col>
           </b-row>
         </b-col>
-        <!-- <b-col
+        <b-col
           v-if="selectedPhoto"
           cols="12"
-          md="6"
-          lg="5"
+          sm="6"
+          md="5"
+          lg="4"
+          xl="3"
           order="1"
-          order-md="2"
-          class="mb-3"
+          order-sm="2"
+          class="mb-3 p-0 border-left"
         >
           <PhotoDetails
             v-if="!isPhotosLoading"
-            class="utd-utilities__photoDetails"
+            class="utd-utilities__photoDetails mt-3"
             :source="source"
             :photo-details="selectedPhoto"
             @close="selectedPhoto = null"
             @photo-selected="onSelect"
           />
-        </b-col> -->
+        </b-col>
       </b-row>
     </b-container>
+    <!-- <EditPhoto
+      :show="!!editingPhoto"
+      :source="source"
+      :photo-details="editingPhoto"
+      @close="editingPhoto = null"
+      @photo-selected="onSelect"
+    /> -->
   </b-row>
 </template>
 <script>
@@ -93,10 +104,11 @@ import UTDService from "@/services/UTDService";
 import PhotoDetails from "./PhotoDetails.vue";
 import PhotoListItem from "./PhotoListItem.vue";
 import UTDInput from "@/components/UTDInput";
+import EditPhoto from "./EditPhoto.vue";
 
 export default {
   name: "PhotoPicker",
-  components: { PhotoDetails, PhotoListItem, UTDInput },
+  components: { PhotoDetails, PhotoListItem, UTDInput, EditPhoto },
   props: {
     token: String,
     accountId: Number,
@@ -119,6 +131,7 @@ export default {
     return {
       photos: this.defaultPhotos,
       selectedPhoto: null,
+      editingPhoto: null,
       isPhotosLoading: false,
       searchString: "",
     };
@@ -162,6 +175,10 @@ export default {
     onSelect(e) {
       this.$emit("photo-selected", e);
     },
+
+    onPhotoEdit(photoId) {
+      this.editingPhoto = this.photos.find((photo) => photo.id == photoId);
+    },
   },
   watch: {
     defaultPhotos: {
@@ -188,11 +205,6 @@ $md: 768px;
       // max-height: 700px;
       // overflow: auto;
     }
-  }
-
-  &__photoDetails {
-    position: sticky;
-    top: 150px;
   }
 }
 </style>

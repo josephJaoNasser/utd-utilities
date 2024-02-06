@@ -1,6 +1,6 @@
 <template>
-  <b-container fluid class="p-4 rounded utd-utilities__photo-preview">
-    <div class="mb-4 d-flex justify-content-between">
+  <b-container fluid class="rounded utd-utilities__photo-preview p-0">
+    <div class="mb-4 px-3 d-flex justify-content-between">
       <UTDButton
         @click="onClose"
         class="utd-utilities__back-button"
@@ -18,62 +18,42 @@
       </UTDButton>
     </div>
 
-    <PhotoWindow :url="photoDetails.url" max-height="250" borders />
+    <PhotoWindow class="mb-3 p-0" :url="photoDetails.url" max-height="250" background-color="#eee" />
 
-    <b-container v-if="source !== 'ai'" fluid class="p-0">
-      <b-row align-v="center" class="mb-2">
-        <b-col cols="4" class="text-right">
-          <label class="mb-0" for="title">Title</label>
-        </b-col>
-        <b-col cols="8">
-          <b-form-input
-            type="text"
-            name="title"
-            v-model="fileName"
-          ></b-form-input>
-        </b-col>
-      </b-row>
+    <b-container v-if="source !== 'ai'" fluid class="px-3">
+      <div class="mb-3">
+        <label class="mb-1" for="title">Title</label>
+        <b-form-input
+          type="text"
+          name="title"
+          v-model="fileName"
+        ></b-form-input>
+      </div>
 
-      <b-row align-v="center" class="mb-2">
-        <b-col cols="4" class="text-right">
-          <label class="mb-0" for="caption">Caption</label>
-        </b-col>
-        <b-col cols="8">
-          <b-form-input
-            type="text"
-            name="caption"
-            v-model="caption"
-          ></b-form-input>
-        </b-col>
-      </b-row>
+      <div class="mb-3">
+        <label class="mb-1" for="caption">Caption</label>
+        <b-form-input
+          type="text"
+          name="caption"
+          v-model="caption"
+        ></b-form-input>
+      </div>
 
-      <b-row class="mb-2">
-        <b-col cols="4" class="text-right">
-          <label class="mb-0" for="description">Description</label>
-        </b-col>
-        <b-col cols="8">
-          <b-form-textarea
-            no-resize
-            rows="4"
-            type="text"
-            name="description"
-            v-model="description"
-          ></b-form-textarea>
-        </b-col>
-      </b-row>
+      <div class="mb-3">
+        <label class="mb-1" for="description">Description</label>
+        <b-form-textarea
+          no-resize
+          rows="4"
+          type="text"
+          name="description"
+          v-model="description"
+        ></b-form-textarea>
+      </div>
 
-      <b-row align-v="center" class="mb-2">
-        <b-col cols="4" class="text-right">
-          <label class="mb-0" for="file-url">File URL</label>
-        </b-col>
-        <b-col cols="8">
-          <b-form-input
-            type="text"
-            name="file-url"
-            v-model="url"
-          ></b-form-input>
-        </b-col>
-      </b-row>
+      <div class="mb-3">
+        <label class="mb-1" for="file-url">File URL</label>
+        <b-form-input type="text" name="file-url" v-model="url"></b-form-input>
+      </div>
     </b-container>
   </b-container>
 </template>
@@ -126,9 +106,9 @@ export default {
 
 <style scoped lang="scss">
 .utd-utilities {
-  &__photo-preview {
-    background-color: rgb(0, 0, 0, 0.05);
-  }
+  // &__photo-preview {
+  //   background-color: rgb(0, 0, 0, 0.05);
+  // }
 
   &__back-button {
     border: none;

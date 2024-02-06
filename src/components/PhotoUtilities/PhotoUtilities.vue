@@ -33,7 +33,7 @@
               <UTDButton
                 block
                 type="light"
-                class="text-primary"
+                class="text-primary px-3 py-2"
                 @click="toggleUploader"
               >
                 <b-icon-image class="mr-2"></b-icon-image>
@@ -44,7 +44,7 @@
               <UTDButton
                 block
                 type="light"
-                class="text-primary"
+                class="text-primary px-3 py-2"
                 @click="toggleCreateAlbum"
               >
                 <b-icon-images class="mr-2"></b-icon-images>
@@ -328,6 +328,10 @@ $breakpoint-tablet: 768px;
           &.nav-item {
             background: none;
             border: none;
+
+            &:hover {
+              background-color: #dfefff;
+            }
 
             &:focus {
               box-shadow: none;
