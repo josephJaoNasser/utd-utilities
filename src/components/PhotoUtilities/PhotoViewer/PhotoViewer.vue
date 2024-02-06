@@ -46,8 +46,9 @@
           <b-row
             class="utd-utilities__photo-grid"
             cols="3"
-            :cols-md="!selectedPhoto ? 4 : 2"
-            :cols-lg="!selectedPhoto ? 5 : 3"
+            cols-md="4"
+            cols-lg="5"
+            cols-xl="6"
             no-gutters
           >
             <b-col
@@ -65,7 +66,7 @@
             </b-col>
           </b-row>
         </b-col>
-        <b-col
+        <!-- <b-col
           v-if="selectedPhoto"
           cols="12"
           md="6"
@@ -82,7 +83,7 @@
             @close="selectedPhoto = null"
             @photo-selected="onSelect"
           />
-        </b-col>
+        </b-col> -->
       </b-row>
     </b-container>
   </b-row>
