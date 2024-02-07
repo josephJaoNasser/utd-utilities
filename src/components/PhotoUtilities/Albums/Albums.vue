@@ -1,5 +1,8 @@
 <template>
-  <b-row class="position-relative utd-utilities__albums">
+  <b-row
+    class="position-relative utd-utilities__albums"
+    :style="!selectedAlbum && 'overflow: auto;'"
+  >
     <b-container fluid class="sticky-top pt-4" style="background-color: white">
       <div v-if="!selectedAlbum" class="mb-3">
         <h2 class="font-weight-bold">Albums</h2>
@@ -25,7 +28,7 @@
       </div>
     </b-container>
 
-    <b-container fluid v-if="!selectedAlbum">
+    <b-container fluid v-if="!selectedAlbum" class="h-100">
       <b-container fluid class="text-center mb-3 p-4" v-if="isAlbumsLoading">
         <b-spinner label="Loading..." variant="primary" type="grow"></b-spinner>
       </b-container>
@@ -69,6 +72,7 @@
 
     <AlbumViewer
       v-else
+      class="h-100"
       :token="this.token"
       :selected-album="selectedAlbum"
       :account-id="accountId"
@@ -159,7 +163,6 @@ export default {
 .utd-utilities {
   &__albums {
     height: 100%;
-    overflow: auto;
   }
 
   &__album {

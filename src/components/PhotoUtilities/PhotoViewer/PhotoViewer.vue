@@ -12,7 +12,7 @@
         <UTDInput
           v-model="searchString"
           icon="search"
-          class="p-1 p-sm-2 mb-3"
+          class="p-1 mb-3"
           placeholder="Type to search"
         />
         <!-- <b-row class="mb-4">
@@ -234,7 +234,7 @@ export default {
       };
     },
     gridContainerStyle() {
-      const offsetHeight = this.selectedPhoto ? "200px" : "150px";
+      const offsetHeight = this.selectedPhoto ? "190px" : "140px";
       return {
         height: `calc(100% - ${offsetHeight})`,
       };
@@ -294,7 +294,7 @@ $md: 768px;
     }
 
     .photo-details-container {
-      height: calc(100% - 200px);
+      height: calc(100% - 190px);
       overflow: auto;
     }
   }

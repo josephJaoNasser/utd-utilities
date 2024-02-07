@@ -4,7 +4,7 @@
       <div class="d-flex justify-content-between">
         <UTDButton @click="$emit('back')" type="light" class="mb-3">
           <b-icon-chevron-left></b-icon-chevron-left>
-          Back to albums
+          Back
         </UTDButton>
         <UTDButton @click="showUploader = true" type="primary" class="mb-3">
           <b-icon-plus></b-icon-plus>
@@ -40,13 +40,14 @@
     <b-container fluid class="text-center mb-3 p-4" v-if="isPhotosLoading">
       <b-spinner label="Loading..." variant="primary" type="grow"></b-spinner>
     </b-container>
-    <PhotoViewer
-      v-else
-      :token="token"
-      :default-photos="formattedGallery"
-      :source="'album'"
-      @photo-selected="onSelect"
-    />
+    <b-container v-else fluid class="photo-viewer-container p-0">
+      <PhotoViewer
+        :token="token"
+        :default-photos="formattedGallery"
+        :source="'album'"
+        @photo-selected="onSelect"
+      />
+    </b-container>
     <Uploader
       :token="token"
       :show="showUploader"
@@ -137,9 +138,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.photo-viewer-container {
+  height: calc(100% - 180px);
+}
+
 .utd-utilities {
   &__album-cover {
     overflow: hidden;
+    height: 160px;
     & > .img-container {
       height: 100%;
 
