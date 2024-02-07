@@ -9,6 +9,7 @@
         cols="12"
         md="5"
         lg="4"
+        xl="3"
       >
         <b-container fluid>
           <UTDTextArea
@@ -49,7 +50,7 @@
           </div>
         </b-container>
       </b-col>
-      <b-col cols="12" md="7" lg="8">
+      <b-col cols="12" md="7" lg="8" xl="9">
         <b-container
           fluid
           class="text-center mb-3 p-4"

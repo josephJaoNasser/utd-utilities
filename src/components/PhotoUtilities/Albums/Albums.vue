@@ -1,5 +1,5 @@
 <template>
-  <b-row class="position-relative">
+  <b-row class="position-relative utd-utilities__albums">
     <b-container fluid class="sticky-top pt-4" style="background-color: white">
       <div v-if="!selectedAlbum" class="mb-3">
         <h2 class="font-weight-bold">Albums</h2>
@@ -157,6 +157,11 @@ export default {
 
 <style scoped lang="scss">
 .utd-utilities {
+  &__albums {
+    height: 100%;
+    overflow: auto;
+  }
+
   &__album {
     cursor: pointer;
     height: 200px;

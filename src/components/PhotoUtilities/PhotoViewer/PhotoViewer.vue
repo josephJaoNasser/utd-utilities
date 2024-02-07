@@ -1,5 +1,5 @@
 <template>
-  <b-row class="position-relative">
+  <b-row class="utd-utilities__photo-viewer position-relative h-100">
     <b-container
       fluid
       :class="['sticky-top border-bottom', source === 'all' ? 'pt-4' : '']"
@@ -28,8 +28,9 @@
         </b-row> -->
       </div>
     </b-container>
-    <b-container fluid >
-      <b-row>
+
+    <b-container fluid class="h-100">
+      <b-row class="h-100">
         <b-container fluid class="text-center mb-3 p-4" v-if="isPhotosLoading">
           <b-spinner
             label="Loading..."
@@ -37,24 +38,49 @@
             type="grow"
           ></b-spinner>
         </b-container>
-        <b-col order="2" order-sm="1" v-else class="mt-4">
+
+        <!-- Photo grid column -->
+        <b-col
+          v-else
+          order="2"
+          order-sm="1"
+          class="photo-grid-container"
+          :style="gridContainerStyle"
+        >
+          <b-row>
+            <b-container fluid class="py-2">
+              <UTDPagination
+                :page="currentPage"
+                :total-items="totalItems"
+                @page-change="
+                  (e) => {
+                    currentPage = e;
+                    getPhotos(e);
+                  }
+                "
+              />
+            </b-container>
+          </b-row>
+
           <b-container fluid v-if="!photos.length">
             <p class="text-center p-4">
               <i> No photos to show... </i>
             </p>
           </b-container>
+
           <b-row
             class="utd-utilities__photo-grid"
+            style="overflow: auto"
             cols="3"
-            :cols-sm="!selectedPhoto ? 4 : 2"
-            :cols-md="!selectedPhoto ? 4 : 3"
-            :cols-lg="!selectedPhoto ? 5 : 4"
-            :cols-xl="!selectedPhoto ? 6 : 5"
+            :cols-sm="!showEditSection ? 4 : 2"
+            :cols-md="!showEditSection ? 4 : 3"
+            :cols-lg="!showEditSection ? 5 : 4"
+            :cols-xl="!showEditSection ? 6 : 5"
             no-gutters
           >
             <b-col
               v-for="photo in filteredPhotos"
-              class="p-1 p-md-2"
+              class="p-1"
               @click="selectedPhoto = photo"
               :key="photo.id"
             >
@@ -63,13 +89,29 @@
                   photo.thumbnail?.length ? photo.thumbnail : photo.url
                 "
                 :active="!!selectedPhoto && selectedPhoto.id === photo.id"
-                @edit-click="onPhotoEdit(photo.id)"
               />
             </b-col>
           </b-row>
+
+          <b-row>
+            <b-container fluid class="py-2">
+              <UTDPagination
+                :page="currentPage"
+                :total-items="totalItems"
+                @page-change="
+                  (e) => {
+                    currentPage = e;
+                    getPhotos(e);
+                  }
+                "
+              />
+            </b-container>
+          </b-row>
         </b-col>
+
+        <!-- edit section column -->
         <b-col
-          v-if="selectedPhoto"
+          v-if="showEditSection"
           cols="12"
           sm="6"
           md="5"
@@ -77,26 +119,48 @@
           xl="3"
           order="1"
           order-sm="2"
-          class="mb-3 p-0 border-left"
+          class="p-0 pt-3 border-left photo-details-container"
         >
           <PhotoDetails
             v-if="!isPhotosLoading"
-            class="utd-utilities__photoDetails mt-3"
+            class="utd-utilities__photoDetails"
             :source="source"
             :photo-details="selectedPhoto"
-            @close="selectedPhoto = null"
+            @close="showEditSection = false"
             @photo-selected="onSelect"
           />
         </b-col>
       </b-row>
     </b-container>
-    <!-- <EditPhoto
-      :show="!!editingPhoto"
-      :source="source"
-      :photo-details="editingPhoto"
-      @close="editingPhoto = null"
-      @photo-selected="onSelect"
-    /> -->
+
+    <b-container
+      v-if="selectedPhoto"
+      fluid
+      class="utd-utilities__photo-actions"
+    >
+      <UTDButton
+        type="light"
+        size="sm"
+        class="mr-2"
+        @click="
+          () => {
+            selectedPhoto = null;
+            showEditSection = false;
+          }
+        "
+      >
+        <b-icon-chevron-left class="mr-1"></b-icon-chevron-left>
+        Cancel
+      </UTDButton>
+      <UTDButton type="light" size="sm" class="mr-2" @click="toggleEditSection">
+        <b-icon-pencil class="mr-1"></b-icon-pencil>
+        Edit details
+      </UTDButton>
+      <UTDButton size="sm" @click="onSelect">
+        <b-icon-plus class="mr-1"></b-icon-plus>
+        Add to page
+      </UTDButton>
+    </b-container>
   </b-row>
 </template>
 <script>
@@ -105,10 +169,21 @@ import PhotoDetails from "./PhotoDetails.vue";
 import PhotoListItem from "./PhotoListItem.vue";
 import UTDInput from "@/components/UTDInput";
 import EditPhoto from "./EditPhoto.vue";
+import UTDPagination from "@/components/UTDPagination";
+import UTDButton from "@/components/UTDButton";
+
+const PHOTO_PAGINATION_LIMIT = 25;
 
 export default {
   name: "PhotoPicker",
-  components: { PhotoDetails, PhotoListItem, UTDInput, EditPhoto },
+  components: {
+    PhotoDetails,
+    PhotoListItem,
+    UTDInput,
+    EditPhoto,
+    UTDPagination,
+    UTDButton,
+  },
   props: {
     token: String,
     accountId: Number,
@@ -131,8 +206,11 @@ export default {
     return {
       photos: this.defaultPhotos,
       selectedPhoto: null,
-      editingPhoto: null,
+      showEditSection: false,
       isPhotosLoading: false,
+      currentPage: 1,
+      totalItems: 1,
+      itemsPerPage: PHOTO_PAGINATION_LIMIT,
       searchString: "",
     };
   },
@@ -155,15 +233,25 @@ export default {
         ...(this.source !== "all" ? { top: "15px" } : {}),
       };
     },
+    gridContainerStyle() {
+      const offsetHeight = this.selectedPhoto ? "200px" : "150px";
+      return {
+        height: `calc(100% - ${offsetHeight})`,
+      };
+    },
   },
   methods: {
-    async getPhotos() {
+    async getPhotos(page) {
       this.isPhotosLoading = true;
       try {
         const UTD = new UTDService(this.token);
-        const { rows, count } = await UTD.getPhotos({
+        const { rows, totalPages, count } = await UTD.getPhotos({
           accountId: this.accountId,
+          limit: PHOTO_PAGINATION_LIMIT,
+          page: page || this.currentPage,
         });
+
+        this.totalItems = count;
         this.photos = rows;
         this.$emit("load", this.photos);
       } catch (e) {
@@ -172,12 +260,12 @@ export default {
       this.isPhotosLoading = false;
     },
 
-    onSelect(e) {
-      this.$emit("photo-selected", e);
+    onSelect() {
+      this.$emit("photo-selected", this.selectedPhoto);
     },
 
-    onPhotoEdit(photoId) {
-      this.editingPhoto = this.photos.find((photo) => photo.id == photoId);
+    toggleEditSection() {
+      this.showEditSection = !this.showEditSection;
     },
   },
   watch: {
@@ -200,11 +288,25 @@ export default {
 <style scoped lang="scss">
 $md: 768px;
 .utd-utilities {
-  @media screen and (min-width: $md) {
-    &__photo-grid {
-      // max-height: 700px;
-      // overflow: auto;
+  &__photo-viewer {
+    .photo-grid-container {
+      overflow: auto;
     }
+
+    .photo-details-container {
+      height: calc(100% - 200px);
+      overflow: auto;
+    }
+  }
+
+  &__photo-actions {
+    background-color: white;
+    position: sticky;
+    border-top: 1px solid #ccc;
+    bottom: 0;
+    z-index: 3;
+    padding: 10px;
+    text-align: right;
   }
 }
 </style>

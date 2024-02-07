@@ -108,17 +108,26 @@ class UTDService {
    *  userId: number,
    *  accountId: number,
    *  limit: number,
-   *  offset: number
+   *  page: number
    * }} query
    * @returns
    */
   async getPhotos(query) {
+    if (query.page && query.limit) {
+      query.offset = (query.page - 1) * query.limit;
+      delete query.page;
+    }
+
     const queryString = queryBuilder(query);
+
     try {
       const { data } = await this.axiosInstance.get(
         `/file/photos${queryString}`
       );
-      return data;
+
+      const totalPages = query.limit ? Math.round(data.count / query.limit) : 1;
+
+      return { ...data, totalPages };
     } catch (e) {
       console.log(e);
       throw e;

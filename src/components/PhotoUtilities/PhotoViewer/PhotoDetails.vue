@@ -1,6 +1,6 @@
 <template>
   <b-container fluid class="rounded utd-utilities__photo-preview p-0">
-    <div class="mb-4 px-3 d-flex justify-content-between">
+    <div class="mb-3 px-3 d-flex justify-content-between">
       <UTDButton
         @click="onClose"
         class="utd-utilities__back-button"
@@ -9,12 +9,12 @@
         <b-icon-chevron-left></b-icon-chevron-left>
       </UTDButton>
       <UTDButton
-        @click="onSelect"
+        @click="onSave"
         class="utd-utilities__select-button"
         type="primary"
       >
-        <b-icon-plus></b-icon-plus>
-        Select photo
+        <b-icon-check></b-icon-check>
+        Save changes
       </UTDButton>
     </div>
 
@@ -71,7 +71,7 @@ export default {
       default: "all",
     },
   },
-  emits: ["photo-selected"],
+  emits: ["photo-saved"],
   data() {
     const { fileName, url } = this.photoDetails;
     return {
@@ -86,8 +86,8 @@ export default {
       this.$emit("close");
     },
 
-    onSelect() {
-      this.$emit("photo-selected", this.photoDetails);
+    onSave() {
+      // create a request for saving the photo details
     },
   },
   watch: {

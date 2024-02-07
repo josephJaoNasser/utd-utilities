@@ -1,6 +1,6 @@
 <template>
   <div class="utd-utilities__photo-list-item position-relative">
-    <div class="actions">
+    <!-- <div class="actions">
       <UTDButton
         size="sm"
         type="dark"
@@ -10,7 +10,7 @@
       >
         <b-icon icon="pencil" font-scale="1"></b-icon>
       </UTDButton>
-    </div>
+    </div> -->
     <b-img-lazy
       :class="[
         'cursor-pointer rounded border',

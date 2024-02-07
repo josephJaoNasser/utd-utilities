@@ -13,15 +13,10 @@
           <b-icon-x v-else></b-icon-x>
         </UTDButton>
         <div class="border-bottom mb-2 pb-3 position-relative">
-          <UTDButton pill block @click="toggleUploadMenu">
+          <UTDButton block @click="toggleUploadMenu">
             <b-icon-plus></b-icon-plus>
-            <div
-              :class="[
-                'nav-menu-item-text text-center ml-0',
-                expandNav ? 'expanded' : '',
-              ]"
-            >
-              Create
+            <div :class="['nav-menu-item-text', expandNav ? 'expanded' : '']">
+              Add Media
             </div>
           </UTDButton>
           <ul
@@ -121,7 +116,7 @@
         </div>
       </div>
     </div>
-    <b-container fluid class="">
+    <b-container fluid class="utd-utilities__photo-utilities__main">
       <!-- Main section -->
       <PhotoViewer
         v-if="currentUtility === UtilityTypes.photo"
@@ -274,11 +269,10 @@ $breakpoint-tablet: 768px;
 
 .utd-utilities {
   &__photo-utilities {
+    // &__main {
+    //   overflow: auto;
+    // }
     .photo-utilities {
-      // &__main {
-      //   height: 100%;
-      //   overflow: auto;
-      // }
 
       &__nav {
         font-weight: 600;
@@ -345,7 +339,7 @@ $breakpoint-tablet: 768px;
           overflow: hidden;
           display: none;
           transition: all 0.5s;
-          margin-left: 5px;
+          margin-left: 12px;
 
           &.expanded {
             width: 100%;
