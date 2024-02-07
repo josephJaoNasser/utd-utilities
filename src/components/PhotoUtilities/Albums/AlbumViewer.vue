@@ -6,10 +6,16 @@
           <b-icon-chevron-left></b-icon-chevron-left>
           Back
         </UTDButton>
-        <UTDButton @click="showUploader = true" type="primary" class="mb-3">
-          <b-icon-plus></b-icon-plus>
-          Add photos
-        </UTDButton>
+        <div>
+          <UTDButton type="light" class="mb-3 mr-2">
+            <b-icon-gear></b-icon-gear>
+            Album Settings
+          </UTDButton>
+          <UTDButton @click="showUploader = true" type="primary" class="mb-3">
+            <b-icon-plus></b-icon-plus>
+            Add photos
+          </UTDButton>
+        </div>
       </div>
 
       <div class="card bg-dark text-white border-0 utd-utilities__album-cover">
@@ -43,7 +49,7 @@
     <b-container v-else fluid class="photo-viewer-container p-0">
       <PhotoViewer
         :token="token"
-        :default-photos="formattedGallery"
+        :default-photos="paginatedGallery"
         :source="'album'"
         @photo-selected="onSelect"
       />
@@ -129,6 +135,24 @@ export default {
         thumbnail: image.imageThumbnail,
         url: image.image,
       }));
+    },
+    paginatedGallery() {
+      const ITEMS_PER_PAGE = 25;
+      const totalItems = this.formattedGallery.length;
+      const gallery = {
+        totalItems: totalItems,
+      };
+
+      const pages = [];
+      for (let i = 0; i < this.formattedGallery.length; i += ITEMS_PER_PAGE) {
+        pages.push(this.formattedGallery.slice(i, i + ITEMS_PER_PAGE));
+      }
+
+      pages.forEach((chunk, index) => {
+        gallery[index + 1] = chunk;
+      });
+
+      return gallery;
     },
   },
   async mounted() {

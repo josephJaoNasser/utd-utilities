@@ -48,10 +48,11 @@
           :style="gridContainerStyle"
         >
           <b-row>
-            <b-container fluid class="py-2">
+            <b-container fluid class="py-2 mb-3 border-bottom">
               <UTDPagination
                 :page="currentPage"
                 :total-items="totalItems"
+                :per-page="itemsPerPage"
                 @page-change="
                   (e) => {
                     currentPage = e;
@@ -62,7 +63,7 @@
             </b-container>
           </b-row>
 
-          <b-container fluid v-if="!photos.length">
+          <b-container fluid v-if="!photos[currentPage]?.length">
             <p class="text-center p-4">
               <i> No photos to show... </i>
             </p>
@@ -94,10 +95,11 @@
           </b-row>
 
           <b-row>
-            <b-container fluid class="py-2">
+            <b-container fluid class="py-2 mb-2 mt-2 border-top">
               <UTDPagination
                 :page="currentPage"
                 :total-items="totalItems"
+                :per-page="itemsPerPage"
                 @page-change="
                   (e) => {
                     currentPage = e;
@@ -193,8 +195,8 @@ export default {
       default: "all",
     },
     defaultPhotos: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     query: {
       type: Object,
@@ -209,19 +211,22 @@ export default {
       showEditSection: false,
       isPhotosLoading: false,
       currentPage: 1,
-      totalItems: 1,
+      totalItems: this.defaultPhotos.totalItems,
       itemsPerPage: PHOTO_PAGINATION_LIMIT,
       searchString: "",
     };
   },
   computed: {
     filteredPhotos() {
-      if (!this.searchString.length) {
-        return this.photos;
+      const photos = JSON.parse(JSON.stringify(this.photos[this.currentPage]));
+
+      if (!this.searchString.length && this.photos[this.currentPage]) {
+        return photos;
       }
+
       const searchLowerCase = this.searchString.toLowerCase();
 
-      const filteredList = this.photos.filter((photo) =>
+      const filteredList = photos.filter((photo) =>
         photo.fileName.toLowerCase().includes(searchLowerCase)
       );
 
@@ -243,16 +248,24 @@ export default {
   methods: {
     async getPhotos(page) {
       this.isPhotosLoading = true;
+      const pageToFetch = page || this.currentPage;
+
+      if (this.photos[pageToFetch]?.length) {
+        this.isPhotosLoading = false;
+        return;
+      }
+
       try {
         const UTD = new UTDService(this.token);
         const { rows, totalPages, count } = await UTD.getPhotos({
           accountId: this.accountId,
           limit: PHOTO_PAGINATION_LIMIT,
-          page: page || this.currentPage,
+          page: pageToFetch,
         });
 
         this.totalItems = count;
-        this.photos = rows;
+        this.photos[pageToFetch] = rows;
+        this.photos.totalItems = count;
         this.$emit("load", this.photos);
       } catch (e) {
         console.log(e);
@@ -278,7 +291,10 @@ export default {
     },
   },
   async mounted() {
-    if (!this.defaultPhotos.length && this.source === "all") {
+    if (
+      !this.defaultPhotos[this.currentPage]?.length &&
+      this.source === "all"
+    ) {
       await this.getPhotos();
     }
   },

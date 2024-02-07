@@ -5,7 +5,6 @@
     :total-rows="totalItems"
     :per-page="perPage"
     :align="'center'"
-    first-number
   ></b-pagination>
 </template>
 
@@ -43,6 +42,7 @@ export default {
 
 <style lang="scss">
 .utd-utilities__pagination {
+  margin-bottom: 0;
   .page-item {
     .page-link {
       border-radius: 3px;

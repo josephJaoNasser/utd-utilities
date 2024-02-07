@@ -123,12 +123,13 @@
         :token="token"
         :account-id="accountId"
         :organization-id="organizationId"
+        :default-photos="photos"
         @load="(e) => (photos = e)"
         @photo-selected="onSelect"
-        :default-photos="photos"
       />
       <Albums
         v-if="currentUtility === UtilityTypes.album"
+        id="utd-utilities__album"
         :token="token"
         :account-id="accountId"
         :organization-id="organizationId"
@@ -146,8 +147,8 @@
         :default-moments="moments"
       />
       <AIArtCreator
-        :token="token"
         v-if="currentUtility === UtilityTypes.ai"
+        :token="token"
         :default-images="aiArt"
         @image-created="(e) => (aiArt = e)"
         @photo-selected="onSelect"
@@ -212,7 +213,7 @@ export default {
       showCreateAlbum: false,
       showUploadMenu: false,
       expandNav: false,
-      photos: [],
+      photos: {},
       albums: [],
       moments: [],
       aiArt: [],
@@ -273,7 +274,6 @@ $breakpoint-tablet: 768px;
     //   overflow: auto;
     // }
     .photo-utilities {
-
       &__nav {
         font-weight: 600;
         padding: 15px 10px;
