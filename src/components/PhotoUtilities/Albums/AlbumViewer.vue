@@ -49,7 +49,7 @@
     <b-container v-else fluid class="photo-viewer-container p-0">
       <PhotoViewer
         :token="token"
-        :default-photos="paginatedGallery"
+        :photos="paginatedGallery"
         :source="'album'"
         @photo-selected="onSelect"
       />

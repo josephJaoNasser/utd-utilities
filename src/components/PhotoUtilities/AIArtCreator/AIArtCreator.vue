@@ -1,5 +1,9 @@
 <template>
-  <b-container fluid class="sticky-top p-0 pt-4" style="background-color: white">
+  <b-container
+    fluid
+    class="sticky-top p-0 pt-4 utd-utilities__ai-art"
+    style="background-color: white"
+  >
     <h2 class="font-weight-bold">Create AI Art</h2>
     <p>Create AI Art with our free AI image generator.</p>
 
@@ -44,7 +48,7 @@
               block
               @click="onSelect({ url: images[0].url })"
             >
-            <b-icon-check class="mr-1"></b-icon-check>
+              <b-icon-check class="mr-1"></b-icon-check>
               Use image
             </UTDButton>
           </div>
@@ -86,7 +90,11 @@
           ></b-spinner>
         </b-container>
         <b-container fluid class="mb-3 p-0 p-md-4" v-else-if="images.length">
-          <PhotoWindow :url="images[0].url" rounded-image />
+          <PhotoWindow
+            :url="images[0].url"
+            rounded-image
+            max-height="unset"
+          />
         </b-container>
       </b-col>
     </b-row>
@@ -154,4 +162,9 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.utd-utilities__ai-art {
+  height: 100%;
+  overflow: auto;
+}
+</style>

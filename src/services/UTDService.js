@@ -125,7 +125,7 @@ class UTDService {
         `/file/photos${queryString}`
       );
 
-      const totalPages = query.limit ? Math.round(data.count / query.limit) : 1;
+      const totalPages = query.limit ? Math.ceil(data.count / query.limit) : 1;
 
       return { ...data, totalPages };
     } catch (e) {

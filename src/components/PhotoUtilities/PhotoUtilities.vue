@@ -116,20 +116,22 @@
         </div>
       </div>
     </div>
-    <b-container fluid class="utd-utilities__photo-utilities__main">
+    <b-container fluid class="utd-utilities__photo-utilities__main px-0">
       <!-- Main section -->
       <PhotoViewer
         v-if="currentUtility === UtilityTypes.photo"
+        class="px-3"
         :token="token"
         :account-id="accountId"
         :organization-id="organizationId"
-        :default-photos="photos"
+        :photos="JSON.parse(JSON.stringify(photos))"
         @load="(e) => (photos = e)"
         @photo-selected="onSelect"
       />
       <Albums
         v-if="currentUtility === UtilityTypes.album"
         id="utd-utilities__album"
+        class="px-3"
         :token="token"
         :account-id="accountId"
         :organization-id="organizationId"
@@ -139,6 +141,7 @@
       />
       <Moments
         v-if="currentUtility === UtilityTypes.moments"
+        class="px-3"
         :token="token"
         :account-id="accountId"
         :organization-id="organizationId"
@@ -148,6 +151,7 @@
       />
       <AIArtCreator
         v-if="currentUtility === UtilityTypes.ai"
+        class="px-3"
         :token="token"
         :default-images="aiArt"
         @image-created="(e) => (aiArt = e)"
@@ -228,10 +232,12 @@ export default {
       this.$emit("photo-selected", e);
     },
 
-    handleUploadComplete(newPhotos) {
-      for (const photo of newPhotos) {
-        this.photos.unshift(photo);
-      }
+    handleUploadComplete(newPhoto) {
+      if (!this.photos["1"]) this.photos["1"] = [];
+      if (!this.photos.totalItems) this.photos.totalItems = 0;
+
+      this.photos["1"].unshift(newPhoto);
+      this.photos.totalItems += 1;
     },
 
     handleAlbumCreate(albumData) {

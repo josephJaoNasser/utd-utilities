@@ -63,7 +63,7 @@
             </b-container>
           </b-row>
 
-          <b-container fluid v-if="!photos[currentPage]?.length">
+          <b-container fluid v-if="!photos?.[currentPage]?.length">
             <p class="text-center p-4">
               <i> No photos to show... </i>
             </p>
@@ -80,7 +80,9 @@
             no-gutters
           >
             <b-col
-              v-for="photo in filteredPhotos"
+              v-for="photo in filteredPhotos.length
+                ? filteredPhotos
+                : photos[currentPage]"
               class="p-1"
               @click="selectedPhoto = photo"
               :key="photo.id"
@@ -173,8 +175,7 @@ import UTDInput from "@/components/UTDInput";
 import EditPhoto from "./EditPhoto.vue";
 import UTDPagination from "@/components/UTDPagination";
 import UTDButton from "@/components/UTDButton";
-
-const PHOTO_PAGINATION_LIMIT = 25;
+import { PHOTOS_PER_PAGE } from "@/constants/PaginationVariables";
 
 export default {
   name: "PhotoPicker",
@@ -194,7 +195,11 @@ export default {
       type: String,
       default: "all",
     },
-    defaultPhotos: {
+    // defaultPhotos: {
+    //   type: Object,
+    //   default: () => {},
+    // },
+    photos: {
       type: Object,
       default: () => {},
     },
@@ -204,24 +209,68 @@ export default {
     },
   },
   emits: ["load", "photo-selected"],
+  model: {
+    prop: "photos",
+    event: "load",
+  },
   data() {
     return {
-      photos: this.defaultPhotos,
+      // photos: this.defaultPhotos,
       selectedPhoto: null,
       showEditSection: false,
       isPhotosLoading: false,
       currentPage: 1,
-      totalItems: this.defaultPhotos.totalItems,
-      itemsPerPage: PHOTO_PAGINATION_LIMIT,
+      totalItems: this.photos.totalItems,
+      itemsPerPage: PHOTOS_PER_PAGE,
       searchString: "",
     };
   },
+  methods: {
+    async getPhotos(page) {
+      this.isPhotosLoading = true;
+      const pageToFetch = page || this.currentPage;
+
+      if (this.photos[pageToFetch]?.length) {
+        this.isPhotosLoading = false;
+        return;
+      }
+
+      try {
+        const UTD = new UTDService(this.token);
+        const { rows, totalPages, count } = await UTD.getPhotos({
+          accountId: this.accountId,
+          limit: this.itemsPerPage,
+          page: pageToFetch,
+        });
+
+        this.totalItems = count;
+        this.photos[pageToFetch] = rows;
+        this.photos.totalItems = count;
+        this.$emit("load", this.photos);
+      } catch (e) {
+        console.log(e);
+      }
+      this.isPhotosLoading = false;
+    },
+
+    onSelect() {
+      this.$emit("photo-selected", this.selectedPhoto);
+    },
+
+    toggleEditSection() {
+      this.showEditSection = !this.showEditSection;
+    },
+  },
   computed: {
     filteredPhotos() {
-      const photos = JSON.parse(JSON.stringify(this.photos[this.currentPage]));
+      let photos = [];
+
+      if (this.photos[this.currentPage]) {
+        photos = this.photos[this.currentPage];
+      }
 
       if (!this.searchString.length && this.photos[this.currentPage]) {
-        return photos;
+        return [];
       }
 
       const searchLowerCase = this.searchString.toLowerCase();
@@ -245,56 +294,8 @@ export default {
       };
     },
   },
-  methods: {
-    async getPhotos(page) {
-      this.isPhotosLoading = true;
-      const pageToFetch = page || this.currentPage;
-
-      if (this.photos[pageToFetch]?.length) {
-        this.isPhotosLoading = false;
-        return;
-      }
-
-      try {
-        const UTD = new UTDService(this.token);
-        const { rows, totalPages, count } = await UTD.getPhotos({
-          accountId: this.accountId,
-          limit: PHOTO_PAGINATION_LIMIT,
-          page: pageToFetch,
-        });
-
-        this.totalItems = count;
-        this.photos[pageToFetch] = rows;
-        this.photos.totalItems = count;
-        this.$emit("load", this.photos);
-      } catch (e) {
-        console.log(e);
-      }
-      this.isPhotosLoading = false;
-    },
-
-    onSelect() {
-      this.$emit("photo-selected", this.selectedPhoto);
-    },
-
-    toggleEditSection() {
-      this.showEditSection = !this.showEditSection;
-    },
-  },
-  watch: {
-    defaultPhotos: {
-      deep: true,
-      immediate: true,
-      handler(newVal) {
-        this.photos = newVal;
-      },
-    },
-  },
   async mounted() {
-    if (
-      !this.defaultPhotos[this.currentPage]?.length &&
-      this.source === "all"
-    ) {
+    if (!this.photos[this.currentPage]?.length && this.source === "all") {
       await this.getPhotos();
     }
   },
