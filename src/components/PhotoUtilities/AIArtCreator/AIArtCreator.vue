@@ -9,97 +9,106 @@
       <p>Create AI Art with our free AI image generator.</p>
     </b-container>
 
-    <b-row class="px-3 h-100">
-      <b-col
-        class="border-md-right border-md-bottom-0 px-1 mb-3"
-        cols="12"
-        md="5"
-        lg="4"
-        xl="3"
-      >
-        <b-container fluid>
-          <UTDTextArea
-            class="mb-3"
-            v-model="prompt"
-            :rows="4"
-            placeholder="What do you want to create?"
-          />
-          <UTDButton
-            :loading="isGeneratingFromPrompt"
-            :disabled="isGeneratingFromPrompt || isGeneratingRandom"
-            class="mr-2 mb-2"
-            block
-            @click="getAIArt(false)"
-          >
-            <b-icon-brush-fill class="mr-2"></b-icon-brush-fill>
-            Create!
-          </UTDButton>
-          <UTDButton
-            :loading="isGeneratingRandom"
-            :disabled="isGeneratingFromPrompt || isGeneratingRandom"
-            outline
-            class="mr-2 mb-2"
-            block
-            @click="getAIArt(true)"
-          >
-            Create random image
-          </UTDButton>
-          <div v-if="images.length" class="border-top pt-3">
+    <b-container fluid class="px-3">
+      <b-row class="h-100">
+        <b-col
+          class="border-md-right border-md-bottom-0 px-1 mb-3"
+          cols="12"
+          md="5"
+          lg="4"
+          xl="3"
+        >
+          <b-container fluid>
+            <UTDTextArea
+              class="mb-3"
+              v-model="prompt"
+              :rows="4"
+              placeholder="What do you want to create?"
+            />
             <UTDButton
-              type="success"
+              :loading="isGeneratingFromPrompt"
+              :disabled="isGeneratingFromPrompt || isGeneratingRandom"
+              class="mr-2 mb-2"
               block
-              @click="onSelect({ url: images[0].url })"
+              @click="getAIArt(false)"
             >
-              <b-icon-check class="mr-1"></b-icon-check>
-              Use image
+              <b-icon-brush-fill
+                v-if="!images.length"
+                class="mr-2"
+              ></b-icon-brush-fill>
+              <b-icon-arrow-clockwise
+                v-else
+                class="mr-2"
+              ></b-icon-arrow-clockwise>
+              {{ !images.length ? "Create!" : "Regenerate" }}
             </UTDButton>
-          </div>
-        </b-container>
-      </b-col>
-      <b-col cols="12" md="7" lg="8" xl="9">
-        <b-container
-          fluid
-          class="text-center mb-3 p-4"
-          style="color: #888"
-          v-if="!images.length"
-        >
-          <p>
-            <b-icon-stars style="height: 100px; width: 100px"></b-icon-stars>
-          </p>
-          <p
-            class="text-center"
-            v-if="!isGeneratingFromPrompt && !isGeneratingRandom"
+            <UTDButton
+              :loading="isGeneratingRandom"
+              :disabled="isGeneratingFromPrompt || isGeneratingRandom"
+              outline
+              class="mr-2 mb-2"
+              block
+              @click="getAIArt(true)"
+            >
+              Create random image
+            </UTDButton>
+            <div v-if="images.length" class="border-top pt-3">
+              <UTDButton
+                type="success"
+                block
+                @click="onSelect({ url: images[0].url })"
+              >
+                <b-icon-check class="mr-1"></b-icon-check>
+                Use image
+              </UTDButton>
+            </div>
+          </b-container>
+        </b-col>
+        <b-col cols="12" md="7" lg="8" xl="9">
+          <b-container
+            fluid
+            class="text-center mb-3 p-4"
+            style="color: #888"
+            v-if="!images.length"
           >
-            Tell us what you want to create!<br />
-            Your image will appear here
-          </p>
-          <p
-            v-else-if="isGeneratingFromPrompt || isGeneratingRandom"
-            class="text-center"
+            <p>
+              <b-icon-stars style="height: 100px; width: 100px"></b-icon-stars>
+            </p>
+            <p
+              class="text-center"
+              v-if="!isGeneratingFromPrompt && !isGeneratingRandom"
+            >
+              Tell us what you want to create!<br />
+              Your image will appear here
+            </p>
+            <p
+              v-else-if="isGeneratingFromPrompt || isGeneratingRandom"
+              class="text-center"
+            >
+              Creating your image! Please wait a moment...
+            </p>
+          </b-container>
+          <b-container
+            fluid
+            class="text-center mb-3 p-4"
+            v-if="isGeneratingFromPrompt || isGeneratingRandom"
           >
-            Creating your image! Please wait a moment...
-          </p>
-        </b-container>
-        <b-container
-          fluid
-          class="text-center mb-3 p-4"
-          v-if="isGeneratingFromPrompt || isGeneratingRandom"
-        >
-          <b-spinner
-            label="Loading..."
-            variant="primary"
-            type="grow"
-          ></b-spinner>
-        </b-container>
-        <b-container fluid class="mb-3 p-0 p-md-4" v-else-if="images.length">
-          <PhotoWindow
-            :url="images[0].url"
-            rounded-image
-            max-height="unset"
-          />
-        </b-container>
-      </b-col>
-    </b-row>
+            <b-spinner
+              label="Loading..."
+              variant="primary"
+              type="grow"
+            ></b-spinner>
+          </b-container>
+          <b-container fluid class="mb-3 p-0 p-md-4" v-else-if="images.length">
+            <PhotoWindow
+              :url="images[0].url"
+              rounded-image
+              max-height="unset"
+            />
+          </b-container>
+        </b-col>
+      </b-row>
+    </b-container>
   </b-container>
 </template>
 <script>

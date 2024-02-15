@@ -4,17 +4,17 @@ const medium = {
     {
       name: "Oil Painting",
       image: null,
-      prompt: "in the style of an oil painting",
+      prompt: "drawn with oil paint",
     },
     {
       name: "Pencil Art",
       image: null,
-      prompt: "in the style of pencil art",
+      prompt: "drawn with pencil",
     },
     {
       name: "Crayons",
       image: null,
-      prompt: "drawn using crayons",
+      prompt: "drawn with crayons",
     },
     // add more medium prompts here
   ],

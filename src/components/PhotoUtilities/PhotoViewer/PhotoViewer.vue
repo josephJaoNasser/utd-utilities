@@ -39,7 +39,7 @@
           class="photo-grid-container"
           :style="gridContainerStyle"
         >
-          <b-row>
+          <b-row v-if="totalPages > 1">
             <b-container fluid class="py-2 mb-3 border-bottom">
               <UTDPagination
                 :page="currentPage"
@@ -88,7 +88,7 @@
             </b-col>
           </b-row>
 
-          <b-row>
+          <b-row v-if="totalPages > 1">
             <b-container fluid class="py-2 mb-2 mt-2 border-top">
               <UTDPagination
                 :page="currentPage"
@@ -252,6 +252,9 @@ export default {
     },
   },
   computed: {
+    totalPages() {
+      return Math.ceil(this.totalItems / this.itemsPerPage);
+    },
     filteredPhotos() {
       let photos = [];
 
