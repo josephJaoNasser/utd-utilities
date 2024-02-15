@@ -61,7 +61,7 @@
             </p>
           </b-container>
 
-          <b-row
+          <div
             class="utd-utilities__photo-grid"
             style="overflow: auto"
             cols="3"
@@ -71,22 +71,23 @@
             :cols-xl="!showEditSection ? 6 : 5"
             no-gutters
           >
-            <b-col
+            <div
               v-for="photo in filteredPhotos.length
                 ? filteredPhotos
                 : photos[currentPage]"
-              class="p-1"
+              class="photo-grid-item p-1"
               @click="selectedPhoto = photo"
               :key="photo.id"
             >
               <PhotoListItem
+                class="h-100"
                 :thumbnail-url="
                   photo.thumbnail?.length ? photo.thumbnail : photo.url
                 "
                 :active="!!selectedPhoto && selectedPhoto.id === photo.id"
               />
-            </b-col>
-          </b-row>
+            </div>
+          </div>
 
           <b-row v-if="totalPages > 1">
             <b-container fluid class="py-2 mb-2 mt-2 border-top">
@@ -311,6 +312,15 @@ export default {
 <style scoped lang="scss">
 $md: 768px;
 .utd-utilities {
+  &__photo-grid {
+    display: flex;
+    flex-wrap: wrap;
+
+    .photo-grid-item {
+      height: 180px;
+    }
+  }
+
   &__photo-viewer {
     overflow: hidden;
     .photo-grid-container {

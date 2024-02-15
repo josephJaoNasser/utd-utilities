@@ -13,13 +13,13 @@
     </div> -->
     <b-img-lazy
       :class="[
-        'cursor-pointer rounded border',
+        'cursor-pointer rounded border h-100',
         active && 'img-active border-5 border-primary',
       ]"
       fluid-grow
       blankColor="#bbb"
       :src="thumbnailUrl"
-      style="aspect-ratio: 1; object-fit: cover"
+      style="object-fit: cover"
     />
   </div>
 </template>

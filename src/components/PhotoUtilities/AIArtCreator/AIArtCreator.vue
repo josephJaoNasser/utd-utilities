@@ -25,6 +25,36 @@
               :rows="4"
               placeholder="What do you want to create?"
             />
+
+            <div class="">
+              <div class="mb-4" v-for="param in aiArtParams">
+                <div class="font-weight-bold mb-2">{{ param.name }}</div>
+                <div class="d-flex flex-wrap">
+                  <div
+                    :class="[
+                      'ai-art-param mr-3 d-flex align-items-center mb-2 position-relative',
+                      isStyleActive(param.name, style.prompt) ? 'active' : '',
+                    ]"
+                    v-for="style in param.params"
+                    @click="onStyleSelect(param.name, style.prompt)"
+                  >
+                    <img :src="style.image" class="mr-2" />
+                    <small>
+                      <b>{{ style.name }}</b>
+                    </small>
+                    <b-badge
+                      v-if="isStyleActive(param.name, style.prompt)"
+                      variant="primary"
+                      class="position-absolute"
+                      style="top: -5px; right: -5px"
+                    >
+                      <b-icon-check></b-icon-check>
+                    </b-badge>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <UTDButton
               :loading="isGeneratingFromPrompt"
               :disabled="isGeneratingFromPrompt || isGeneratingRandom"
@@ -118,6 +148,7 @@ import UTDService from "@/services/UTDService";
 import PhotoListItem from "../PhotoViewer/PhotoListItem.vue";
 import PhotoWindow from "../Utils/PhotoWindow.vue";
 import UTDTextArea from "@/components/UTDTextArea";
+import AIArtParams from "@/constants/AIArtParams";
 
 export default {
   name: "AIArtCreator",
@@ -138,6 +169,7 @@ export default {
       showPreviewModal: false,
       isGeneratingRandom: false,
       isGeneratingFromPrompt: false,
+      stylePrompts: [],
     };
   },
   methods: {
@@ -150,6 +182,8 @@ export default {
       } else {
         this.isGeneratingFromPrompt = true;
       }
+
+      prompt = this.appendStylePrompts(prompt);
 
       try {
         this.images = [];
@@ -169,6 +203,46 @@ export default {
     onSelect(e) {
       this.$emit("photo-selected", e);
     },
+
+    onStyleSelect(styleParam, stylePrompt) {
+      const promptIndex = this.stylePrompts.findIndex(
+        (p) => p.prompt === stylePrompt && p.param === styleParam
+      );
+
+      if (promptIndex < 0) {
+        this.stylePrompts = this.stylePrompts.filter(
+          (p) => p.param !== styleParam
+        );
+
+        this.stylePrompts.push({
+          param: styleParam,
+          prompt: stylePrompt,
+        });
+      } else {
+        this.stylePrompts = this.stylePrompts.filter(
+          (p) => p.prompt !== stylePrompt && p.param !== styleParam
+        );
+      }
+    },
+
+    isStyleActive(styleParam, stylePrompt) {
+      const index = this.stylePrompts.findIndex(
+        (p) => p.prompt === stylePrompt && p.param === styleParam
+      );
+
+      return index >= 0 ? true : false;
+    },
+
+    appendStylePrompts(prompt) {
+      this.stylePrompts.forEach((p) => {
+        prompt += ", " + p.prompt;
+      });
+
+      return prompt;
+    },
+  },
+  computed: {
+    aiArtParams: () => AIArtParams,
   },
 };
 </script>
@@ -177,5 +251,26 @@ export default {
 .utd-utilities__ai-art {
   height: 100%;
   overflow: auto;
+
+  .ai-art-param {
+    padding: 5px 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+
+    &.active {
+      outline: 2px solid #2a99d6;
+    }
+
+    &:hover {
+      background-color: #eee;
+      cursor: pointer;
+    }
+
+    img {
+      height: 40px;
+      width: 40px;
+      border-radius: 3px;
+    }
+  }
 }
 </style>
