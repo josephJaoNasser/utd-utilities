@@ -4,15 +4,15 @@
     class="sticky-top p-0 pt-4 utd-utilities__ai-art"
     style="background-color: white"
   >
-    <b-container fluid class="border-bottom mb-3 px-3 mx-0">
+    <b-container fluid class="border-bottom px-3 mx-0">
       <h2 class="font-weight-bold">Create AI Art</h2>
       <p>Create AI Art with our free AI image generator.</p>
     </b-container>
 
-    <b-container fluid class="px-3">
+    <b-container fluid class="px-3" style="height: calc(100% - 90px)">
       <b-row class="h-100">
         <b-col
-          class="border-md-right border-md-bottom-0 px-1 mb-3"
+          class="border-md-right border-md-bottom-0 px-1 pt-3 mb-3"
           cols="12"
           md="5"
           lg="4"
@@ -94,7 +94,7 @@
             </div>
           </b-container>
         </b-col>
-        <b-col cols="12" md="7" lg="8" xl="9">
+        <b-col cols="12" md="7" lg="8" xl="9" class="pt-3 p-0">
           <b-container
             fluid
             class="text-center mb-3 p-4"
