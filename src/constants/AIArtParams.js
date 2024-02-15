@@ -3,18 +3,26 @@ const medium = {
   params: [
     {
       name: "Oil Painting",
-      image: "https://pics.craiyon.com/2023-09-11/86fd4cf3cc634f8baf646af90460501d.webp",
+      image:
+        "https://pics.craiyon.com/2023-09-11/86fd4cf3cc634f8baf646af90460501d.webp",
       prompt: "drawn with oil paint",
     },
     {
       name: "Pencil Art",
-      image: "https://pics.craiyon.com/2023-10-08/2f5ab3f89635408fa8916d92ea5c7bbd.webp",
+      image:
+        "https://pics.craiyon.com/2023-10-08/2f5ab3f89635408fa8916d92ea5c7bbd.webp",
       prompt: "drawn with pencil",
     },
     {
       name: "Crayons",
-      image: "https://pics.craiyon.com/2023-09-09/f932b5d4b018417fa54d3f49a300b8a2.webp",
+      image:
+        "https://pics.craiyon.com/2023-09-09/f932b5d4b018417fa54d3f49a300b8a2.webp",
       prompt: "drawn with crayons",
+    },
+    {
+      name: "Photo",
+      image: "https://pics.craiyon.com/2023-11-28/wPukvq2dTOOrPiAJKVIsdg.webp",
+      prompt: "shot with a camera",
     },
     // add more medium prompts here
   ],
@@ -32,6 +40,12 @@ const styles = {
       name: "Abstract",
       image: "https://pics.craiyon.com/2023-11-30/RoY_EdqLSOGe9Rpfc995pg.webp",
       prompt: "as an abstract art",
+    },
+    {
+      name: "Renaissance",
+      image:
+        "https://pics.craiyon.com/2023-10-14/d356549d2741427caed763c0c9ed51a4.webp",
+      prompt: "in the style of the renaissance era",
     },
     // add more style prompts here
   ],
