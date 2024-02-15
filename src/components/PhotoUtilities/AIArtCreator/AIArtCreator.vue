@@ -4,10 +4,12 @@
     class="sticky-top p-0 pt-4 utd-utilities__ai-art"
     style="background-color: white"
   >
-    <h2 class="font-weight-bold">Create AI Art</h2>
-    <p>Create AI Art with our free AI image generator.</p>
+    <b-container fluid class="border-bottom mb-3 px-3 mx-0">
+      <h2 class="font-weight-bold">Create AI Art</h2>
+      <p>Create AI Art with our free AI image generator.</p>
+    </b-container>
 
-    <b-row>
+    <b-row class="px-3 h-100">
       <b-col
         class="border-md-right border-md-bottom-0 px-1 mb-3"
         cols="12"
