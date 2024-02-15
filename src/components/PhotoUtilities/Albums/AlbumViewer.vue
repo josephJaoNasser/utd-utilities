@@ -72,6 +72,7 @@ import UTDService from "@/services/UTDService";
 import UTDButton from "@/components/UTDButton";
 import PhotoViewer from "../PhotoViewer";
 import Uploader from "../Utils/Uploader.vue";
+import { PHOTOS_PER_PAGE } from "@/constants/PaginationVariables";
 
 const SITE_ID_REMOVE_DURING_PRACTICAL = "ef6c9ff73237e166d797df0b8ded24f5";
 
@@ -137,15 +138,14 @@ export default {
       }));
     },
     paginatedGallery() {
-      const ITEMS_PER_PAGE = 25;
       const totalItems = this.formattedGallery.length;
       const gallery = {
         totalItems: totalItems,
       };
 
       const pages = [];
-      for (let i = 0; i < this.formattedGallery.length; i += ITEMS_PER_PAGE) {
-        pages.push(this.formattedGallery.slice(i, i + ITEMS_PER_PAGE));
+      for (let i = 0; i < this.formattedGallery.length; i += PHOTOS_PER_PAGE) {
+        pages.push(this.formattedGallery.slice(i, i + PHOTOS_PER_PAGE));
       }
 
       pages.forEach((chunk, index) => {
