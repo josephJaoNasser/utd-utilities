@@ -1,13 +1,19 @@
 <template>
-  <b-row
-    class="position-relative utd-utilities__albums"
+  <b-container
+    fluid
+    class="position-relative utd-utilities__albums px-0"
     :style="!selectedAlbum && 'overflow: auto;'"
   >
-    <b-container fluid class="sticky-top pt-4" style="background-color: white">
-      <div v-if="!selectedAlbum" class="mb-3">
+    <b-container
+      fluid
+      class="sticky-top pt-4 pb-2 border-bottom"
+      v-if="!selectedAlbum"
+      style="background-color: white"
+    >
+      <div class="mb-3">
         <h2 class="font-weight-bold">Moments</h2>
       </div>
-      <div v-if="!selectedAlbum">
+      <div>
         <UTDInput
           v-model="searchString"
           icon="search"
@@ -79,7 +85,7 @@
       @photo-selected="onSelect"
       @back="selectedAlbum = null"
     />
-  </b-row>
+  </b-container>
 </template>
 
 <script>

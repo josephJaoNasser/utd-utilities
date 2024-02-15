@@ -1,6 +1,6 @@
 <template>
-  <b-container fluid>
-    <b-container fluid class="p-0 mb-3">
+  <b-container fluid class="utd-utilities__album-viewer pt-3 px-0">
+    <b-container fluid>
       <div class="d-flex justify-content-between">
         <UTDButton @click="$emit('back')" type="light" class="mb-3">
           <b-icon-chevron-left></b-icon-chevron-left>
@@ -50,6 +50,7 @@
       <PhotoViewer
         :token="token"
         :photos="paginatedGallery"
+        :selected-album="selectedAlbum"
         :source="'album'"
         @photo-selected="onSelect"
       />
@@ -163,10 +164,14 @@ export default {
 
 <style scoped lang="scss">
 .photo-viewer-container {
-  height: calc(100% - 180px);
+  height: calc(100% - 215px);
 }
 
 .utd-utilities {
+  &__album-viewer {
+    height: 100%;
+  }
+
   &__album-cover {
     overflow: hidden;
     height: 160px;

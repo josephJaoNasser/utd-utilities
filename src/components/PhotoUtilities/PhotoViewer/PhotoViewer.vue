@@ -1,31 +1,23 @@
 <template>
-  <b-row class="utd-utilities__photo-viewer position-relative h-100">
+  <b-container
+    fluid
+    class="utd-utilities__photo-viewer position-relative h-100 px-0"
+  >
     <b-container
       fluid
-      :class="['sticky-top border-bottom', source === 'all' ? 'pt-4' : '']"
+      :class="['sticky-top border-bottom', !selectedAlbum ? 'pt-4' : '']"
       :style="headerStyle"
     >
-      <div class="mb-3" v-if="source === 'all'">
+      <div class="mb-3" v-if="!selectedAlbum">
         <h2 class="font-weight-bold">Photos</h2>
       </div>
-      <div fluid v-if="source !== 'ai'">
+      <div fluid>
         <UTDInput
           v-model="searchString"
           icon="search"
           class="p-1 mb-3"
           placeholder="Type to search"
         />
-        <!-- <b-row class="mb-4">
-          <b-col cols="12" md="6" lg="7">
-            <UTDInput
-              v-model="searchString"
-              icon="search"
-              class="p-1 p-sm-2"
-              placeholder="Type to search"
-            />
-          </b-col>
-          <b-col></b-col>
-        </b-row> -->
       </div>
     </b-container>
 
@@ -128,6 +120,7 @@
           <PhotoDetails
             v-if="!isPhotosLoading"
             class="utd-utilities__photoDetails"
+            :style="photoDetailsContainerStyle"
             :source="source"
             :photo-details="selectedPhoto"
             @close="showEditSection = false"
@@ -165,7 +158,7 @@
         Add to page
       </UTDButton>
     </b-container>
-  </b-row>
+  </b-container>
 </template>
 <script>
 import UTDService from "@/services/UTDService";
@@ -191,10 +184,7 @@ export default {
     token: String,
     accountId: Number,
     organizationId: Number,
-    source: {
-      type: String,
-      default: "all",
-    },
+    selectedAlbum: Object,
     // defaultPhotos: {
     //   type: Object,
     //   default: () => {},
@@ -284,18 +274,31 @@ export default {
     headerStyle() {
       return {
         backgroundColor: "white",
-        ...(this.source !== "all" ? { top: "15px" } : {}),
+        ...(this.selectedAlbum ? { top: "15px" } : {}),
       };
     },
     gridContainerStyle() {
-      const offsetHeight = this.selectedPhoto ? "190px" : "140px";
+      let offsetHeight = this.selectedAlbum ? 60 : 140;
+
+      if (this.selectedPhoto) {
+        offsetHeight += 50;
+      }
+
       return {
-        height: `calc(100% - ${offsetHeight})`,
+        height: `calc(100% - ${offsetHeight}px)`,
+      };
+    },
+    photoDetailsContainerStyle() {
+      let offsetHeight = this.selectedAlbum ? 210 : 190;
+
+      return {
+        height: `calc(100% - ${offsetHeight}px)`,
+        overflow: "auto",
       };
     },
   },
   async mounted() {
-    if (!this.photos[this.currentPage]?.length && this.source === "all") {
+    if (!this.photos[this.currentPage]?.length && !this.selectedAlbum) {
       await this.getPhotos();
     }
   },
@@ -306,12 +309,8 @@ export default {
 $md: 768px;
 .utd-utilities {
   &__photo-viewer {
+    overflow: hidden;
     .photo-grid-container {
-      overflow: auto;
-    }
-
-    .photo-details-container {
-      height: calc(100% - 190px);
       overflow: auto;
     }
   }

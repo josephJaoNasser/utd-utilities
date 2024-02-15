@@ -1,13 +1,11 @@
 <template>
   <div id="app">
-    <div class="utilities-container">
-      <PhotoUtilities
-        :accountId="credentials.accountId"
-        :organization-id="credentials.organizationId"
-        :token="credentials.token"
-        @photo-selected="handlePhotoSelect"
-      />
-    </div>
+    <PhotoUtilities
+      :accountId="credentials.accountId"
+      :organization-id="credentials.organizationId"
+      :token="credentials.token"
+      @photo-selected="handlePhotoSelect"
+    />
     <!-- <b-container fluid class="mt-5">
       <button style="margin: 0 auto" @click="selectedPhoto = null">
         Clear image
@@ -38,9 +36,9 @@ export default {
   },
   methods: {
     handlePhotoSelect(e) {
-      console.log(e)
-      this.selectedPhoto = e
-    }
+      console.log(e);
+      this.selectedPhoto = e;
+    },
   },
   computed: {
     credentials() {

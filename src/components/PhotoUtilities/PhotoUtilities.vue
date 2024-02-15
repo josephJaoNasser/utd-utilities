@@ -4,7 +4,7 @@
     class="p-0 m-0 utd-utilities__photo-utilities d-flex h-100"
   >
     <div
-      class="photo-utilities__nav"
+      class="photo-utilities__nav border-right"
       style="background-color: #f1f4f7; z-index: 1040"
     >
       <div class="position-sticky" style="top: 15px">
@@ -120,7 +120,6 @@
       <!-- Main section -->
       <PhotoViewer
         v-if="currentUtility === UtilityTypes.photo"
-        class="px-3"
         :token="token"
         :account-id="accountId"
         :organization-id="organizationId"
@@ -131,7 +130,7 @@
       <Albums
         v-if="currentUtility === UtilityTypes.album"
         id="utd-utilities__album"
-        class="px-3"
+        class="w-100"
         :token="token"
         :account-id="accountId"
         :organization-id="organizationId"
@@ -141,7 +140,7 @@
       />
       <Moments
         v-if="currentUtility === UtilityTypes.moments"
-        class="px-3"
+        class="w-100"
         :token="token"
         :account-id="accountId"
         :organization-id="organizationId"
@@ -151,7 +150,7 @@
       />
       <AIArtCreator
         v-if="currentUtility === UtilityTypes.ai"
-        class="px-3"
+        class="ew-100"
         :token="token"
         :default-images="aiArt"
         @image-created="(e) => (aiArt = e)"
