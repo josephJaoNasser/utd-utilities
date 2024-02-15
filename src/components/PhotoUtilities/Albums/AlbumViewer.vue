@@ -51,7 +51,6 @@
         :token="token"
         :photos="paginatedGallery"
         :selected-album="selectedAlbum"
-        :source="'album'"
         @photo-selected="onSelect"
       />
     </b-container>
@@ -133,7 +132,7 @@ export default {
       return this.gallery.map((image, index) => ({
         id: index,
         fileName: image.fileName,
-        thumbnail: image.imageThumbnail,
+        thumbnail: image.imageThumbnail || image.thumbnail,
         url: image.image,
       }));
     },
