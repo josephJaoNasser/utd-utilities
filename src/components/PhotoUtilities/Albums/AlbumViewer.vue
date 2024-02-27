@@ -4,16 +4,16 @@
       <div class="d-flex justify-content-between">
         <UTDButton @click="$emit('back')" type="light" class="mb-3">
           <b-icon-chevron-left></b-icon-chevron-left>
-          Back
+          <span class="d-none d-sm-inline-block"> Back </span>
         </UTDButton>
         <div>
           <UTDButton type="light" class="mb-3 mr-2">
             <b-icon-gear></b-icon-gear>
-            Album Settings
+            <span class="d-none d-sm-inline-block"> Album Settings </span>
           </UTDButton>
           <UTDButton @click="showUploader = true" type="primary" class="mb-3">
             <b-icon-plus></b-icon-plus>
-            Add photos
+            <span class="d-none d-sm-inline-block"> Add photos </span>
           </UTDButton>
         </div>
       </div>

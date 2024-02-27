@@ -5,7 +5,7 @@
     hide-header
     centered
     size="lg"
-    content-class="p-3"
+    content-class="p-2 p-md-3"
   >
     <h3 class="mb-4 font-weight-bold">Upload photos</h3>
     <div class="position-absolute" style="right: -30px; top: -30px">

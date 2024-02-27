@@ -19,10 +19,25 @@
           placeholder="Type to search"
         />
       </div>
+      <b-row>
+        <b-container fluid class="py-2 border-top">
+          <UTDPagination
+            :page="currentPage"
+            :total-items="totalItems"
+            :per-page="itemsPerPage"
+            @page-change="
+              (e) => {
+                currentPage = e;
+                getPhotos(e);
+              }
+            "
+          />
+        </b-container>
+      </b-row>
     </b-container>
 
-    <b-container fluid class="h-100">
-      <b-row class="h-100">
+    <b-container fluid class="h-100 px-0">
+      <b-row :class="['h-100 w-100 mx-0 px-0', selectedAlbum ? 'mt-3' : '']">
         <b-container fluid class="text-center mb-3 p-4" v-if="isPhotosLoading">
           <b-spinner
             label="Loading..."
@@ -36,42 +51,26 @@
           v-else
           order="2"
           order-sm="1"
-          class="photo-grid-container"
+          class="photo-grid-container w-100 px-0"
           :style="gridContainerStyle"
         >
-          <b-row v-if="totalPages > 1">
-            <b-container fluid class="py-2 mb-3 border-bottom">
-              <UTDPagination
-                :page="currentPage"
-                :total-items="totalItems"
-                :per-page="itemsPerPage"
-                @page-change="
-                  (e) => {
-                    currentPage = e;
-                    getPhotos(e);
-                  }
-                "
-              />
-            </b-container>
-          </b-row>
-
           <b-container fluid v-if="!photos?.[currentPage]?.length">
             <p class="text-center p-4">
               <i> No photos to show... </i>
             </p>
           </b-container>
 
-          <div
-            class="utd-utilities__photo-grid"
+          <b-row
+            class="utd-utilities__photo-grid px-3 py-3"
             style="overflow: auto"
-            cols="3"
-            :cols-sm="!showEditSection ? 4 : 2"
-            :cols-md="!showEditSection ? 4 : 3"
+            cols="1"
+            :cols-sm="!showEditSection ? 2 : 1"
+            :cols-md="!showEditSection ? 4 : 2"
             :cols-lg="!showEditSection ? 5 : 4"
             :cols-xl="!showEditSection ? 6 : 5"
             no-gutters
           >
-            <div
+            <b-col
               v-for="photo in filteredPhotos.length
                 ? filteredPhotos
                 : photos[currentPage]"
@@ -86,9 +85,9 @@
                 "
                 :active="!!selectedPhoto && selectedPhoto.id === photo.id"
               />
-            </div>
-          </div>
-
+            </b-col>
+          </b-row>
+          <!-- 
           <b-row v-if="totalPages > 1">
             <b-container fluid class="py-2 mb-2 mt-2 border-top">
               <UTDPagination
@@ -103,7 +102,43 @@
                 "
               />
             </b-container>
-          </b-row>
+          </b-row> -->
+
+          <b-container
+            v-if="selectedPhoto"
+            fluid
+            class="utd-utilities__photo-actions"
+          >
+            <div class="d-flex">
+              <UTDButton
+                type="light"
+                size="sm"
+                class="mr-2"
+                @click="
+                  () => {
+                    selectedPhoto = null;
+                    showEditSection = false;
+                  }
+                "
+              >
+                <b-icon-chevron-left class="mr-1"></b-icon-chevron-left>
+                <span class="d-none d-sm-inline-block">Cancel</span>
+              </UTDButton>
+              <UTDButton
+                type="light"
+                size="sm"
+                class="mr-2"
+                @click="toggleEditSection"
+              >
+                <b-icon-pencil class="mr-1"></b-icon-pencil>
+                <span class="d-none d-sm-inline-block">Edit details</span>
+              </UTDButton>
+              <UTDButton size="sm" @click="onSelect">
+                <b-icon-plus class="mr-1"></b-icon-plus>
+                <span class="d-none d-sm-inline-block">Add to page</span>
+              </UTDButton>
+            </div>
+          </b-container>
         </b-col>
 
         <!-- edit section column -->
@@ -116,48 +151,18 @@
           xl="3"
           order="1"
           order-sm="2"
-          class="p-0 pt-3 border-left photo-details-container"
+          class="p-0 border-left photo-details-container"
+          :style="photoDetailsContainerStyle"
         >
           <PhotoDetails
             v-if="!isPhotosLoading"
-            class="utd-utilities__photoDetails"
-            :style="photoDetailsContainerStyle"
-            :source="source"
+            class="utd-utilities__photoDetails pt-3"
             :photo-details="selectedPhoto"
             @close="showEditSection = false"
             @photo-selected="onSelect"
           />
         </b-col>
       </b-row>
-    </b-container>
-
-    <b-container
-      v-if="selectedPhoto"
-      fluid
-      class="utd-utilities__photo-actions"
-    >
-      <UTDButton
-        type="light"
-        size="sm"
-        class="mr-2"
-        @click="
-          () => {
-            selectedPhoto = null;
-            showEditSection = false;
-          }
-        "
-      >
-        <b-icon-chevron-left class="mr-1"></b-icon-chevron-left>
-        Cancel
-      </UTDButton>
-      <UTDButton type="light" size="sm" class="mr-2" @click="toggleEditSection">
-        <b-icon-pencil class="mr-1"></b-icon-pencil>
-        Edit details
-      </UTDButton>
-      <UTDButton size="sm" @click="onSelect">
-        <b-icon-plus class="mr-1"></b-icon-plus>
-        Add to page
-      </UTDButton>
     </b-container>
   </b-container>
 </template>
@@ -282,18 +287,14 @@ export default {
       };
     },
     gridContainerStyle() {
-      let offsetHeight = this.selectedAlbum ? 60 : 140;
-
-      if (this.selectedPhoto) {
-        offsetHeight += 50;
-      }
+      let offsetHeight = this.selectedAlbum ? 135 : 195;
 
       return {
         height: `calc(100% - ${offsetHeight}px)`,
       };
     },
     photoDetailsContainerStyle() {
-      let offsetHeight = this.selectedAlbum ? 210 : 190;
+      let offsetHeight = this.selectedAlbum ? 130 : 195;
 
       return {
         height: `calc(100% - ${offsetHeight}px)`,
@@ -313,9 +314,6 @@ export default {
 $md: 768px;
 .utd-utilities {
   &__photo-grid {
-    display: flex;
-    flex-wrap: wrap;
-
     .photo-grid-item {
       height: 180px;
     }
@@ -325,6 +323,7 @@ $md: 768px;
     overflow: hidden;
     .photo-grid-container {
       overflow: auto;
+      overflow-x: hidden;
     }
   }
 
@@ -336,6 +335,8 @@ $md: 768px;
     z-index: 3;
     padding: 10px;
     text-align: right;
+    display: flex;
+    justify-content: flex-end;
   }
 }
 </style>

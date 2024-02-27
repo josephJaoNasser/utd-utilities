@@ -3,119 +3,22 @@
     fluid
     class="p-0 m-0 utd-utilities__photo-utilities d-flex h-100"
   >
-    <div
-      class="photo-utilities__nav border-right"
-      style="background-color: #f1f4f7; z-index: 1040"
-    >
-      <div class="position-sticky" style="top: 15px">
-        <UTDButton @click="toggleExpandNav" small type="light" class="mb-2">
-          <b-icon-list v-if="!expandNav"></b-icon-list>
-          <b-icon-x v-else></b-icon-x>
-        </UTDButton>
-        <div class="border-bottom mb-2 pb-3 position-relative">
-          <UTDButton block @click="toggleUploadMenu">
-            <b-icon-plus></b-icon-plus>
-            <div :class="['nav-menu-item-text', expandNav ? 'expanded' : '']">
-              Add Media
-            </div>
-          </UTDButton>
-          <ul
-            v-if="showUploadMenu"
-            class="photo-utilities__nav-dropdown text-primary position-absolute top-0"
-            style="list-style: none"
-          >
-            <li>
-              <UTDButton
-                block
-                type="light"
-                class="text-primary px-3 py-2"
-                @click="toggleUploader"
-              >
-                <b-icon-image class="mr-2"></b-icon-image>
-                Photo
-              </UTDButton>
-            </li>
-            <li>
-              <UTDButton
-                block
-                type="light"
-                class="text-primary px-3 py-2"
-                @click="toggleCreateAlbum"
-              >
-                <b-icon-images class="mr-2"></b-icon-images>
-                Album
-              </UTDButton>
-            </li>
-          </ul>
-        </div>
-        <div class="d-flex flex-column">
-          <UTDButton
-            type="light"
-            :class="[
-              'nav-item',
-              'mb-2',
-              currentUtility === UtilityTypes.photo
-                ? 'text-primary'
-                : 'text-secondary',
-            ]"
-            @click="onUtilityChange(UtilityTypes.photo)"
-          >
-            <b-icon-image></b-icon-image>
-            <div :class="['nav-menu-item-text', expandNav ? 'expanded' : '']">
-              Photos
-            </div>
-          </UTDButton>
-          <UTDButton
-            type="light"
-            :class="[
-              'nav-item',
-              'mb-2',
-              currentUtility === UtilityTypes.album
-                ? 'text-primary'
-                : 'text-secondary',
-            ]"
-            @click="onUtilityChange(UtilityTypes.album)"
-          >
-            <b-icon-images></b-icon-images>
-            <div :class="['nav-menu-item-text', expandNav ? 'expanded' : '']">
-              Albums
-            </div>
-          </UTDButton>
-          <UTDButton
-            type="light"
-            :class="[
-              'nav-item',
-              'mb-2',
-              currentUtility === UtilityTypes.moments
-                ? 'text-primary'
-                : 'text-secondary',
-            ]"
-            @click="onUtilityChange(UtilityTypes.moments)"
-          >
-            <b-icon-calendar-fill></b-icon-calendar-fill>
-            <div :class="['nav-menu-item-text', expandNav ? 'expanded' : '']">
-              Moments
-            </div>
-          </UTDButton>
-          <UTDButton
-            type="light"
-            :class="[
-              'nav-item',
-              'mb-2',
-              currentUtility === UtilityTypes.ai
-                ? 'text-primary'
-                : 'text-secondary',
-            ]"
-            @click="onUtilityChange(UtilityTypes.ai)"
-          >
-            <b-icon-stars></b-icon-stars>
-            <div :class="['nav-menu-item-text', expandNav ? 'expanded' : '']">
-              AI Image creator
-            </div>
-          </UTDButton>
-        </div>
-      </div>
-    </div>
+    <MobileNav
+      class="d-sm-none"
+      :current-utility="currentUtility"
+      @utility-change="onUtilityChange"
+      @uploader-toggled="toggleUploader"
+      @create-album-toggled="toggleCreateAlbum"
+    />
+
+    <SideNav
+      class="d-none d-sm-block"
+      :current-utility="currentUtility"
+      @utility-change="onUtilityChange"
+      @uploader-toggled="toggleUploader"
+      @create-album-toggled="toggleCreateAlbum"
+    />
+
     <b-container fluid class="utd-utilities__photo-utilities__main px-0">
       <!-- Main section -->
       <PhotoViewer
@@ -184,13 +87,9 @@ import UTDButton from "../UTDButton";
 import Uploader from "./Utils/Uploader.vue";
 import CreateAlbum from "./Utils/CreateAlbum.vue";
 import Moments from "./Moments";
-
-const utilTypes = {
-  photo: "photo",
-  album: "album",
-  moments: "moments",
-  ai: "ai",
-};
+import SideNav from "./Utils/SideNav.vue";
+import UtilityTypes from "@/constants/UtilityTypes";
+import MobileNav from "./Utils/MobileNav.vue";
 
 export default {
   name: "PhotoUtilities",
@@ -207,15 +106,16 @@ export default {
     Uploader,
     CreateAlbum,
     Moments,
+    SideNav,
+    MobileNav,
   },
   emits: ["photo-selected"],
   data() {
     return {
-      currentUtility: utilTypes.photo,
+      currentUtility: UtilityTypes.photo,
       showUploader: false,
       showCreateAlbum: false,
-      showUploadMenu: false,
-      expandNav: false,
+
       photos: {},
       albums: [],
       moments: [],
@@ -243,27 +143,17 @@ export default {
       this.albums.unshift(albumData);
     },
 
-    toggleUploadMenu() {
-      this.showUploadMenu = !this.showUploadMenu;
-    },
-
     toggleCreateAlbum() {
       this.showCreateAlbum = true;
-      this.toggleUploadMenu();
     },
 
     toggleUploader() {
       this.showUploader = true;
-      this.toggleUploadMenu();
-    },
-
-    toggleExpandNav() {
-      this.expandNav = !this.expandNav;
     },
   },
   computed: {
     UtilityTypes() {
-      return utilTypes;
+      return UtilityTypes;
     },
   },
 };
@@ -282,6 +172,8 @@ $breakpoint-tablet: 768px;
       &__nav {
         font-weight: 600;
         padding: 15px 10px;
+        background-color: #f1f4f7;
+        z-index: 1040;
 
         &-dropdown {
           list-style: none;

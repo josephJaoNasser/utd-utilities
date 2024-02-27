@@ -18,7 +18,12 @@
       </UTDButton>
     </div>
 
-    <PhotoWindow class="mb-3 p-0" :url="photoDetails.url" max-height="250" background-color="#eee" />
+    <PhotoWindow
+      class="mb-3 p-0"
+      :url="photoDetails.url"
+      max-height="250"
+      background-color="#eee"
+    />
 
     <b-container v-if="source !== 'ai'" fluid class="px-3">
       <div class="mb-3">
@@ -52,7 +57,12 @@
 
       <div class="mb-3">
         <label class="mb-1" for="file-url">File URL</label>
-        <b-form-input type="text" name="file-url" v-model="url"></b-form-input>
+        <b-form-input
+          type="text"
+          name="file-url"
+          v-model="url"
+          disabled
+        ></b-form-input>
       </div>
     </b-container>
   </b-container>
