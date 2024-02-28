@@ -7,7 +7,11 @@
           <span class="d-none d-sm-inline-block"> Back </span>
         </UTDButton>
         <div>
-          <UTDButton type="light" class="mb-3 mr-2">
+          <UTDButton
+            type="light"
+            class="mb-3 mr-2"
+            @click="showAlbumSettings = true"
+          >
             <b-icon-gear></b-icon-gear>
             <span class="d-none d-sm-inline-block"> Album Settings </span>
           </UTDButton>
@@ -21,7 +25,7 @@
       <div class="card bg-dark text-white border-0 utd-utilities__album-cover">
         <div class="position-relative img-container">
           <div class="album-bg-overlay absolute"></div>
-          <img class="card-img" :src="selectedAlbum.albumImage" />
+          <img class="card-img" :src="albumImage" />
         </div>
         <div class="card-img-overlay p-0">
           <div class="card-body h-100">
@@ -65,6 +69,14 @@
       @close="showUploader = false"
       @upload-completed="handleUploadComplete"
     />
+    <AlbumSettingsModal
+      :show="showAlbumSettings"
+      :account-id="accountId"
+      :organization-id="organizationId"
+      :album-details="selectedAlbum"
+      @album-updated="handleAlbumDetailsUpdate"
+      @close="showAlbumSettings = false"
+    />
   </b-container>
 </template>
 
@@ -73,13 +85,14 @@ import UTDService from "@/services/UTDService";
 import UTDButton from "@/components/UTDButton";
 import PhotoViewer from "../PhotoViewer";
 import Uploader from "../components/Uploader.vue";
+import AlbumSettingsModal from "./AlbumSettingsModal.vue";
 import { PHOTOS_PER_PAGE } from "@/constants/PaginationVariables";
 
 const SITE_ID_REMOVE_DURING_PRODUCTION = "ef6c9ff73237e166d797df0b8ded24f5";
 
 export default {
   name: "AlbumViewer",
-  components: { PhotoViewer, UTDButton, Uploader },
+  components: { PhotoViewer, UTDButton, Uploader, AlbumSettingsModal },
   props: {
     token: String,
     accountId: Number,
@@ -89,12 +102,14 @@ export default {
       default: () => {},
     },
   },
-  emits: ["photo-selected", "back", "album-image-updated"],
+  emits: ["photo-selected", "back", "album-details-updated"],
   data() {
     return {
       showUploader: false,
       isPhotosLoading: false,
+      showAlbumSettings: false,
       gallery: [],
+      albumImage: this.selectedAlbum?.albumImage || null,
     };
   },
   methods: {
@@ -122,7 +137,7 @@ export default {
         });
 
         if (res.success) {
-          this.$emit("album-image-updated", url);
+          this.$emit("album-details-updated", url);
         }
       } catch (e) {
         console.log(e);
@@ -151,8 +166,22 @@ export default {
       }
     },
 
+    handleAlbumDetailsUpdate(albumDetails) {
+      const { albumName, albumDescription, albumImage } = albumDetails;
+      this.$emit("album-details-updated", {
+        albumName,
+        albumDescription,
+        albumImage,
+      });
+    },
+
     handleAlbumImageUpdate(url) {
-      this.$emit("album-image-updated", url);
+      this.albumImage = url;
+      this.handleAlbumDetailsUpdate({
+        albumName: this.albumName,
+        albumDescription: this.albumDescription,
+        albumImage: url,
+      });
     },
 
     onSelect(e) {
