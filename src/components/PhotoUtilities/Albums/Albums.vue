@@ -60,7 +60,7 @@
                 <div class="card-body h-100">
                   <h5 class="card-title">
                     {{
-                      album.albumName.length
+                      album.albumName?.length
                         ? album.albumName
                         : "Untitled Album"
                     }}

@@ -31,7 +31,7 @@
           <div class="card-body h-100">
             <h4 class="card-title">
               {{
-                selectedAlbum.albumName.length
+                selectedAlbum.albumName?.length
                   ? selectedAlbum.albumName
                   : "Untitled Album"
               }}
@@ -137,7 +137,7 @@ export default {
         });
 
         if (res.success) {
-          this.$emit("album-details-updated", url);
+          this.handleAlbumImageUpdate(url);
         }
       } catch (e) {
         console.log(e);
@@ -146,12 +146,12 @@ export default {
 
     handleUploadComplete(newPhotos) {
       if (!Array.isArray(newPhotos)) {
+        this.gallery.unshift(newPhotos);
+
         if (this.selectedAlbum && !this.selectedAlbum.albumImage) {
           this.setAlbumImage(newPhotos.image);
           this.handleAlbumImageUpdate(newPhotos.image);
         }
-
-        this.gallery.unshift(newPhotos);
 
         return;
       }
@@ -178,8 +178,8 @@ export default {
     handleAlbumImageUpdate(url) {
       this.albumImage = url;
       this.handleAlbumDetailsUpdate({
-        albumName: this.albumName,
-        albumDescription: this.albumDescription,
+        albumName: this.selectedAlbum.albumName,
+        albumDescription: this.selectedAlbum.albumDescription,
         albumImage: url,
       });
     },
