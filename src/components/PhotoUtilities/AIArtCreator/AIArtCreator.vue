@@ -146,7 +146,7 @@ import UTDButton from "@/components/UTDButton";
 import UTDInput from "@/components/UTDInput";
 import UTDService from "@/services/UTDService";
 import PhotoListItem from "../PhotoViewer/PhotoListItem.vue";
-import PhotoWindow from "../Utils/PhotoWindow.vue";
+import PhotoWindow from "../components/PhotoWindow.vue";
 import UTDTextArea from "@/components/UTDTextArea";
 import AIArtParams from "@/constants/AIArtParams";
 
@@ -274,3 +274,4 @@ export default {
   }
 }
 </style>
+../components/PhotoWindow.vue

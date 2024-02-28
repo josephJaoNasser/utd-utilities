@@ -87,22 +87,6 @@
               />
             </b-col>
           </b-row>
-          <!-- 
-          <b-row v-if="totalPages > 1">
-            <b-container fluid class="py-2 mb-2 mt-2 border-top">
-              <UTDPagination
-                :page="currentPage"
-                :total-items="totalItems"
-                :per-page="itemsPerPage"
-                @page-change="
-                  (e) => {
-                    currentPage = e;
-                    getPhotos(e);
-                  }
-                "
-              />
-            </b-container>
-          </b-row> -->
 
           <b-container
             v-if="selectedPhoto"
@@ -132,6 +116,17 @@
               >
                 <b-icon-pencil class="mr-1"></b-icon-pencil>
                 <span class="d-none d-sm-inline-block">Edit details</span>
+              </UTDButton>
+              <UTDButton
+                v-if="selectedAlbum"
+                :loading="isSettingAlbumImage"
+                @click="setAlbumImage"
+                type="light"
+                size="sm"
+                class="mr-2"
+              >
+                <b-icon-image class="mr-1"></b-icon-image>
+                <span class="d-none d-sm-inline-block">Set album cover</span>
               </UTDButton>
               <UTDButton size="sm" @click="onSelect">
                 <b-icon-plus class="mr-1"></b-icon-plus>
@@ -191,10 +186,6 @@ export default {
     accountId: Number,
     organizationId: Number,
     selectedAlbum: Object,
-    // defaultPhotos: {
-    //   type: Object,
-    //   default: () => {},
-    // },
     photos: {
       type: Object,
       default: () => {},
@@ -204,7 +195,7 @@ export default {
       default: () => {},
     },
   },
-  emits: ["load", "photo-selected"],
+  emits: ["load", "photo-selected", "album-image-updated"],
   model: {
     prop: "photos",
     event: "load",
@@ -215,6 +206,7 @@ export default {
       selectedPhoto: null,
       showEditSection: false,
       isPhotosLoading: false,
+      isSettingAlbumImage: false,
       currentPage: 1,
       totalItems: this.photos.totalItems,
       itemsPerPage: PHOTOS_PER_PAGE,
@@ -247,6 +239,23 @@ export default {
         console.log(e);
       }
       this.isPhotosLoading = false;
+    },
+
+    async setAlbumImage() {
+      this.isSettingAlbumImage = true;
+      try {
+        const UTD = new UTDService(this.token);
+        const res = await UTD.editAlbum(this.selectedAlbum.id.toString(), {
+          albumImage: this.selectedPhoto.url,
+        });
+
+        if (res.success) {
+          this.$emit("album-image-updated", this.selectedPhoto.url);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+      this.isSettingAlbumImage = false;
     },
 
     onSelect() {

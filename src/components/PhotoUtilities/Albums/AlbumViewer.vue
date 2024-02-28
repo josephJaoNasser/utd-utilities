@@ -52,6 +52,7 @@
         :photos="paginatedGallery"
         :selected-album="selectedAlbum"
         @photo-selected="onSelect"
+        @album-image-updated="handleAlbumImageUpdate"
       />
     </b-container>
     <Uploader
@@ -71,10 +72,10 @@
 import UTDService from "@/services/UTDService";
 import UTDButton from "@/components/UTDButton";
 import PhotoViewer from "../PhotoViewer";
-import Uploader from "../Utils/Uploader.vue";
+import Uploader from "../components/Uploader.vue";
 import { PHOTOS_PER_PAGE } from "@/constants/PaginationVariables";
 
-const SITE_ID_REMOVE_DURING_PRACTICAL = "ef6c9ff73237e166d797df0b8ded24f5";
+const SITE_ID_REMOVE_DURING_PRODUCTION = "ef6c9ff73237e166d797df0b8ded24f5";
 
 export default {
   name: "AlbumViewer",
@@ -88,7 +89,7 @@ export default {
       default: () => {},
     },
   },
-  emits: ["photo-selected", "back"],
+  emits: ["photo-selected", "back", "album-image-updated"],
   data() {
     return {
       showUploader: false,
@@ -103,7 +104,7 @@ export default {
         const UTD = new UTDService(this.token);
         const albumData = await UTD.getAlbumGallery(
           this.selectedAlbum.encryptedId,
-          SITE_ID_REMOVE_DURING_PRACTICAL
+          SITE_ID_REMOVE_DURING_PRODUCTION
         );
 
         this.gallery = albumData.payload || [];
@@ -113,15 +114,45 @@ export default {
       this.isPhotosLoading = false;
     },
 
+    async setAlbumImage(url) {
+      try {
+        const UTD = new UTDService(this.token);
+        const res = await UTD.editAlbum(this.selectedAlbum.id.toString(), {
+          albumImage: url,
+        });
+
+        if (res.success) {
+          this.$emit("album-image-updated", url);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
     handleUploadComplete(newPhotos) {
       if (!Array.isArray(newPhotos)) {
+        if (this.selectedAlbum && !this.selectedAlbum.albumImage) {
+          this.setAlbumImage(newPhotos.image);
+          this.handleAlbumImageUpdate(newPhotos.image);
+        }
+
         this.gallery.unshift(newPhotos);
+
         return;
       }
 
       for (const photo of newPhotos) {
         this.gallery.unshift(photo);
       }
+
+      if (this.selectedAlbum && !this.selectedAlbum.albumImage) {
+        this.setAlbumImage(newPhotos[0].image);
+        this.handleAlbumImageUpdate(newPhotos[0].image);
+      }
+    },
+
+    handleAlbumImageUpdate(url) {
+      this.$emit("album-image-updated", url);
     },
 
     onSelect(e) {
@@ -203,3 +234,4 @@ export default {
   }
 }
 </style>
+../components/Uploader.vue

@@ -69,7 +69,7 @@
 </template>
 <script>
 import UTDButton from "@/components/UTDButton";
-import PhotoWindow from "../Utils/PhotoWindow.vue";
+import PhotoWindow from "../components/PhotoWindow.vue";
 
 export default {
   name: "PhotoDetails",
@@ -125,3 +125,4 @@ export default {
   }
 }
 </style>
+../components/PhotoWindow.vue

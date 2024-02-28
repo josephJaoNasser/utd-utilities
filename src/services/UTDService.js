@@ -103,6 +103,29 @@ class UTDService {
   }
 
   /**
+   *
+   * @param {string} albumId the NON-ENCRYPTED ID of the album
+   * @param {{
+   *  albumName: string,
+   *  albumDescription: string,
+   *  parentAlbumId: string,
+   *  albumImage: string,
+   * }} options
+   */
+  async editAlbum(albumId, options = {}) {
+    try {
+      const { data } = await this.axiosInstance.put(
+        `/albums/${albumId}`,
+        options
+      );
+
+      return data;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  /**
    * Shows the uploaded photos of the user
    * @param {{
    *  userId: number,

@@ -84,12 +84,12 @@ import PhotoViewer from "./PhotoViewer";
 import Albums from "./Albums";
 import AIArtCreator from "./AIArtCreator/AIArtCreator.vue";
 import UTDButton from "../UTDButton";
-import Uploader from "./Utils/Uploader.vue";
-import CreateAlbum from "./Utils/CreateAlbum.vue";
+import Uploader from "./components/Uploader.vue";
+import CreateAlbum from "./components/CreateAlbum.vue";
 import Moments from "./Moments";
-import SideNav from "./Utils/SideNav.vue";
+import SideNav from "./components/SideNav.vue";
 import UtilityTypes from "@/constants/UtilityTypes";
-import MobileNav from "./Utils/MobileNav.vue";
+import MobileNav from "./components/MobileNav.vue";
 
 export default {
   name: "PhotoUtilities",
@@ -249,3 +249,4 @@ $breakpoint-tablet: 768px;
   }
 }
 </style>
+./components/Uploader.vue./components/CreateAlbum.vue./components/SideNav.vue./components/MobileNav.vue
