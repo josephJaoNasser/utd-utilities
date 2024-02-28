@@ -63,8 +63,8 @@
           <b-row
             class="utd-utilities__photo-grid px-3 py-3"
             style="overflow: auto"
-            cols="1"
-            :cols-sm="!showEditSection ? 2 : 1"
+            cols="2"
+            :cols-sm="!showEditSection ? 3 : 1"
             :cols-md="!showEditSection ? 4 : 2"
             :cols-lg="!showEditSection ? 5 : 4"
             :cols-xl="!showEditSection ? 6 : 5"
