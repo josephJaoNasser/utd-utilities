@@ -84,6 +84,7 @@
       :organization-id="organizationId"
       @photo-selected="onSelect"
       @back="selectedAlbum = null"
+      @album-details-updated="handleAlbumDetailsUpdate"
     />
   </b-container>
 </template>
@@ -128,6 +129,12 @@ export default {
         console.log(e);
       }
       this.isMomentsLoading = false;
+    },
+
+    handleAlbumDetailsUpdate({ albumName, albumDescription, albumImage }) {
+      this.selectedAlbum.albumImage = albumImage;
+      this.selectedAlbum.albumName = albumName;
+      this.selectedAlbum.albumDescription = albumDescription;
     },
 
     onSelect(e) {
