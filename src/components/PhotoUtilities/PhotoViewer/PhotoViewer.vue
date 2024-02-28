@@ -87,53 +87,6 @@
               />
             </b-col>
           </b-row>
-
-          <b-container
-            v-if="selectedPhoto"
-            fluid
-            class="utd-utilities__photo-actions"
-          >
-            <div class="d-flex">
-              <UTDButton
-                type="light"
-                size="sm"
-                class="mr-2"
-                @click="
-                  () => {
-                    selectedPhoto = null;
-                    showEditSection = false;
-                  }
-                "
-              >
-                <b-icon-chevron-left class="mr-1"></b-icon-chevron-left>
-                <span class="d-none d-sm-inline-block">Cancel</span>
-              </UTDButton>
-              <UTDButton
-                type="light"
-                size="sm"
-                class="mr-2"
-                @click="toggleEditSection"
-              >
-                <b-icon-pencil class="mr-1"></b-icon-pencil>
-                <span class="d-none d-sm-inline-block">Edit details</span>
-              </UTDButton>
-              <UTDButton
-                v-if="selectedAlbum"
-                :loading="isSettingAlbumImage"
-                @click="setAlbumImage"
-                type="light"
-                size="sm"
-                class="mr-2"
-              >
-                <b-icon-image class="mr-1"></b-icon-image>
-                <span class="d-none d-sm-inline-block">Set album cover</span>
-              </UTDButton>
-              <UTDButton size="sm" @click="onSelect">
-                <b-icon-plus class="mr-1"></b-icon-plus>
-                <span class="d-none d-sm-inline-block">Add to page</span>
-              </UTDButton>
-            </div>
-          </b-container>
         </b-col>
 
         <!-- edit section column -->
@@ -157,6 +110,53 @@
             @photo-selected="onSelect"
           />
         </b-col>
+
+        <b-container
+          v-if="selectedPhoto"
+          fluid
+          class="utd-utilities__photo-actions"
+        >
+          <div class="d-flex">
+            <UTDButton
+              type="light"
+              size="sm"
+              class="mr-2"
+              @click="
+                () => {
+                  selectedPhoto = null;
+                  showEditSection = false;
+                }
+              "
+            >
+              <b-icon-chevron-left class="mr-1"></b-icon-chevron-left>
+              <span class="d-none d-sm-inline-block">Cancel</span>
+            </UTDButton>
+            <UTDButton
+              type="light"
+              size="sm"
+              class="mr-2"
+              @click="toggleEditSection"
+            >
+              <b-icon-pencil class="mr-1"></b-icon-pencil>
+              <span class="d-none d-sm-inline-block">Edit details</span>
+            </UTDButton>
+            <UTDButton
+              v-if="selectedAlbum"
+              :loading="isSettingAlbumImage"
+              @click="setAlbumImage"
+              type="light"
+              size="sm"
+              class="mr-2"
+            >
+              <b-icon-image class="mr-1"></b-icon-image>
+              <span class="d-none d-sm-inline-block">Set album cover</span>
+            </UTDButton>
+            <UTDButton size="sm" @click="onSelect">
+              <b-icon-plus class="mr-1"></b-icon-plus>
+              <span class="d-none d-sm-inline-block">Add to page</span>
+            </UTDButton>
+          </div>
+        </b-container>
       </b-row>
     </b-container>
   </b-container>
@@ -298,12 +298,20 @@ export default {
     gridContainerStyle() {
       let offsetHeight = this.selectedAlbum ? 135 : 195;
 
+      if (this.selectedPhoto) {
+        offsetHeight += 50;
+      }
+
       return {
         height: `calc(100% - ${offsetHeight}px)`,
       };
     },
     photoDetailsContainerStyle() {
       let offsetHeight = this.selectedAlbum ? 130 : 195;
+
+      if (this.selectedPhoto) {
+        offsetHeight += 50;
+      }
 
       return {
         height: `calc(100% - ${offsetHeight}px)`,
@@ -338,7 +346,7 @@ $md: 768px;
 
   &__photo-actions {
     background-color: white;
-    position: sticky;
+    position: absolute;
     border-top: 1px solid #ccc;
     bottom: 0;
     z-index: 3;

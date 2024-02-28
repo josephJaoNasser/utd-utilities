@@ -14,7 +14,7 @@
         type="primary"
       >
         <b-icon-check></b-icon-check>
-        Save changes
+        <span class="d-none d-sm-inline-block"> Save changes </span>
       </UTDButton>
     </div>
 

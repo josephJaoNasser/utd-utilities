@@ -19,7 +19,7 @@
       @create-album-toggled="toggleCreateAlbum"
     />
 
-    <b-container fluid class="utd-utilities__photo-utilities__main px-0">
+    <b-container fluid class="utd-utilities__photo-utilities__main px-0 mt-5 mt-sm-0">
       <!-- Main section -->
       <PhotoViewer
         v-if="currentUtility === UtilityTypes.photo"

@@ -102,24 +102,21 @@ export default {
 <style lang="scss" scoped>
 .photo-utilities {
   &__mobile-nav {
-    position: fixed;
-    bottom: 55px;
+    position: absolute;
+    width: 100%;
+    top: 0;
     display: flex;
-    left: 50%;
-    transform: translateX(-50%);
     z-index: 1040;
     gap: 10px;
     align-items: center;
     padding: 5px;
     background-color: #f1f4f7;
     border: 1px solid #ccc;
-    border-radius: 5px;
 
     &-dropdown {
       list-style: none;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 45px;
+      left: 0;
       background: white;
       padding: 0;
       border-radius: 5px;
@@ -141,19 +138,20 @@ export default {
         content: " ";
         width: 0;
         height: 0;
-        border-top: 10px solid transparent;
-        border-bottom: 10px solid white;
-        border-left: 10px solid white;
+        border-right: 10px solid white;
+        border-top: 10px solid white;
+        border-bottom: 10px solid transparent;
+        border-left: 10px solid transparent;
         position: absolute;
-        border-right: 10px solid transparent;
-        left: 44.5px;
-        top: 70px;
+        left: 12.5px;
+        bottom: 70px;
         transform: rotate(315deg);
       }
     }
 
     .mobile-nav-items {
       display: flex;
+      flex-wrap: wrap;
       gap: 5px;
     }
   }
