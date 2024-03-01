@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import UTDService from "@/services/UTDService";
+import PhotoService from "@/services/PhotoService";
 import UTDButton from "@/components/UTDButton";
 import PhotoViewer from "../PhotoViewer";
 import Uploader from "../components/Uploader.vue";
@@ -116,7 +116,7 @@ export default {
     async getAlbumPhotos() {
       this.isPhotosLoading = true;
       try {
-        const UTD = new UTDService(this.token);
+        const UTD = new PhotoService(this.token);
         const albumData = await UTD.getAlbumGallery(
           this.selectedAlbum.encryptedId,
           SITE_ID_REMOVE_DURING_PRODUCTION
@@ -131,7 +131,7 @@ export default {
 
     async setAlbumImage(url) {
       try {
-        const UTD = new UTDService(this.token);
+        const UTD = new PhotoService(this.token);
         const res = await UTD.editAlbum(this.selectedAlbum.id.toString(), {
           albumImage: url,
         });

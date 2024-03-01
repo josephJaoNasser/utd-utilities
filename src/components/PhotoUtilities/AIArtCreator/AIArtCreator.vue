@@ -144,7 +144,7 @@
 <script>
 import UTDButton from "@/components/UTDButton";
 import UTDInput from "@/components/UTDInput";
-import UTDService from "@/services/UTDService";
+import PhotoService from "@/services/PhotoService";
 import PhotoListItem from "../PhotoViewer/PhotoListItem.vue";
 import PhotoWindow from "../components/PhotoWindow.vue";
 import UTDTextArea from "@/components/UTDTextArea";
@@ -187,7 +187,7 @@ export default {
 
       try {
         this.images = [];
-        const UTD = new UTDService(this.token);
+        const UTD = new PhotoService(this.token);
         const { payload } = await UTD.generateAIImages(prompt, 11);
 
         this.images = payload.data;

@@ -11,15 +11,15 @@
       <div class="mb-3" v-if="!selectedAlbum">
         <h2 class="font-weight-bold">Photos</h2>
       </div>
-      <div fluid>
+      <!-- <div fluid>
         <UTDInput
           v-model="searchString"
           icon="search"
           class="p-1 mb-3"
           placeholder="Type to search"
         />
-      </div>
-      <b-row>
+      </div> -->
+      <!-- <b-row>
         <b-container fluid class="py-2 border-top">
           <UTDPagination
             :page="currentPage"
@@ -33,7 +33,7 @@
             "
           />
         </b-container>
-      </b-row>
+      </b-row> -->
     </b-container>
 
     <b-container fluid class="h-100 px-0">
@@ -162,7 +162,7 @@
   </b-container>
 </template>
 <script>
-import UTDService from "@/services/UTDService";
+import PhotoService from "@/services/PhotoService";
 import PhotoDetails from "./PhotoDetails.vue";
 import PhotoListItem from "./PhotoListItem.vue";
 import UTDInput from "@/components/UTDInput";
@@ -224,7 +224,7 @@ export default {
       }
 
       try {
-        const UTD = new UTDService(this.token);
+        const UTD = new PhotoService(this.token);
         const { rows, totalPages, count } = await UTD.getPhotos({
           accountId: this.accountId,
           limit: this.itemsPerPage,
@@ -244,7 +244,7 @@ export default {
     async setAlbumImage() {
       this.isSettingAlbumImage = true;
       try {
-        const UTD = new UTDService(this.token);
+        const UTD = new PhotoService(this.token);
         const res = await UTD.editAlbum(this.selectedAlbum.id.toString(), {
           albumImage: this.selectedPhoto.url,
         });
@@ -296,7 +296,7 @@ export default {
       };
     },
     gridContainerStyle() {
-      let offsetHeight = this.selectedAlbum ? 135 : 195;
+      let offsetHeight = this.selectedAlbum ? 25 : 80;
 
       if (this.selectedPhoto) {
         offsetHeight += 50;

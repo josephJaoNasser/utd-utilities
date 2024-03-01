@@ -13,25 +13,14 @@
       <div class="mb-3">
         <h2 class="font-weight-bold">Albums</h2>
       </div>
-      <div>
+      <!-- <div>
         <UTDInput
           v-model="searchString"
           icon="search"
           class="p-1 p-sm-2 mb-3"
           placeholder="Type to search"
         />
-        <!-- <b-row class="mb-4">
-          <b-col cols="12" md="6" lg="7">
-            <UTDInput
-              v-model="searchString"
-              icon="search"
-              class="p-1 p-sm-2"
-              placeholder="Type to search"
-            />
-          </b-col>
-          <b-col></b-col>
-        </b-row> -->
-      </div>
+      </div> -->
     </b-container>
 
     <b-container fluid v-if="!selectedAlbum" class="h-100">
@@ -92,7 +81,7 @@
 <script>
 import UTDButton from "@/components/UTDButton";
 import UTDInput from "@/components/UTDInput";
-import UTDService from "@/services/UTDService.js";
+import PhotoService from "@/services/PhotoService.js";
 import AlbumViewer from "./AlbumViewer.vue";
 
 export default {
@@ -120,7 +109,7 @@ export default {
     async getAlbums() {
       this.isAlbumsLoading = true;
       try {
-        const UTD = new UTDService(this.token);
+        const UTD = new PhotoService(this.token);
         const { payload } = await UTD.getAlbums(this.accountId);
         this.albums = payload;
         this.$emit("load", payload);

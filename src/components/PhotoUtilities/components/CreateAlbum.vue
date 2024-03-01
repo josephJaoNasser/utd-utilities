@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import UTDService from "@/services/UTDService";
+import PhotoService from "@/services/PhotoService";
 import UTDButton from "@/components/UTDButton";
 export default {
   name: "CreateAlbum",
@@ -76,7 +76,7 @@ export default {
     async handleCreateAlbum() {
       this.isCreatingAlbum = true;
       try {
-        const UTD = new UTDService();
+        const UTD = new PhotoService();
         const res = await UTD.createAlbum({
           albumName: this.albumTitle,
           albumDescription: this.albumDescription,

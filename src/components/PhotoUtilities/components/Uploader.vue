@@ -143,7 +143,7 @@
 </template>
 
 <script>
-import UTDService from "@/services/UTDService";
+import PhotoService from "@/services/PhotoService";
 import UTDButton from "@/components/UTDButton";
 import UTDInput from "@/components/UTDInput";
 
@@ -241,7 +241,7 @@ export default {
       }
 
       try {
-        const UTD = new UTDService(this.token);
+        const UTD = new PhotoService(this.token);
         const photos = this.files.map((fileObj) => ({
           file: this.packagePhoto(fileObj.file),
           index: fileObj.index,

@@ -91,7 +91,7 @@
 
 <script>
 import UTDInput from "@/components/UTDInput";
-import UTDService from "@/services/UTDService.js";
+import PhotoService from "@/services/PhotoService.js";
 import UTDButton from "@/components/UTDButton";
 import AlbumViewer from "../Albums/AlbumViewer.vue";
 
@@ -106,7 +106,7 @@ export default {
     accountId: Number,
     organizationId: Number,
   },
-  components: { UTDInput, UTDService, UTDButton, AlbumViewer },
+  components: { UTDInput, PhotoService, UTDButton, AlbumViewer },
   emits: ["load", "onSelect"],
   data() {
     return {
@@ -120,7 +120,7 @@ export default {
     async getMoments() {
       this.isMomentsLoading = true;
       try {
-        const UTD = new UTDService(this.token);
+        const UTD = new PhotoService(this.token);
         const { payload } = await UTD.getMoments(this.accountId);
 
         this.moments = payload;
