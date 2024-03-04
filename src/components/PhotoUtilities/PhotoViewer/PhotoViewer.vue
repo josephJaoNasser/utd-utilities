@@ -5,35 +5,10 @@
   >
     <b-container
       fluid
-      :class="['sticky-top border-bottom', !selectedAlbum ? 'pt-4' : '']"
+      :class="['sticky-top border-bottom']"
       :style="headerStyle"
     >
-      <div class="mb-3" v-if="!selectedAlbum">
-        <h2 class="font-weight-bold">Photos</h2>
-      </div>
-      <!-- <div fluid>
-        <UTDInput
-          v-model="searchString"
-          icon="search"
-          class="p-1 mb-3"
-          placeholder="Type to search"
-        />
-      </div> -->
-      <!-- <b-row>
-        <b-container fluid class="py-2 border-top">
-          <UTDPagination
-            :page="currentPage"
-            :total-items="totalItems"
-            :per-page="itemsPerPage"
-            @page-change="
-              (e) => {
-                currentPage = e;
-                getPhotos(e);
-              }
-            "
-          />
-        </b-container>
-      </b-row> -->
+      <slot name="header"> </slot>
     </b-container>
 
     <b-container fluid class="h-100 px-0">
@@ -54,7 +29,7 @@
           class="photo-grid-container w-100 px-0"
           :style="gridContainerStyle"
         >
-          <b-container fluid v-if="!photos?.[currentPage]?.length">
+          <b-container fluid v-if="!photos?.length">
             <p class="text-center p-4">
               <i> No photos to show... </i>
             </p>
@@ -64,16 +39,14 @@
             class="utd-utilities__photo-grid px-3 py-3"
             style="overflow: auto"
             cols="2"
-            :cols-sm="!showEditSection ? 3 : 1"
-            :cols-md="!showEditSection ? 4 : 2"
-            :cols-lg="!showEditSection ? 5 : 4"
-            :cols-xl="!showEditSection ? 6 : 5"
+            :cols-sm="3"
+            :cols-md="4"
+            :cols-lg="5"
+            :cols-xl="6"
             no-gutters
           >
             <b-col
-              v-for="photo in filteredPhotos.length
-                ? filteredPhotos
-                : photos[currentPage]"
+              v-for="photo in photos"
               class="photo-grid-item p-1"
               @click="selectedPhoto = photo"
               :key="photo.id"
@@ -91,7 +64,7 @@
 
         <!-- edit section column -->
         <b-col
-          v-if="showEditSection"
+          v-if="showEditSection && checkBreakpoint(windowWidth) === 'xs'"
           cols="12"
           sm="6"
           md="5"
@@ -159,6 +132,17 @@
         </b-container>
       </b-row>
     </b-container>
+    <PhotoDetails
+      v-if="
+        !isPhotosLoading &&
+        showEditSection &&
+        checkBreakpoint(windowWidth) === 'sm'
+      "
+      class="utd-utilities__photoDetails-desktop pt-3"
+      :photo-details="selectedPhoto"
+      @close="showEditSection = false"
+      @photo-selected="onSelect"
+    />
   </b-container>
 </template>
 <script>
@@ -167,9 +151,9 @@ import PhotoDetails from "./PhotoDetails.vue";
 import PhotoListItem from "./PhotoListItem.vue";
 import UTDInput from "@/components/UTDInput";
 import EditPhoto from "./EditPhoto.vue";
-import UTDPagination from "@/components/UTDPagination";
 import UTDButton from "@/components/UTDButton";
 import { PHOTOS_PER_PAGE } from "@/constants/PaginationVariables";
+import { checkBreakpoint } from "@/helpers/breakpoints";
 
 export default {
   name: "PhotoPicker",
@@ -178,7 +162,6 @@ export default {
     PhotoListItem,
     UTDInput,
     EditPhoto,
-    UTDPagination,
     UTDButton,
   },
   props: {
@@ -186,6 +169,7 @@ export default {
     accountId: Number,
     organizationId: Number,
     selectedAlbum: Object,
+    searchString: String,
     photos: {
       type: Object,
       default: () => {},
@@ -207,32 +191,33 @@ export default {
       showEditSection: false,
       isPhotosLoading: false,
       isSettingAlbumImage: false,
-      currentPage: 1,
-      totalItems: this.photos.totalItems,
-      itemsPerPage: PHOTOS_PER_PAGE,
-      searchString: "",
+      windowWidth: window.innerWidth,
+      // currentPage: 1,
+      // totalItems: this.photos.totalItems,
+      // itemsPerPage: PHOTOS_PER_PAGE,
     };
   },
   methods: {
-    async getPhotos(page) {
-      this.isPhotosLoading = true;
-      const pageToFetch = page || this.currentPage;
+    checkBreakpoint,
 
-      if (this.photos[pageToFetch]?.length) {
+    async getPhotos() {
+      this.isPhotosLoading = true;
+
+      if (this.photos?.length) {
         this.isPhotosLoading = false;
         return;
       }
 
       try {
         const UTD = new PhotoService(this.token);
-        const { rows, totalPages, count } = await UTD.getPhotos({
+        const { rows, count } = await UTD.getPhotos({
           accountId: this.accountId,
-          limit: this.itemsPerPage,
-          page: pageToFetch,
+          limit: PHOTOS_PER_PAGE,
+          offset: this.photos.length,
         });
 
         this.totalItems = count;
-        this.photos[pageToFetch] = rows;
+        this.photos = rows;
         this.photos.totalItems = count;
         this.$emit("load", this.photos);
       } catch (e) {
@@ -265,30 +250,12 @@ export default {
     toggleEditSection() {
       this.showEditSection = !this.showEditSection;
     },
+
+    setWindowWidth() {
+      this.windowWidth = window.innerWidth;
+    },
   },
   computed: {
-    totalPages() {
-      return Math.ceil(this.totalItems / this.itemsPerPage);
-    },
-    filteredPhotos() {
-      let photos = [];
-
-      if (this.photos[this.currentPage]) {
-        photos = this.photos[this.currentPage];
-      }
-
-      if (!this.searchString.length && this.photos[this.currentPage]) {
-        return [];
-      }
-
-      const searchLowerCase = this.searchString.toLowerCase();
-
-      const filteredList = photos.filter((photo) =>
-        photo.fileName.toLowerCase().includes(searchLowerCase)
-      );
-
-      return filteredList;
-    },
     headerStyle() {
       return {
         backgroundColor: "white",
@@ -296,7 +263,7 @@ export default {
       };
     },
     gridContainerStyle() {
-      let offsetHeight = this.selectedAlbum ? 25 : 80;
+      let offsetHeight = this.selectedAlbum ? 230 : 70;
 
       if (this.selectedPhoto) {
         offsetHeight += 50;
@@ -320,9 +287,15 @@ export default {
     },
   },
   async mounted() {
-    if (!this.photos[this.currentPage]?.length && !this.selectedAlbum) {
+    if (!this.photos?.length && !this.selectedAlbum) {
       await this.getPhotos();
     }
+  },
+  created() {
+    window.addEventListener("resize", this.setWindowWidth);
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.setWindowWidth);
   },
 };
 </script>
@@ -330,6 +303,17 @@ export default {
 <style scoped lang="scss">
 $md: 768px;
 .utd-utilities {
+  &__photoDetails-desktop {
+    background-color: white;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 350px;
+    z-index: 1100;
+    height: 100%;
+    border: 1px solid #ccc;
+  }
+
   &__photo-grid {
     .photo-grid-item {
       height: 180px;

@@ -125,6 +125,7 @@ class PhotoService extends UTDService {
    *  userId: number,
    *  accountId: number,
    *  limit: number,
+   *  offset: number,
    *  page: number
    * }} query
    * @returns

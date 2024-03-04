@@ -1,1 +1,1 @@
-export const PHOTOS_PER_PAGE = 42
+export const PHOTOS_PER_PAGE = 30

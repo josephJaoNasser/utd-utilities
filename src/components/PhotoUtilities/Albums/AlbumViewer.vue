@@ -1,63 +1,69 @@
 <template>
-  <b-container fluid class="utd-utilities__album-viewer pt-3 px-0">
-    <b-container fluid>
-      <div class="d-flex justify-content-between">
-        <UTDButton @click="$emit('back')" type="light" class="mb-3">
-          <b-icon-chevron-left></b-icon-chevron-left>
-          <span class="d-none d-sm-inline-block"> Back </span>
-        </UTDButton>
-        <div>
-          <UTDButton
-            type="light"
-            class="mb-3 mr-2"
-            @click="showAlbumSettings = true"
-          >
-            <b-icon-gear></b-icon-gear>
-            <span class="d-none d-sm-inline-block"> Album Settings </span>
-          </UTDButton>
-          <UTDButton @click="showUploader = true" type="primary" class="mb-3">
-            <b-icon-plus></b-icon-plus>
-            <span class="d-none d-sm-inline-block"> Add photos </span>
-          </UTDButton>
-        </div>
-      </div>
-
-      <div class="card bg-dark text-white border-0 utd-utilities__album-cover">
-        <div class="position-relative img-container">
-          <div class="album-bg-overlay absolute"></div>
-          <img class="card-img" :src="albumImage" />
-        </div>
-        <div class="card-img-overlay p-0">
-          <div class="card-body h-100">
-            <h4 class="card-title">
-              {{
-                selectedAlbum.albumName?.length
-                  ? selectedAlbum.albumName
-                  : "Untitled Album"
-              }}
-            </h4>
-            <p class="card-text">
-              {{ selectedAlbum.albumDescription }}
-            </p>
-            <p class="card-text">
-              {{ formattedGallery.length }}
-              {{ formattedGallery.length === 1 ? "photo" : "photos" }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </b-container>
+  <b-container fluid class="utd-utilities__album-viewer px-0">
     <b-container fluid class="text-center mb-3 p-4" v-if="isPhotosLoading">
       <b-spinner label="Loading..." variant="primary" type="grow"></b-spinner>
     </b-container>
     <b-container v-else fluid class="photo-viewer-container p-0">
       <PhotoViewer
         :token="token"
-        :photos="paginatedGallery"
+        :photos="formattedGallery"
         :selected-album="selectedAlbum"
         @photo-selected="onSelect"
         @album-image-updated="handleAlbumImageUpdate"
-      />
+      >
+        <template #header>
+          <div
+            class="card bg-dark text-white border-0 utd-utilities__album-cover mb-3"
+          >
+            <div class="position-relative img-container">
+              <div class="album-bg-overlay absolute"></div>
+              <img class="card-img" :src="albumImage" />
+            </div>
+            <div class="card-img-overlay p-0">
+              <div class="card-body h-100">
+                <div class="d-flex justify-content-between">
+                  <UTDButton @click="$emit('back')" type="light" class="mb-3">
+                    <b-icon-chevron-left></b-icon-chevron-left>
+                    <span class="d-none d-sm-inline-block"> Back </span>
+                  </UTDButton>
+                  <div>
+                    <UTDButton
+                      type="light"
+                      class="mb-3 mr-2"
+                      @click="showAlbumSettings = true"
+                    >
+                      <b-icon-gear></b-icon-gear>
+                      <span class="d-none d-sm-inline-block"> Settings </span>
+                    </UTDButton>
+                    <UTDButton
+                      @click="showUploader = true"
+                      type="primary"
+                      class="mb-3"
+                    >
+                      <b-icon-plus></b-icon-plus>
+                      <span class="d-none d-sm-inline-block"> Add photos </span>
+                    </UTDButton>
+                  </div>
+                </div>
+                <h4 class="card-title">
+                  {{
+                    selectedAlbum.albumName?.length
+                      ? selectedAlbum.albumName
+                      : "Untitled Album"
+                  }}
+                </h4>
+                <p class="card-text">
+                  {{ selectedAlbum.albumDescription }}
+                </p>
+                <p class="card-text">
+                  {{ formattedGallery.length }}
+                  {{ formattedGallery.length === 1 ? "photo" : "photos" }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </template>
+      </PhotoViewer>
     </b-container>
     <Uploader
       :token="token"
@@ -197,23 +203,23 @@ export default {
         url: image.image,
       }));
     },
-    paginatedGallery() {
-      const totalItems = this.formattedGallery.length;
-      const gallery = {
-        totalItems: totalItems,
-      };
+    // paginatedGallery() {
+    //   const totalItems = this.formattedGallery.length;
+    //   const gallery = {
+    //     totalItems: totalItems,
+    //   };
 
-      const pages = [];
-      for (let i = 0; i < this.formattedGallery.length; i += PHOTOS_PER_PAGE) {
-        pages.push(this.formattedGallery.slice(i, i + PHOTOS_PER_PAGE));
-      }
+    //   const pages = [];
+    //   for (let i = 0; i < this.formattedGallery.length; i += PHOTOS_PER_PAGE) {
+    //     pages.push(this.formattedGallery.slice(i, i + PHOTOS_PER_PAGE));
+    //   }
 
-      pages.forEach((chunk, index) => {
-        gallery[index + 1] = chunk;
-      });
+    //   pages.forEach((chunk, index) => {
+    //     gallery[index + 1] = chunk;
+    //   });
 
-      return gallery;
-    },
+    //   return gallery;
+    // },
   },
   async mounted() {
     await this.getAlbumPhotos();
@@ -223,7 +229,7 @@ export default {
 
 <style scoped lang="scss">
 .photo-viewer-container {
-  height: calc(100% - 215px);
+  height: 100%;
 }
 
 .utd-utilities {
@@ -233,7 +239,7 @@ export default {
 
   &__album-cover {
     overflow: hidden;
-    height: 160px;
+    height: 200px;
     & > .img-container {
       height: 100%;
 

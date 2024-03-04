@@ -19,7 +19,10 @@
       @create-album-toggled="toggleCreateAlbum"
     />
 
-    <b-container fluid class="utd-utilities__photo-utilities__main px-0 mt-5 mt-sm-0">
+    <b-container
+      fluid
+      class="utd-utilities__photo-utilities__main px-0 mt-5 mt-sm-0"
+    >
       <!-- Main section -->
       <PhotoViewer
         v-if="currentUtility === UtilityTypes.photo"
@@ -29,7 +32,13 @@
         :photos="JSON.parse(JSON.stringify(photos))"
         @load="(e) => (photos = e)"
         @photo-selected="onSelect"
-      />
+      >
+        <template #header>
+          <div class="mb-3 pt-3" v-if="!selectedAlbum">
+            <h2 class="font-weight-bold">Photos</h2>
+          </div>
+        </template>
+      </PhotoViewer>
       <Albums
         v-if="currentUtility === UtilityTypes.album"
         id="utd-utilities__album"
@@ -116,7 +125,7 @@ export default {
       showUploader: false,
       showCreateAlbum: false,
 
-      photos: {},
+      photos: [],
       albums: [],
       moments: [],
       aiArt: [],
@@ -132,11 +141,7 @@ export default {
     },
 
     handleUploadComplete(newPhoto) {
-      if (!this.photos["1"]) this.photos["1"] = [];
-      if (!this.photos.totalItems) this.photos.totalItems = 0;
-
-      this.photos["1"].unshift(newPhoto);
-      this.photos.totalItems += 1;
+      this.photos.unshift(newPhoto);
     },
 
     handleAlbumCreate(albumData) {
