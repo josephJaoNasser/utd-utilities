@@ -30,11 +30,11 @@
         :account-id="accountId"
         :organization-id="organizationId"
         :photos="JSON.parse(JSON.stringify(photos))"
-        @load="(e) => (photos = e)"
+        @load="(e) => (photos = [...photos, ...e])"
         @photo-selected="onSelect"
       >
         <template #header>
-          <div class="mb-3 pt-3" v-if="!selectedAlbum">
+          <div class="mb-3 pt-3">
             <h2 class="font-weight-bold">Photos</h2>
           </div>
         </template>

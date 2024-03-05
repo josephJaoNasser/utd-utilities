@@ -13,21 +13,13 @@
 
     <b-container fluid class="h-100 px-0">
       <b-row :class="['h-100 w-100 mx-0 px-0', selectedAlbum ? 'mt-3' : '']">
-        <b-container fluid class="text-center mb-3 p-4" v-if="isPhotosLoading">
-          <b-spinner
-            label="Loading..."
-            variant="primary"
-            type="grow"
-          ></b-spinner>
-        </b-container>
-
         <!-- Photo grid column -->
         <b-col
-          v-else
           order="2"
           order-sm="1"
           class="photo-grid-container w-100 px-0"
           :style="gridContainerStyle"
+          ref="photo-grid-container"
         >
           <b-container fluid v-if="!photos?.length">
             <p class="text-center p-4">
@@ -36,13 +28,14 @@
           </b-container>
 
           <b-row
+            ref="photo-grid"
             class="utd-utilities__photo-grid px-3 py-3"
             style="overflow: auto"
             cols="2"
-            :cols-sm="3"
-            :cols-md="4"
-            :cols-lg="5"
-            :cols-xl="6"
+            cols-sm="3"
+            cols-md="4"
+            cols-lg="5"
+            cols-xl="6"
             no-gutters
           >
             <b-col
@@ -60,6 +53,17 @@
               />
             </b-col>
           </b-row>
+          <b-container
+            fluid
+            class="text-center mb-3 p-4"
+            v-if="isPhotosLoading"
+          >
+            <b-spinner
+              label="Loading..."
+              variant="primary"
+              type="grow"
+            ></b-spinner>
+          </b-container>
         </b-col>
 
         <!-- edit section column -->
@@ -171,8 +175,8 @@ export default {
     selectedAlbum: Object,
     searchString: String,
     photos: {
-      type: Object,
-      default: () => {},
+      type: Array,
+      default: () => [],
     },
     query: {
       type: Object,
@@ -186,15 +190,12 @@ export default {
   },
   data() {
     return {
-      // photos: this.defaultPhotos,
       selectedPhoto: null,
       showEditSection: false,
       isPhotosLoading: false,
       isSettingAlbumImage: false,
+      isEnd: false,
       windowWidth: window.innerWidth,
-      // currentPage: 1,
-      // totalItems: this.photos.totalItems,
-      // itemsPerPage: PHOTOS_PER_PAGE,
     };
   },
   methods: {
@@ -203,23 +204,22 @@ export default {
     async getPhotos() {
       this.isPhotosLoading = true;
 
-      if (this.photos?.length) {
-        this.isPhotosLoading = false;
-        return;
-      }
+      // if (this.photos?.length) {
+      //   this.isPhotosLoading = false;
+      //   return;
+      // }
 
       try {
         const UTD = new PhotoService(this.token);
-        const { rows, count } = await UTD.getPhotos({
+        const { rows } = await UTD.getPhotos({
           accountId: this.accountId,
           limit: PHOTOS_PER_PAGE,
           offset: this.photos.length,
         });
 
-        this.totalItems = count;
-        this.photos = rows;
-        this.photos.totalItems = count;
-        this.$emit("load", this.photos);
+        if (!rows?.length) this.isEnd = true;
+
+        this.$emit("load", rows);
       } catch (e) {
         console.log(e);
       }
@@ -254,6 +254,23 @@ export default {
     setWindowWidth() {
       this.windowWidth = window.innerWidth;
     },
+
+    handleScroll() {
+      if (this.isEnd) return;
+
+      const photoGrid = this.$refs["photo-grid"];
+      const MARGIN = 2;
+
+      const photoGridBottom = photoGrid.getBoundingClientRect().bottom;
+
+      if (
+        photoGridBottom <= window.innerHeight + MARGIN &&
+        !this.isPhotosLoading
+      ) {
+        console.log("scroll bottom getting photos");
+        this.getPhotos();
+      }
+    },
   },
   computed: {
     headerStyle() {
@@ -287,9 +304,16 @@ export default {
     },
   },
   async mounted() {
+    const photoGridContainer = this.$refs["photo-grid-container"];
+    photoGridContainer.addEventListener("scroll", this.handleScroll);
+
     if (!this.photos?.length && !this.selectedAlbum) {
       await this.getPhotos();
     }
+  },
+  unmounted() {
+    const photoGridContainer = this.$refs["photo-grid-container"];
+    photoGridContainer.removeEventListener("scroll", this.handleScroll);
   },
   created() {
     window.addEventListener("resize", this.setWindowWidth);
