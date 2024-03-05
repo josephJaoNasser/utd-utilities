@@ -92,7 +92,6 @@ import UTDButton from "@/components/UTDButton";
 import PhotoViewer from "../PhotoViewer";
 import Uploader from "../components/Uploader.vue";
 import AlbumSettingsModal from "./AlbumSettingsModal.vue";
-import { PHOTOS_PER_PAGE } from "@/constants/PaginationVariables";
 
 const SITE_ID_REMOVE_DURING_PRODUCTION = "ef6c9ff73237e166d797df0b8ded24f5";
 
@@ -203,23 +202,6 @@ export default {
         url: image.image,
       }));
     },
-    // paginatedGallery() {
-    //   const totalItems = this.formattedGallery.length;
-    //   const gallery = {
-    //     totalItems: totalItems,
-    //   };
-
-    //   const pages = [];
-    //   for (let i = 0; i < this.formattedGallery.length; i += PHOTOS_PER_PAGE) {
-    //     pages.push(this.formattedGallery.slice(i, i + PHOTOS_PER_PAGE));
-    //   }
-
-    //   pages.forEach((chunk, index) => {
-    //     gallery[index + 1] = chunk;
-    //   });
-
-    //   return gallery;
-    // },
   },
   async mounted() {
     await this.getAlbumPhotos();

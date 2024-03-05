@@ -21,7 +21,7 @@
           :style="gridContainerStyle"
           ref="photo-grid-container"
         >
-          <b-container fluid v-if="!photos?.length">
+          <b-container fluid v-if="!photos?.length && !isPhotosLoading">
             <p class="text-center p-4">
               <i> No photos to show... </i>
             </p>
@@ -46,9 +46,7 @@
             >
               <PhotoListItem
                 class="h-100"
-                :thumbnail-url="
-                  photo.thumbnail?.length ? photo.thumbnail : photo.url
-                "
+                :photoDetails="photo"
                 :active="!!selectedPhoto && selectedPhoto.id === photo.id"
               />
             </b-col>

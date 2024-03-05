@@ -1,16 +1,15 @@
 <template>
   <div class="utd-utilities__photo-list-item position-relative">
-    <!-- <div class="actions">
+    <div class="actions">
       <UTDButton
         size="sm"
         type="dark"
-        pill
         class="action-btn"
-        @click="$emit('edit-click')"
+        @click="isPreview = true"
       >
-        <b-icon icon="pencil" font-scale="1"></b-icon>
+        <b-icon icon="arrows-fullscreen" font-scale="1"></b-icon>
       </UTDButton>
-    </div> -->
+    </div>
     <b-img-lazy
       :class="[
         'cursor-pointer rounded border h-100',
@@ -18,27 +17,36 @@
       ]"
       fluid-grow
       blankColor="#bbb"
-      :src="thumbnailUrl"
+      :src="
+        photoDetails.thumbnail?.length
+          ? photoDetails.thumbnail
+          : photoDetails.url
+      "
       style="object-fit: cover"
     />
+    <ImageModal v-model="isPreview" :url="photoDetails?.url" />
   </div>
 </template>
 
 <script>
 import UTDButton from "@/components/UTDButton";
+import ImageModal from "../components/ImageModal.vue";
+
 export default {
   name: "PhotoListItem",
   components: {
     UTDButton,
+    ImageModal,
   },
   emits: ["click", "edit-click"],
   props: {
-    thumbnailUrl: String,
+    photoDetails: Object,
     active: Boolean,
   },
   data() {
     return {
       isHovered: false,
+      isPreview: false,
     };
   },
   methods: {
