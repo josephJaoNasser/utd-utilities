@@ -6,7 +6,7 @@
   >
     <b-container
       fluid
-      class="sticky-top pt-4 pb-2 border-bottom"
+      class="sticky-top pt-3 border-bottom"
       v-if="!selectedAlbum"
       style="background-color: white"
     >
@@ -54,7 +54,7 @@
                         : "Untitled Album"
                     }}
                   </h5>
-                  <p class="card-text">
+                  <p class="card-text text-truncate">
                     {{ album.albumDescription }}
                   </p>
                 </div>
