@@ -1,52 +1,59 @@
 <template>
-  <div class="photo-utilities__mobile-nav">
-    <div class="position-relative">
-      <div class="border-right pr-2">
-        <UTDButton block @click="toggleUploadMenu">
-          <b-icon-plus></b-icon-plus>
+  <div class="photo-utilities__mobile-nav d-flex justify-content-between">
+    <UTDButton small type="light" @click="$emit('back')">
+      <b-icon-chevron-left></b-icon-chevron-left>
+    </UTDButton>
+    <div class="d-flex">
+      <div class="mobile-nav-items">
+        <UTDButton
+          v-for="item in NavItems"
+          type="light"
+          :class="[
+            'nav-item',
+            currentUtility === item.value ? 'text-primary' : 'text-secondary',
+          ]"
+          @click="onUtilityChange(item.value)"
+        >
+          <b-icon :icon="item.icon"></b-icon>
         </UTDButton>
       </div>
-      <ul
-        v-if="showUploadMenu"
-        class="photo-utilities__mobile-nav-dropdown text-primary position-absolute top-0"
-        style="list-style: none"
-      >
-        <li>
-          <UTDButton
-            block
-            type="light"
-            class="text-primary px-3 py-2"
-            @click="toggleUploader"
+      <div class="position-relative">
+        <div>
+          <div class="border-left pl-2 ml-2">
+            <UTDButton block @click="toggleUploadMenu">
+              <b-icon-plus></b-icon-plus>
+            </UTDButton>
+          </div>
+          <ul
+            v-if="showUploadMenu"
+            class="photo-utilities__mobile-nav-dropdown text-primary position-absolute top-0"
+            style="list-style: none"
           >
-            <b-icon-image class="mr-2"></b-icon-image>
-            Photo
-          </UTDButton>
-        </li>
-        <li>
-          <UTDButton
-            block
-            type="light"
-            class="text-primary px-3 py-2"
-            @click="toggleCreateAlbum"
-          >
-            <b-icon-images class="mr-2"></b-icon-images>
-            Album
-          </UTDButton>
-        </li>
-      </ul>
-    </div>
-    <div class="mobile-nav-items">
-      <UTDButton
-        v-for="item in NavItems"
-        type="light"
-        :class="[
-          'nav-item',
-          currentUtility === item.value ? 'text-primary' : 'text-secondary',
-        ]"
-        @click="onUtilityChange(item.value)"
-      >
-        <b-icon :icon="item.icon"></b-icon>
-      </UTDButton>
+            <li>
+              <UTDButton
+                block
+                type="light"
+                class="text-primary px-3 py-2"
+                @click="toggleUploader"
+              >
+                <b-icon-image class="mr-2"></b-icon-image>
+                Photo
+              </UTDButton>
+            </li>
+            <li>
+              <UTDButton
+                block
+                type="light"
+                class="text-primary px-3 py-2"
+                @click="toggleCreateAlbum"
+              >
+                <b-icon-images class="mr-2"></b-icon-images>
+                Album
+              </UTDButton>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -68,7 +75,7 @@ export default {
       showUploadMenu: false,
     };
   },
-  emits: ["utility-change", "uploader-toggled", "create-album-toggled"],
+  emits: ["utility-change", "uploader-toggled", "create-album-toggled", "back"],
   methods: {
     onUtilityChange(type) {
       this.$emit("utility-change", type);

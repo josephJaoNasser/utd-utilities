@@ -38,7 +38,12 @@
             v-for="album in filteredAlbums"
             :key="album.id"
             class="p-2"
-            @click="selectedAlbum = album"
+            @click="
+              () => {
+                selectedAlbum = album;
+                $emit('album-viewer-open');
+              }
+            "
           >
             <div class="card bg-dark text-white border-0 utd-utilities__album">
               <div class="position-relative img-container">
@@ -96,7 +101,7 @@ export default {
     organizationId: Number,
   },
   components: { UTDInput, UTDButton, AlbumViewer },
-  emits: ["load", "photo-selected"],
+  emits: ["load", "photo-selected", "album-viewer-open"],
   data() {
     return {
       albums: this.defaultAlbums,

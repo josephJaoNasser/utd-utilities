@@ -9,6 +9,7 @@
       @utility-change="onUtilityChange"
       @uploader-toggled="toggleUploader"
       @create-album-toggled="toggleCreateAlbum"
+      @back="handleBack"
     />
 
     <SideNav
@@ -17,6 +18,7 @@
       @utility-change="onUtilityChange"
       @uploader-toggled="toggleUploader"
       @create-album-toggled="toggleCreateAlbum"
+      @back="handleBack"
     />
 
     <b-container
@@ -48,6 +50,7 @@
         :organization-id="organizationId"
         @load="(e) => (albums = e)"
         @photo-selected="onSelect"
+        @album-viewer-open="pageHistory.push(UtilityTypes.album)"
         :default-albums="albums"
       />
       <Moments
@@ -124,7 +127,8 @@ export default {
       currentUtility: UtilityTypes.photo,
       showUploader: false,
       showCreateAlbum: false,
-
+      pageHistory: [UtilityTypes.photo],
+      pageHistoryIndex: 0,
       photos: [],
       albums: [],
       moments: [],
@@ -134,6 +138,8 @@ export default {
   methods: {
     onUtilityChange(util) {
       this.currentUtility = util;
+      this.pageHistory.push(util);
+      this.pageHistoryIndex += 1;
     },
 
     onSelect(e) {
@@ -154,6 +160,14 @@ export default {
 
     toggleUploader() {
       this.showUploader = true;
+    },
+
+    handleBack() {
+      if (this.pageHistoryIndex > 0) {
+        this.currentUtility = this.pageHistory[this.pageHistoryIndex - 1];
+        this.pageHistory = this.pageHistory.slice(0, this.pageHistoryIndex);
+        this.pageHistoryIndex -= 1;
+      }
     },
   },
   computed: {

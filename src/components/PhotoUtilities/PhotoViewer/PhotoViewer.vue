@@ -92,20 +92,22 @@
           class="utd-utilities__photo-actions"
         >
           <div class="d-flex">
-            <UTDButton
-              type="light"
-              size="sm"
-              class="mr-2"
-              @click="
-                () => {
-                  selectedPhoto = null;
-                  showEditSection = false;
-                }
-              "
-            >
-              <b-icon-chevron-left class="mr-1"></b-icon-chevron-left>
-              <span class="d-none d-sm-inline-block">Cancel</span>
-            </UTDButton>
+            <div class="border-right pr-2 mr-2">
+              <UTDButton
+                type="light"
+                size="sm"
+                class="mr-2"
+                @click="
+                  () => {
+                    selectedPhoto = null;
+                    showEditSection = false;
+                  }
+                "
+              >
+                <b-icon-chevron-left class="mr-1"></b-icon-chevron-left>
+                <span class="d-none d-sm-inline-block">Cancel</span>
+              </UTDButton>
+            </div>
             <UTDButton
               type="light"
               size="sm"
@@ -289,7 +291,7 @@ export default {
       };
     },
     photoDetailsContainerStyle() {
-      let offsetHeight = this.selectedAlbum ? 130 : 195;
+      let offsetHeight = this.selectedAlbum ? 210 : 75;
 
       if (this.selectedPhoto) {
         offsetHeight += 50;
