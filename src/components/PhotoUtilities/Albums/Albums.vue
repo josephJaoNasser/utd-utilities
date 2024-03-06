@@ -2,12 +2,11 @@
   <b-container
     fluid
     class="position-relative utd-utilities__albums px-0"
-    :style="!selectedAlbum && 'overflow: auto;'"
+    style="overflow: auto"
   >
     <b-container
       fluid
       class="sticky-top pt-3 border-bottom"
-      v-if="!selectedAlbum"
       style="background-color: white"
     >
       <div class="mb-3">
@@ -23,7 +22,7 @@
       </div> -->
     </b-container>
 
-    <b-container fluid v-if="!selectedAlbum" class="h-100">
+    <b-container fluid class="h-100">
       <b-container fluid class="text-center mb-3 p-4" v-if="isAlbumsLoading">
         <b-spinner label="Loading..." variant="primary" type="grow"></b-spinner>
       </b-container>
@@ -35,15 +34,10 @@
         </b-container>
         <b-row cols="1" cols-md="2" cols-lg="3" no-gutters>
           <b-col
-            v-for="album in filteredAlbums"
+            v-for="album in albums"
             :key="album.id"
             class="p-2"
-            @click="
-              () => {
-                selectedAlbum = album;
-                $emit('album-viewer-open');
-              }
-            "
+            @click="$emit('album-select', album)"
           >
             <div class="card bg-dark text-white border-0 utd-utilities__album">
               <div class="position-relative img-container">
@@ -70,16 +64,16 @@
       </b-col>
     </b-container>
 
-    <AlbumViewer
+    <!-- <AlbumViewer
       v-else
-      :token="this.token"
+      :token="token"
       :selected-album="selectedAlbum"
       :account-id="accountId"
       :organization-id="organizationId"
       @photo-selected="onSelect"
       @back="selectedAlbum = null"
       @album-details-updated="handleAlbumDetailsUpdate"
-    />
+    /> -->
   </b-container>
 </template>
 
@@ -101,13 +95,11 @@ export default {
     organizationId: Number,
   },
   components: { UTDInput, UTDButton, AlbumViewer },
-  emits: ["load", "photo-selected", "album-viewer-open"],
+  emits: ["load", "photo-selected", "album-select"],
   data() {
     return {
       albums: this.defaultAlbums,
       isAlbumsLoading: false,
-      selectedAlbum: null,
-      searchString: "",
     };
   },
   methods: {
@@ -124,28 +116,14 @@ export default {
       this.isAlbumsLoading = false;
     },
 
-    handleAlbumDetailsUpdate({ albumName, albumDescription, albumImage }) {
-      this.selectedAlbum.albumImage = albumImage;
-      this.selectedAlbum.albumName = albumName;
-      this.selectedAlbum.albumDescription = albumDescription;
-    },
+    // handleAlbumDetailsUpdate({ albumName, albumDescription, albumImage }) {
+    //   this.selectedAlbum.albumImage = albumImage;
+    //   this.selectedAlbum.albumName = albumName;
+    //   this.selectedAlbum.albumDescription = albumDescription;
+    // },
 
     onSelect(e) {
       this.$emit("photo-selected", e);
-    },
-  },
-  computed: {
-    filteredAlbums() {
-      if (!this.searchString.length) {
-        return this.albums;
-      }
-      const searchLowerCase = this.searchString.toLowerCase();
-
-      const filteredList = this.albums.filter((album) =>
-        album.albumName.toLowerCase().includes(searchLowerCase)
-      );
-
-      return filteredList;
     },
   },
   watch: {

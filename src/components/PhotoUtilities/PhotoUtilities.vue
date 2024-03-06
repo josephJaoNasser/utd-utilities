@@ -50,8 +50,18 @@
         :organization-id="organizationId"
         @load="(e) => (albums = e)"
         @photo-selected="onSelect"
-        @album-viewer-open="pageHistory.push(UtilityTypes.album)"
+        @album-select="handleAlbumSelect"
         :default-albums="albums"
+      />
+      <AlbumViewer
+        v-if="currentUtility === UtilityTypes.albumViewer"
+        :token="token"
+        :selected-album="selectedAlbum"
+        :account-id="accountId"
+        :organization-id="organizationId"
+        @photo-selected="onSelect"
+        @back="selectedAlbum = null"
+        @album-details-updated="handleAlbumDetailsUpdate"
       />
       <Moments
         v-if="currentUtility === UtilityTypes.moments"
@@ -94,6 +104,7 @@
 <script>
 import PhotoViewer from "./PhotoViewer";
 import Albums from "./Albums";
+import AlbumViewer from "./Albums/AlbumViewer.vue";
 import AIArtCreator from "./AIArtCreator/AIArtCreator.vue";
 import UTDButton from "../UTDButton";
 import Uploader from "./components/Uploader.vue";
@@ -113,6 +124,7 @@ export default {
   components: {
     PhotoViewer,
     Albums,
+    AlbumViewer,
     AIArtCreator,
     UTDButton,
     Uploader,
@@ -133,6 +145,7 @@ export default {
       albums: [],
       moments: [],
       aiArt: [],
+      selectedAlbum: null,
     };
   },
   methods: {
@@ -168,6 +181,17 @@ export default {
         this.pageHistory = this.pageHistory.slice(0, this.pageHistoryIndex);
         this.pageHistoryIndex -= 1;
       }
+    },
+
+    handleAlbumSelect(selectedAlbum) {
+      this.selectedAlbum = selectedAlbum;
+      this.onUtilityChange(UtilityTypes.albumViewer);
+    },
+
+    handleAlbumDetailsUpdate({ albumName, albumDescription, albumImage }) {
+      this.selectedAlbum.albumImage = albumImage;
+      this.selectedAlbum.albumName = albumName;
+      this.selectedAlbum.albumDescription = albumDescription;
     },
   },
   computed: {
