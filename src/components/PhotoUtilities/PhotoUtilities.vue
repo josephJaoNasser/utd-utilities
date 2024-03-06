@@ -47,11 +47,10 @@
         class="w-100"
         :token="token"
         :account-id="accountId"
-        :organization-id="organizationId"
+        :default-albums="albums"
         @load="(e) => (albums = e)"
         @photo-selected="onSelect"
         @album-select="handleAlbumSelect"
-        :default-albums="albums"
       />
       <AlbumViewer
         v-if="currentUtility === UtilityTypes.albumViewer"

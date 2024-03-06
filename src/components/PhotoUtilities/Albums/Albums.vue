@@ -12,14 +12,6 @@
       <div class="mb-3">
         <h2 class="font-weight-bold">Albums</h2>
       </div>
-      <!-- <div>
-        <UTDInput
-          v-model="searchString"
-          icon="search"
-          class="p-1 p-sm-2 mb-3"
-          placeholder="Type to search"
-        />
-      </div> -->
     </b-container>
 
     <b-container fluid class="h-100">
@@ -63,17 +55,6 @@
         </b-row>
       </b-col>
     </b-container>
-
-    <!-- <AlbumViewer
-      v-else
-      :token="token"
-      :selected-album="selectedAlbum"
-      :account-id="accountId"
-      :organization-id="organizationId"
-      @photo-selected="onSelect"
-      @back="selectedAlbum = null"
-      @album-details-updated="handleAlbumDetailsUpdate"
-    /> -->
   </b-container>
 </template>
 
@@ -92,7 +73,6 @@ export default {
     },
     token: String,
     accountId: Number,
-    organizationId: Number,
   },
   components: { UTDInput, UTDButton, AlbumViewer },
   emits: ["load", "photo-selected", "album-select"],
@@ -115,12 +95,6 @@ export default {
       }
       this.isAlbumsLoading = false;
     },
-
-    // handleAlbumDetailsUpdate({ albumName, albumDescription, albumImage }) {
-    //   this.selectedAlbum.albumImage = albumImage;
-    //   this.selectedAlbum.albumName = albumName;
-    //   this.selectedAlbum.albumDescription = albumDescription;
-    // },
 
     onSelect(e) {
       this.$emit("photo-selected", e);

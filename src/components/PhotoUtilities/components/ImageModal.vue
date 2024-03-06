@@ -7,7 +7,7 @@
     centered
     hide-footer
     hide-header
-    size="lg"
+    size="xl"
   >
     <b-img-lazy
       blankColor="#bbb"
