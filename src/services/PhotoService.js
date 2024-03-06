@@ -152,6 +152,21 @@ class PhotoService extends UTDService {
     }
   }
 
+  async searchPhotos(searchString, accountId) {
+    const query = encodeURI(searchString);
+
+    try {
+      const { data } = await this.axiosInstance.get(
+        `https://www.uptodateconnect.com/api/v1/site-builder/image-search?q=${query}&accountId=${accountId}&access_token=${this.token}`
+      );
+
+      return data;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
   /**
    * shows albums of images related to public holidays
    * @returns

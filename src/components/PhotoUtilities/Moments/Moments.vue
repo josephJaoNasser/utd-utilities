@@ -6,31 +6,12 @@
   >
     <b-container
       fluid
-      class="sticky-top pt-4 pb-2 border-bottom"
+      class="sticky-top pt-3 border-bottom"
       v-if="!selectedAlbum"
       style="background-color: white"
     >
       <div class="mb-3">
         <h2 class="font-weight-bold">Moments</h2>
-      </div>
-      <div>
-        <UTDInput
-          v-model="searchString"
-          icon="search"
-          class="p-1 p-sm-2 mb-3"
-          placeholder="Type to search"
-        />
-        <!-- <b-row class="mb-4">
-          <b-col>
-            <UTDInput
-              v-model="searchString"
-              icon="search"
-              class="p-1 p-sm-2"
-              placeholder="Type to search"
-            />
-          </b-col>
-          <b-col></b-col>
-        </b-row> -->
       </div>
     </b-container>
 

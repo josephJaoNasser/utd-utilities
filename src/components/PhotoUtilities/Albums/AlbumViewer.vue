@@ -20,45 +20,41 @@
               <img class="card-img" :src="albumImage" />
             </div>
             <div class="card-img-overlay p-0">
-              <div class="card-body h-100">
-                <div class="d-flex justify-content-between">
-                  <UTDButton @click="$emit('back')" type="light" class="mb-3">
-                    <b-icon-chevron-left></b-icon-chevron-left>
-                    <span class="d-none d-sm-inline-block"> Back </span>
-                  </UTDButton>
-                  <div>
+              <div class="card-body h-100 p-0">
+                <div class="d-flex justify-content-between p-3">
+                  <div class="w-80">
+                    <h4 class="card-title">
+                      {{
+                        selectedAlbum.albumName?.length
+                          ? selectedAlbum.albumName
+                          : "Untitled Album"
+                      }}
+                    </h4>
+                    <p class="card-text album-description">
+                      {{ selectedAlbum.albumDescription }}
+                    </p>
+                    <p class="card-text">
+                      {{ formattedGallery.length }}
+                      {{ formattedGallery.length === 1 ? "photo" : "photos" }}
+                    </p>
+                  </div>
+                  <div class="d-flex align-items-end">
                     <UTDButton
                       type="light"
-                      class="mb-3 mr-2"
+                      class="mr-2"
                       @click="showAlbumSettings = true"
                     >
                       <b-icon-gear></b-icon-gear>
-                      <span class="d-none d-sm-inline-block"> Settings </span>
+                      <!-- <span class="d-none d-sm-inline-block"> Settings </span> -->
                     </UTDButton>
-                    <UTDButton
-                      @click="showUploader = true"
-                      type="primary"
-                      class="mb-3"
-                    >
+                    <UTDButton @click="showUploader = true" type="primary">
                       <b-icon-plus></b-icon-plus>
-                      <span class="d-none d-sm-inline-block"> Add photos </span>
+                      <!-- <span class="d-none d-sm-inline-block">
+                          Add photos
+                        </span> -->
                     </UTDButton>
                   </div>
                 </div>
-                <h4 class="card-title">
-                  {{
-                    selectedAlbum.albumName?.length
-                      ? selectedAlbum.albumName
-                      : "Untitled Album"
-                  }}
-                </h4>
-                <p class="card-text">
-                  {{ selectedAlbum.albumDescription }}
-                </p>
-                <p class="card-text">
-                  {{ formattedGallery.length }}
-                  {{ formattedGallery.length === 1 ? "photo" : "photos" }}
-                </p>
               </div>
             </div>
           </div>
@@ -221,7 +217,7 @@ export default {
 
   &__album-cover {
     overflow: hidden;
-    height: 200px;
+    height: 175px;
     & > .img-container {
       height: 100%;
 
@@ -248,7 +244,14 @@ export default {
       flex-direction: column;
       justify-content: end;
     }
+
+    .album-description {
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      width: 80%;
+    }
   }
 }
 </style>
-../components/Uploader.vue

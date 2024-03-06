@@ -7,7 +7,7 @@
         class="action-btn"
         @click="isPreview = true"
       >
-        <b-icon icon="arrows-fullscreen" font-scale="1"></b-icon>
+        <b-icon icon="zoom-in" font-scale="1"></b-icon>
       </UTDButton>
 
       <UTDButton size="sm" class="action-btn" @click="$emit('quick-select')">

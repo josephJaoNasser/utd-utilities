@@ -1,68 +1,96 @@
 <template>
   <div class="photo-utilities__nav border-right">
-    <div class="position-sticky" style="top: 15px">
-      <UTDButton @click="toggleExpandNav" small type="light" class="mb-2">
+    <div
+      class="position-sticky d-flex flex-column justify-content-between h-100"
+      style="top: 15px"
+    >
+      <div>
+        <div class="border-bottom pb-2 mb-2">
+          <UTDButton
+            small
+            type="light"
+            class="mb-2 w-100"
+            @click="$emit('back')"
+          >
+            <b-icon-chevron-left></b-icon-chevron-left>
+            <div
+              :class="[
+                'nav-menu-item-text text-center text-md-left m-0 ml-md-2',
+                expandNav ? 'expanded' : '',
+              ]"
+            >
+              Go back
+            </div>
+          </UTDButton>
+        </div>
+        <div class="border-bottom mb-2 pb-2 position-relative">
+          <UTDButton block @click="toggleUploadMenu">
+            <b-icon-plus></b-icon-plus>
+            <div
+              :class="[
+                'nav-menu-item-text text-center text-md-left m-0 ml-md-2',
+                expandNav ? 'expanded' : '',
+              ]"
+            >
+              Add Media
+            </div>
+          </UTDButton>
+          <ul
+            v-if="showUploadMenu"
+            class="photo-utilities__nav-dropdown text-primary position-absolute top-0"
+            style="list-style: none"
+          >
+            <li>
+              <UTDButton
+                block
+                type="light"
+                class="text-primary px-3 py-2"
+                @click="toggleUploader"
+              >
+                <b-icon-image class="mr-2"></b-icon-image>
+                Photo
+              </UTDButton>
+            </li>
+            <li>
+              <UTDButton
+                block
+                type="light"
+                class="text-primary px-3 py-2"
+                @click="toggleCreateAlbum"
+              >
+                <b-icon-images class="mr-2"></b-icon-images>
+                Album
+              </UTDButton>
+            </li>
+          </ul>
+        </div>
+        <div class="d-flex flex-column">
+          <UTDButton
+            v-for="item in NavItems"
+            type="light"
+            :class="[
+              'nav-item',
+              'mb-2',
+              currentUtility === item.value ? 'text-primary' : 'text-secondary',
+            ]"
+            @click="onUtilityChange(item.value)"
+          >
+            <b-icon :icon="item.icon"></b-icon>
+            <div :class="['nav-menu-item-text', expandNav ? 'expanded' : '']">
+              {{ item.label }}
+            </div>
+          </UTDButton>
+        </div>
+      </div>
+      <UTDButton
+        @click="toggleExpandNav"
+        small
+        type="light"
+        class="mb-2 text-center"
+      >
         <b-icon-list v-if="!expandNav"></b-icon-list>
         <b-icon-x v-else></b-icon-x>
       </UTDButton>
-      <div class="border-bottom mb-2 pb-3 position-relative">
-        <UTDButton block @click="toggleUploadMenu">
-          <b-icon-plus></b-icon-plus>
-          <div
-            :class="[
-              'nav-menu-item-text text-center text-md-left m-0 ml-md-2',
-              expandNav ? 'expanded' : '',
-            ]"
-          >
-            Add Media
-          </div>
-        </UTDButton>
-        <ul
-          v-if="showUploadMenu"
-          class="photo-utilities__nav-dropdown text-primary position-absolute top-0"
-          style="list-style: none"
-        >
-          <li>
-            <UTDButton
-              block
-              type="light"
-              class="text-primary px-3 py-2"
-              @click="toggleUploader"
-            >
-              <b-icon-image class="mr-2"></b-icon-image>
-              Photo
-            </UTDButton>
-          </li>
-          <li>
-            <UTDButton
-              block
-              type="light"
-              class="text-primary px-3 py-2"
-              @click="toggleCreateAlbum"
-            >
-              <b-icon-images class="mr-2"></b-icon-images>
-              Album
-            </UTDButton>
-          </li>
-        </ul>
-      </div>
-      <div class="d-flex flex-column">
-        <UTDButton
-          v-for="item in NavItems"
-          type="light"
-          :class="[
-            'nav-item',
-            'mb-2',
-            currentUtility === item.value ? 'text-primary' : 'text-secondary',
-          ]"
-          @click="onUtilityChange(item.value)"
-        >
-          <b-icon :icon="item.icon"></b-icon>
-          <div :class="['nav-menu-item-text', expandNav ? 'expanded' : '']">
-            {{ item.label }}
-          </div>
-        </UTDButton>
-      </div>
     </div>
   </div>
 </template>
@@ -84,7 +112,7 @@ export default {
       showUploadMenu: false,
     };
   },
-  emits: ["utility-change", "uploader-toggled", "create-album-toggled"],
+  emits: ["utility-change", "uploader-toggled", "create-album-toggled", "back"],
   methods: {
     onUtilityChange(type) {
       this.$emit("utility-change", type);
