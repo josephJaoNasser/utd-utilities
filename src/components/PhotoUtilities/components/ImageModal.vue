@@ -1,9 +1,9 @@
 <template>
   <b-modal
     v-model="showPreviewModal"
-    content-class="border-0 rounded-0 bg-transparent"
-    body-class="p-0 text-center"
-    dialog-class=""
+    content-class="border-0 rounded-0 bg-transparent w-fit-content mx-auto"
+    body-class="p-0 text-center w-fit-content mx-auto"
+    dialog-class="w-fit-content mx-auto"
     centered
     hide-footer
     hide-header
