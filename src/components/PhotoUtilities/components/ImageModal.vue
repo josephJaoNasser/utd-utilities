@@ -2,7 +2,8 @@
   <b-modal
     v-model="showPreviewModal"
     content-class="border-0 rounded-0 bg-transparent"
-    body-class="p-0"
+    body-class="p-0 text-center"
+    dialog-class=""
     centered
     hide-footer
     hide-header
@@ -10,10 +11,8 @@
   >
     <b-img-lazy
       blankColor="#bbb"
-      fluid-grow
-      class="bg-transparent"
       :src="url"
-      style="margin: 0 auto"
+      style="margin: 0 auto; max-height: 90vh; max-width: 100%"
     />
   </b-modal>
 </template>

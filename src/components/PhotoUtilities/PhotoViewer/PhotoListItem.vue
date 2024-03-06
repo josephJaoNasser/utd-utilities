@@ -42,7 +42,7 @@ export default {
     UTDButton,
     ImageModal,
   },
-  emits: ["click", "edit-click"],
+  emits: ["click", "quick-select"],
   props: {
     photoDetails: Object,
     active: Boolean,

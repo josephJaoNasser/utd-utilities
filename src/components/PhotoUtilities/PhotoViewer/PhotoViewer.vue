@@ -48,6 +48,7 @@
                 class="h-100"
                 :photoDetails="photo"
                 :active="!!selectedPhoto && selectedPhoto.id === photo.id"
+                @quick-select="$emit('photo-selected', photo)"
               />
             </b-col>
           </b-row>
