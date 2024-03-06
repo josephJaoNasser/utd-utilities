@@ -9,6 +9,10 @@
       >
         <b-icon icon="arrows-fullscreen" font-scale="1"></b-icon>
       </UTDButton>
+
+      <UTDButton size="sm" class="action-btn" @click="$emit('quick-select')">
+        <b-icon icon="plus" font-scale="1"></b-icon>
+      </UTDButton>
     </div>
     <b-img-lazy
       :class="[
@@ -62,13 +66,14 @@ export default {
   .actions {
     opacity: 0;
     transition: opacity 0.1s ease-in-out;
-    top: 10px;
-    right: 10px;
+    width: 100%;
+    padding: 10px;
+    bottom: 0;
     position: absolute;
-
-    .action-btn {
-      margin-left: 8px;
-    }
+    display: flex;
+    background-color: rgba($color: #fff, $alpha: 0.5);
+    justify-content: flex-end;
+    gap: 5px;
   }
 
   &:hover {
