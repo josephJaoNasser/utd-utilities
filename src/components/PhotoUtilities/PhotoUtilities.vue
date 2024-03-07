@@ -1,7 +1,7 @@
 <template>
   <b-container
     fluid
-    class="p-0 m-0 utd-utilities__photo-utilities d-flex h-100"
+    class="p-0 m-0 utd-utilities__photo-utilities d-flex h-100 position-relative"
   >
     <MobileNav
       class="d-sm-none"
@@ -35,9 +35,14 @@
         @load="(e) => (photos = [...photos, ...e])"
         @photo-selected="onSelect"
       >
-        <template #header>
-          <div class="mb-3 pt-3">
-            <h2 class="font-weight-bold">Photos</h2>
+        <template #header="slotProps">
+          <div
+            class="mb-3 pt-3 d-flex justify-content-between align-items-center"
+          >
+            <h2 class="font-weight-bold mb-0">Photos</h2>
+            <UTDButton @click="slotProps.toggleSearch" type="light">
+              <b-icon-search></b-icon-search>
+            </UTDButton>
           </div>
         </template>
       </PhotoViewer>
@@ -110,8 +115,10 @@ import Uploader from "./components/Uploader.vue";
 import CreateAlbum from "./components/CreateAlbum.vue";
 import Moments from "./Moments";
 import SideNav from "./components/SideNav.vue";
-import UtilityTypes from "@/constants/UtilityTypes";
 import MobileNav from "./components/MobileNav.vue";
+import Search from "./components/Search.vue";
+import UtilityTypes from "@/constants/UtilityTypes";
+import SearchSource from "@/constants/SearchSource";
 
 export default {
   name: "PhotoUtilities",
@@ -131,6 +138,7 @@ export default {
     Moments,
     SideNav,
     MobileNav,
+    Search,
   },
   emits: ["photo-selected"],
   data() {
@@ -194,9 +202,7 @@ export default {
     },
   },
   computed: {
-    UtilityTypes() {
-      return UtilityTypes;
-    },
+    UtilityTypes: () => UtilityTypes,
   },
 };
 </script>
@@ -210,6 +216,7 @@ $breakpoint-tablet: 768px;
     // &__main {
     //   overflow: auto;
     // }
+
     .photo-utilities {
       &__nav {
         font-weight: 600;

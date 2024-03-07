@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="rounded utd-utilities__photo-preview p-0">
+  <b-container fluid class="utd-utilities__photo-preview p-0">
     <div class="mb-3 px-3 d-flex justify-content-between">
       <UTDButton
         @click="onClose"

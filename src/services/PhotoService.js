@@ -152,6 +152,11 @@ class PhotoService extends UTDService {
     }
   }
 
+  /**
+   * @param {string} searchString 
+   * @param {string | number} accountId 
+   * @returns 
+   */
   async searchPhotos(searchString, accountId) {
     const query = encodeURI(searchString);
 

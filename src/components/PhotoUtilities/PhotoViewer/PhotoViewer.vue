@@ -8,8 +8,21 @@
       :class="['sticky-top border-bottom']"
       :style="headerStyle"
     >
-      <slot name="header"> </slot>
+      <slot name="header" :toggleSearch="toggleSearch"> </slot>
     </b-container>
+
+    <div class="utd-utilities__search shadow" v-if="showSearch">
+      <Search
+        class="w-full"
+        :searchSource="SearchSource.photos"
+        :token="token"
+        :account-id="accountId"
+        @search-start="handleSearchStart"
+        @search-complete="handleSearchComplete"
+        @search-end="handleSearchEnd"
+        @close="showSearch = false"
+      />
+    </div>
 
     <b-container fluid class="h-100 px-0">
       <b-row :class="['h-100 w-100 mx-0 px-0', selectedAlbum ? 'mt-3' : '']">
@@ -27,8 +40,25 @@
             </p>
           </b-container>
 
+          <b-container
+            fluid
+            v-if="!searchResults?.length && !isSearching && isUsingSearch"
+            @click="clearSearch"
+          >
+            <p class="text-center p-4">
+              <i> No matching results for "{{ searchString }}"... </i>
+              <br />
+              <br />
+              <UTDButton type="light">
+                <b-icon-chevron-left></b-icon-chevron-left>
+                Back to photos
+              </UTDButton>
+            </p>
+          </b-container>
+
           <b-row
             ref="photo-grid"
+            v-if="!isUsingSearch"
             class="utd-utilities__photo-grid px-3 py-3"
             style="overflow: auto"
             cols="2"
@@ -52,10 +82,36 @@
               />
             </b-col>
           </b-row>
+          <b-row
+            ref="photo-grid"
+            v-else
+            class="utd-utilities__photo-grid px-3 py-3"
+            style="overflow: auto"
+            cols="2"
+            cols-sm="3"
+            cols-md="4"
+            cols-lg="5"
+            cols-xl="6"
+            no-gutters
+          >
+            <b-col
+              v-for="photo in searchResults"
+              class="photo-grid-item p-1"
+              @click="selectedPhoto = photo"
+              :key="photo.id"
+            >
+              <PhotoListItem
+                class="h-100"
+                :photoDetails="photo"
+                :active="!!selectedPhoto && selectedPhoto.id === photo.id"
+                @quick-select="$emit('photo-selected', photo)"
+              />
+            </b-col>
+          </b-row>
           <b-container
             fluid
             class="text-center mb-3 p-4"
-            v-if="isPhotosLoading"
+            v-if="isPhotosLoading || isSearching"
           >
             <b-spinner
               label="Loading..."
@@ -75,7 +131,7 @@
           xl="3"
           order="1"
           order-sm="2"
-          class="p-0 border-left photo-details-container"
+          class="p-0 border-left"
           :style="photoDetailsContainerStyle"
         >
           <PhotoDetails
@@ -143,7 +199,7 @@
         showEditSection &&
         checkBreakpoint(windowWidth) === 'sm'
       "
-      class="utd-utilities__photoDetails-desktop pt-3"
+      class="utd-utilities__photoDetails-desktop pt-3 shadow"
       :photo-details="selectedPhoto"
       @close="showEditSection = false"
       @photo-selected="onSelect"
@@ -157,6 +213,8 @@ import PhotoListItem from "./PhotoListItem.vue";
 import UTDInput from "@/components/UTDInput";
 import EditPhoto from "./EditPhoto.vue";
 import UTDButton from "@/components/UTDButton";
+import Search from "../components/Search.vue";
+import SearchSource from "@/constants/SearchSource";
 import { PHOTOS_PER_PAGE } from "@/constants/PaginationVariables";
 import { checkBreakpoint } from "@/helpers/breakpoints";
 
@@ -168,13 +226,13 @@ export default {
     UTDInput,
     EditPhoto,
     UTDButton,
+    Search,
   },
   props: {
     token: String,
     accountId: Number,
     organizationId: Number,
     selectedAlbum: Object,
-    searchString: String,
     photos: {
       type: Array,
       default: () => [],
@@ -197,6 +255,11 @@ export default {
       isSettingAlbumImage: false,
       isEnd: false,
       windowWidth: window.innerWidth,
+      showSearch: false,
+      isSearching: false,
+      isUsingSearch: false,
+      searchString: "",
+      searchResults: [],
     };
   },
   methods: {
@@ -204,11 +267,6 @@ export default {
 
     async getPhotos() {
       this.isPhotosLoading = true;
-
-      // if (this.photos?.length) {
-      //   this.isPhotosLoading = false;
-      //   return;
-      // }
 
       try {
         const UTD = new PhotoService(this.token);
@@ -256,6 +314,30 @@ export default {
       this.windowWidth = window.innerWidth;
     },
 
+    toggleSearch() {
+      this.showSearch = !this.showSearch;
+    },
+
+    handleSearchComplete({ result }) {
+      this.isUsingSearch = true;
+      this.searchResults = result;
+    },
+
+    handleSearchStart() {
+      this.isUsingSearch = true;
+      this.isSearching = true;
+    },
+
+    handleSearchEnd(e) {
+      this.isSearching = false
+      this.searchString = e
+    },
+
+    clearSearch() {
+      this.isUsingSearch = false;
+      this.searchResults = [];
+    },
+
     handleScroll() {
       if (this.isEnd) return;
 
@@ -268,12 +350,12 @@ export default {
         photoGridBottom <= window.innerHeight + MARGIN &&
         !this.isPhotosLoading
       ) {
-        console.log("scroll bottom getting photos");
         this.getPhotos();
       }
     },
   },
   computed: {
+    SearchSource: () => SearchSource,
     headerStyle() {
       return {
         backgroundColor: "white",
@@ -328,6 +410,17 @@ export default {
 <style scoped lang="scss">
 $md: 768px;
 .utd-utilities {
+  &__search {
+    position: absolute;
+    top: 0;
+    z-index: 1040;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    margin: 0 auto;
+    width: 100%;
+  }
+
   &__photoDetails-desktop {
     background-color: white;
     position: absolute;
