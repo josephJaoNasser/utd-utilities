@@ -326,11 +326,12 @@ export default {
     handleSearchStart() {
       this.isUsingSearch = true;
       this.isSearching = true;
+      this.selectedPhoto = null;
     },
 
     handleSearchEnd(e) {
-      this.isSearching = false
-      this.searchString = e
+      this.isSearching = false;
+      this.searchString = e;
     },
 
     clearSearch() {
