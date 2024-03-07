@@ -31,7 +31,7 @@
               size="sm"
               variant="light"
               class="position-absolute"
-              style="top: 15px; right: 15px; z-index: 1;"
+              style="top: 15px; right: 15px; z-index: 1"
               @click="handleFileRemove(fileObj.index)"
             >
               <b-icon-trash></b-icon-trash>
@@ -223,8 +223,8 @@ export default {
     packagePhoto(file) {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("userId", this.organizationId);
-      formData.append("accountId", this.accountId);
+      formData.append("userId", this.accountId);
+      formData.append("accountId", this.organizationId);
 
       return formData;
     },

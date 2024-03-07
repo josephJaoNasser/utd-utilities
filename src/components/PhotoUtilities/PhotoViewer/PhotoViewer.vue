@@ -16,7 +16,7 @@
         class="w-full"
         :searchSource="SearchSource.photos"
         :token="token"
-        :account-id="accountId"
+        :userId="userId"
         @search-start="handleSearchStart"
         @search-complete="handleSearchComplete"
         @search-end="handleSearchEnd"
@@ -219,7 +219,7 @@ import { PHOTOS_PER_PAGE } from "@/constants/PaginationVariables";
 import { checkBreakpoint } from "@/helpers/breakpoints";
 
 export default {
-  name: "PhotoPicker",
+  name: "PhotoViewer",
   components: {
     PhotoDetails,
     PhotoListItem,
@@ -230,7 +230,7 @@ export default {
   },
   props: {
     token: String,
-    accountId: Number,
+    userId: Number,
     organizationId: Number,
     selectedAlbum: Object,
     photos: {
@@ -271,7 +271,8 @@ export default {
       try {
         const UTD = new PhotoService(this.token);
         const { rows } = await UTD.getPhotos({
-          accountId: this.accountId,
+          userId: this.userId,
+          accountId: this.organizationId,
           limit: PHOTOS_PER_PAGE,
           offset: this.photos.length,
         });

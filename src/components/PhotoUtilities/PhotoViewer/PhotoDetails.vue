@@ -20,7 +20,7 @@
 
     <PhotoWindow
       class="mb-3 p-0"
-      :url="photoDetails.url"
+      :url="url"
       max-height="250"
       background-color="#eee"
     />
@@ -83,10 +83,9 @@ export default {
   },
   emits: ["photo-saved"],
   data() {
-    const { fileName, url } = this.photoDetails;
+    const { fileName, alt } = this.photoDetails;
     return {
-      fileName,
-      url,
+      fileName: fileName ? fileName : alt,
       caption: "",
       description: "",
     };
@@ -100,14 +99,24 @@ export default {
       // create a request for saving the photo details
     },
   },
+  computed: {
+    url() {
+      if (this.photoDetails.url?.length) {
+        return this.photoDetails.url;
+      } else if (this.photoDetails.src?.length) {
+        return this.photoDetails.src;
+      }
+
+      return "";
+    },
+  },
   watch: {
     photoDetails: {
       deep: true,
       immediate: true,
       handler(newData) {
-        const { fileName, url } = newData;
-        this.fileName = fileName;
-        this.url = url;
+        const { fileName, url, alt } = newData;
+        this.fileName = fileName || alt;
       },
     },
   },

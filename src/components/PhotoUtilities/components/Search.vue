@@ -32,7 +32,7 @@ export default {
       default: "Search...",
     },
     token: String,
-    accountId: Number,
+    userId: Number,
     hideCloseButton: Boolean,
   },
   components: {

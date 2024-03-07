@@ -29,7 +29,7 @@
       <PhotoViewer
         v-if="currentUtility === UtilityTypes.photo"
         :token="token"
-        :account-id="accountId"
+        :user-id="accountId"
         :organization-id="organizationId"
         :photos="JSON.parse(JSON.stringify(photos))"
         @load="(e) => (photos = [...photos, ...e])"

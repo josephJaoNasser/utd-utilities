@@ -21,11 +21,7 @@
       ]"
       fluid-grow
       blankColor="#bbb"
-      :src="
-        photoDetails.thumbnail?.length
-          ? photoDetails.thumbnail
-          : photoDetails.url
-      "
+      :src="url"
       style="object-fit: cover"
     />
     <ImageModal v-model="isPreview" :url="photoDetails?.url" />
@@ -56,6 +52,19 @@ export default {
   methods: {
     onClick() {
       this.$emit("click");
+    },
+  },
+  computed: {
+    url() {
+      if (this.photoDetails.thumbnail?.length) {
+        return this.photoDetails.thumbnail;
+      } else if (this.photoDetails.url?.length) {
+        return this.photoDetails.url;
+      } else if (this.photoDetails.src?.length) {
+        return this.photoDetails.src;
+      }
+
+      return "";
     },
   },
 };
