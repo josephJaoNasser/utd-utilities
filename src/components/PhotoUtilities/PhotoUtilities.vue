@@ -77,9 +77,10 @@
         @photo-selected="onSelect"
         :default-moments="moments"
       />
+      <GoogleDriveViewer v-if="currentUtility === UtilityTypes.googleDrive" />
       <AIArtCreator
         v-if="currentUtility === UtilityTypes.ai"
-        class="ew-100"
+        class="w-100"
         :token="token"
         :default-images="aiArt"
         @image-created="(e) => (aiArt = e)"
@@ -118,7 +119,7 @@ import SideNav from "./components/SideNav.vue";
 import MobileNav from "./components/MobileNav.vue";
 import Search from "./components/Search.vue";
 import UtilityTypes from "@/constants/UtilityTypes";
-import SearchSource from "@/constants/SearchSource";
+import GoogleDriveViewer from "./GoogleDriveViewer";
 
 export default {
   name: "PhotoUtilities",
@@ -139,6 +140,7 @@ export default {
     SideNav,
     MobileNav,
     Search,
+    GoogleDriveViewer,
   },
   emits: ["photo-selected"],
   data() {

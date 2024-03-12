@@ -17,6 +17,11 @@ export default [
     icon: "calendar-fill",
   },
   {
+    label: "Google Drive Photos",
+    value: UtilityTypes.googleDrive,
+    icon: "google"
+  },
+  {
     label: "AI Image Creator",
     value: UtilityTypes.ai,
     icon: "stars",
