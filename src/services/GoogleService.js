@@ -5,7 +5,7 @@ class GoogleService {
 
   async getPicker() {}
 
-  getOauthURL() {
+  getOauthURL({ toPage, utilityType }) {
     const scopes = [
       "https://www.googleapis.com/auth/drive.metadata.readonly",
       "https://www.googleapis.com/auth/drive.photos.readonly",
@@ -16,12 +16,21 @@ class GoogleService {
     const redirect_uri = process.env.VUE_APP_GOOGLE_REDIRECT_URI;
 
     const scope = scopes.join(" ");
+    let state;
+
+    if (toPage && utilityType) {
+      state = JSON.stringify({
+        toPage,
+        utilityType,
+      });
+    }
 
     const queryObj = {
       client_id,
       redirect_uri,
       scope,
       response_type: "token",
+      ...(state && { state }),
     };
 
     const queryString = queryBuilder(queryObj);

@@ -1,5 +1,20 @@
 <template>
+  <b-container v-if="isRedirect" class="text-center p-4">
+    <b-icon-check-circle-fill
+      font-scale="5"
+      class="text-success mb-3"
+    ></b-icon-check-circle-fill>
+    <p>
+      Connected successfully! Window will close in
+      {{ redirectCountDown }} seconds...
+    </p>
+    <UTDButton type="light" onclick="window.close()">
+      <b-icon-x></b-icon-x>
+      Close now
+    </UTDButton>
+  </b-container>
   <b-container
+    v-else
     fluid
     class="p-0 m-0 utd-utilities__photo-utilities d-flex h-100 position-relative"
   >
@@ -118,8 +133,9 @@ import Moments from "./Moments";
 import SideNav from "./components/SideNav.vue";
 import MobileNav from "./components/MobileNav.vue";
 import Search from "./components/Search.vue";
-import UtilityTypes from "@/constants/UtilityTypes";
+import { photoUtilities, utilities } from "@/constants/UtilityTypes";
 import GoogleDriveViewer from "./GoogleDriveViewer";
+import urlQueryToJson from "@/helpers/urlQueryToJson";
 
 export default {
   name: "PhotoUtilities",
@@ -145,16 +161,18 @@ export default {
   emits: ["photo-selected"],
   data() {
     return {
-      currentUtility: UtilityTypes.photo,
+      currentUtility: photoUtilities.photo,
       showUploader: false,
       showCreateAlbum: false,
-      pageHistory: [UtilityTypes.photo],
+      pageHistory: [photoUtilities.photo],
       pageHistoryIndex: 0,
       photos: [],
       albums: [],
       moments: [],
       aiArt: [],
       selectedAlbum: null,
+      isRedirect: false,
+      redirectCountDown: 0,
     };
   },
   methods: {
@@ -204,7 +222,38 @@ export default {
     },
   },
   computed: {
-    UtilityTypes: () => UtilityTypes,
+    UtilityTypes: () => photoUtilities,
+  },
+  mounted() {
+    const url = window.location.href;
+
+    const [querySegment] = new URL(url).hash.split("/");
+    const queries = urlQueryToJson(querySegment.substring(1));
+
+    if (queries?.state) {
+      queries.state = JSON.parse(queries.state);
+    }
+
+    if (queries?.access_token) {
+      this.isRedirect =
+        queries.state && queries.state.utilityType === utilities.photo;
+
+      window.opener.postMessage({ ...queries, code: "utd_utils_gauth" });
+      // localStorage.setItem(
+      //   "photo_utilities_auth_result",
+      //   JSON.stringify(queries)
+      // );
+    }
+    if (this.isRedirect) {
+      this.redirectCountDown = 3;
+      let countdownInterval = setInterval(() => {
+        this.redirectCountDown -= 1;
+        if (!this.redirectCountDown) {
+          clearInterval(countdownInterval);
+          window.close();
+        }
+      }, 1000);
+    }
   },
 };
 </script>

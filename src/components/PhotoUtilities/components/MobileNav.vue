@@ -60,7 +60,7 @@
 
 <script>
 import UTDButton from "@/components/UTDButton/UTDButton.vue";
-import UtilityTypes from "@/constants/UtilityTypes";
+import { photoUtilities } from "@/constants/UtilityTypes";
 import navItems from "./navItems";
 
 export default {
@@ -100,7 +100,7 @@ export default {
     },
   },
   computed: {
-    UtilityTypes: () => UtilityTypes,
+    UtilityTypes: () => photoUtilities,
     NavItems: () => navItems,
   },
 };

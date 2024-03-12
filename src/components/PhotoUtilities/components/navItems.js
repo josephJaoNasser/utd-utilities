@@ -1,4 +1,4 @@
-import UtilityTypes from "@/constants/UtilityTypes";
+import { photoUtilities as UtilityTypes } from "@/constants/UtilityTypes";
 
 export default [
   {
@@ -19,7 +19,7 @@ export default [
   {
     label: "Google Drive Photos",
     value: UtilityTypes.googleDrive,
-    icon: "google"
+    icon: "google",
   },
   {
     label: "AI Image Creator",
