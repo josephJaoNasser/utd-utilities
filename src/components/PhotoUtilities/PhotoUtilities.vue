@@ -92,7 +92,10 @@
         @photo-selected="onSelect"
         :default-moments="moments"
       />
-      <GoogleDriveViewer v-if="currentUtility === UtilityTypes.googleDrive" />
+      <GoogleDriveViewer
+        v-if="currentUtility === UtilityTypes.googleDrive"
+        :credentials="googleCredentials"
+      />
       <AIArtCreator
         v-if="currentUtility === UtilityTypes.ai"
         class="w-100"
@@ -142,6 +145,7 @@ export default {
   props: {
     accountId: Number,
     organizationId: Number,
+    googleCredentials: Object,
     token: String,
   },
   components: {

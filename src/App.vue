@@ -4,6 +4,7 @@
       :accountId="credentials.accountId"
       :organization-id="credentials.organizationId"
       :token="credentials.token"
+      :google-credentials="googleCredentials"
       @photo-selected="handlePhotoSelect"
     />
     <!-- <b-container fluid class="mt-5">
@@ -46,6 +47,14 @@ export default {
         token: process.env.VUE_APP_TOKEN || "",
         accountId: +process.env.VUE_APP_ACCOUNT_ID || null,
         organizationId: +process.env.VUE_APP_ORGANIZATION_ID || null,
+      };
+    },
+
+    googleCredentials() {
+      return {
+        client_id: process.env.VUE_APP_GOOGLE_CLIENT_ID,
+        client_secret: process.env.VUE_APP_GOOGLE_CLIENT_SECRET,
+        redirect_uri: process.env.VUE_APP_GOOGLE_REDIRECT_URI,
       };
     },
   },

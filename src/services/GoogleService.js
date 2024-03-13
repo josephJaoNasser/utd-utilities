@@ -1,19 +1,36 @@
+import { PHOTOS_PER_PAGE } from "@/constants/PaginationVariables";
 import queryBuilder from "@/helpers/queryBuilder";
+import axios from "axios";
 
 class GoogleService {
-  constructor() {}
+  constructor({ client_id, client_secret, redirect_uri }) {
+    this.client_id = client_id;
+    this.client_secret = client_secret;
+    this.redirect_uri = redirect_uri;
+  }
 
-  async getPicker() {}
+  static async listDrivePhotos(token) {
+    const q = encodeURI("mimeType='image/jpeg'");
+    const url = `https://www.googleapis.com/drive/v3/files?q=${q}&pageSize=${PHOTOS_PER_PAGE}`;
+
+    try {
+      const res = await axios.get(url, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+
+      return res.data;
+    } catch (e) {
+      throw e;
+    }
+  }
 
   getOauthURL({ toPage, utilityType }) {
     const scopes = [
       "https://www.googleapis.com/auth/drive.metadata.readonly",
       "https://www.googleapis.com/auth/drive.photos.readonly",
     ];
-
-    const client_id = process.env.VUE_APP_GOOGLE_CLIENT_ID;
-    const client_secret = process.env.VUE_APP_GOOGLE_CLIENT_SECRET;
-    const redirect_uri = process.env.VUE_APP_GOOGLE_REDIRECT_URI;
 
     const scope = scopes.join(" ");
     let state;
@@ -26,8 +43,8 @@ class GoogleService {
     }
 
     const queryObj = {
-      client_id,
-      redirect_uri,
+      client_id: this.client_id,
+      redirect_uri: this.redirect_uri,
       scope,
       response_type: "token",
       ...(state && { state }),
@@ -41,4 +58,4 @@ class GoogleService {
   }
 }
 
-export default new GoogleService();
+export default GoogleService;
