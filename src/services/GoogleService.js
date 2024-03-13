@@ -11,7 +11,18 @@ class GoogleService {
 
   static async listDrivePhotos(token) {
     const q = encodeURI("mimeType='image/jpeg'");
-    const url = `https://www.googleapis.com/drive/v3/files?q=${q}&pageSize=${PHOTOS_PER_PAGE}`;
+    const fields = [
+      "id",
+      "webViewLink",
+      "webContentLink",
+      "iconLink",
+      "name",
+      "originalFilename",
+      "thumbnailLink",
+      "mimeType",
+    ].join(",");
+
+    const url = `https://www.googleapis.com/drive/v3/files/?q=${q}&pageSize=${PHOTOS_PER_PAGE}&fields=files(${fields})`;
 
     try {
       const res = await axios.get(url, {
@@ -28,8 +39,12 @@ class GoogleService {
 
   getOauthURL({ toPage, utilityType }) {
     const scopes = [
-      "https://www.googleapis.com/auth/drive.metadata.readonly",
-      "https://www.googleapis.com/auth/drive.photos.readonly",
+      "https://www.googleapis.com/auth/drive",
+      // "https://www.googleapis.com/auth/drive.appdata",
+      // "https://www.googleapis.com/auth/drive.file",
+      // "https://www.googleapis.com/auth/drive.metadata.readonly",
+      // "https://www.googleapis.com/auth/drive.photos.readonly",
+      // "https://www.googleapis.com/auth/drive.metadata",
     ];
 
     const scope = scopes.join(" ");

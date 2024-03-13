@@ -216,7 +216,7 @@ export default {
 
     handleAlbumSelect(selectedAlbum) {
       this.selectedAlbum = selectedAlbum;
-      this.onUtilityChange(UtilityTypes.albumViewer);
+      this.onUtilityChange(this.UtilityTypes.albumViewer);
     },
 
     handleAlbumDetailsUpdate({ albumName, albumDescription, albumImage }) {

@@ -22,6 +22,14 @@
       <b-container fluid class="text-center mb-3 p-4" v-if="isPhotosLoading">
         <b-spinner label="Loading..." variant="primary" type="grow"></b-spinner>
       </b-container>
+      <b-container v-else>
+        <b-row cols="2" cols-sm="3" cols-md="4" cols-lg="5" cols-xl="6">
+          <b-col v-for="photo in files" class="border m-2 p-3">
+            <b-img fluid :src="photo.thumbnailLink || photo.iconLink"/>
+            {{ photo.name }}
+          </b-col>
+        </b-row>
+      </b-container>
     </b-container>
   </b-container>
 </template>
