@@ -103,12 +103,9 @@ export default {
       const { expires_in, access_dateTime } = JSON.parse(localCredentials);
 
       const expirationDate = access_dateTime + expires_in;
-      const currentDate = new Date(access_dateTime);
-      if (currentDate < expirationDate) {
-        return true;
-      }
+      const currentDate = new Date().getTime();
 
-      return false;
+      return currentDate < expirationDate;
     },
   },
   mounted() {
@@ -118,6 +115,8 @@ export default {
       );
 
       this.accessToken = access_token;
+    } else {
+      this.accessToken = null;
     }
 
     if (!window.gapi) return console.warn("Google API not loaded");
