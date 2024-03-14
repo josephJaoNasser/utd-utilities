@@ -20,6 +20,7 @@ class GoogleService {
       "originalFilename",
       "thumbnailLink",
       "mimeType",
+      "imageMediaMetadata",
     ].join(",");
 
     const url = `https://www.googleapis.com/drive/v3/files/?q=${q}&pageSize=${PHOTOS_PER_PAGE}&fields=files(${fields})`;

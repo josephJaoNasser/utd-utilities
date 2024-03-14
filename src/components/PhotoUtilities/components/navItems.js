@@ -16,11 +16,11 @@ export default [
     value: UtilityTypes.moments,
     icon: "calendar-fill",
   },
-  {
-    label: "Google Drive Photos",
-    value: UtilityTypes.googleDrive,
-    icon: "google",
-  },
+  // {
+  //   label: "Google Drive Photos",
+  //   value: UtilityTypes.googleDrive,
+  //   icon: "google",
+  // },
   {
     label: "AI Image Creator",
     value: UtilityTypes.ai,

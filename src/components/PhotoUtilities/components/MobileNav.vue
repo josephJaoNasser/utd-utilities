@@ -16,6 +16,14 @@
         >
           <b-icon :icon="item.icon"></b-icon>
         </UTDButton>
+        <GooglePickerButton
+          type="light"
+          :class="['nav-item', 'text-secondary']"
+          :credentials="googleCredentials"
+          @picked="handleGooglePickerPick"
+        >
+          <b-icon-google></b-icon-google>
+        </GooglePickerButton>
       </div>
       <div class="position-relative">
         <div>
@@ -60,14 +68,16 @@
 
 <script>
 import UTDButton from "@/components/UTDButton/UTDButton.vue";
+import GooglePickerButton from "../GoogleDriveViewer/GooglePickerButton.vue";
 import { photoUtilities } from "@/constants/UtilityTypes";
 import navItems from "./navItems";
 
 export default {
   name: "MobileNav",
-  components: { UTDButton },
+  components: { UTDButton, GooglePickerButton },
   props: {
     currentUtility: String,
+    googleCredentials: Object,
   },
   data() {
     return {
@@ -75,7 +85,13 @@ export default {
       showUploadMenu: false,
     };
   },
-  emits: ["utility-change", "uploader-toggled", "create-album-toggled", "back"],
+  emits: [
+    "utility-change",
+    "uploader-toggled",
+    "create-album-toggled",
+    "google-picker-pick",
+    "back",
+  ],
   methods: {
     onUtilityChange(type) {
       this.$emit("utility-change", type);
@@ -97,6 +113,10 @@ export default {
     toggleUploader() {
       this.$emit("uploader-toggled");
       this.toggleUploadMenu();
+    },
+
+    handleGooglePickerPick(e) {
+      this.$emit("google-picker-pick", e);
     },
   },
   computed: {

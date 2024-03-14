@@ -80,6 +80,19 @@
               {{ item.label }}
             </div>
           </UTDButton>
+          <div class="py-2 border-top">
+            <GooglePickerButton
+              type="light"
+              :class="['nav-item', 'mb-2', 'text-secondary']"
+              :credentials="googleCredentials"
+              @picked="handleGooglePickerPick"
+            >
+              <b-icon-google></b-icon-google>
+              <div :class="['nav-menu-item-text', expandNav ? 'expanded' : '']">
+                Google Drive
+              </div>
+            </GooglePickerButton>
+          </div>
         </div>
       </div>
       <UTDButton
@@ -97,14 +110,16 @@
 
 <script>
 import UTDButton from "@/components/UTDButton/UTDButton.vue";
+import GooglePickerButton from "../GoogleDriveViewer/GooglePickerButton.vue";
 import { photoUtilities } from "@/constants/UtilityTypes";
 import navItems from "./navItems";
 
 export default {
   name: "SideNav",
-  components: { UTDButton },
+  components: { UTDButton, GooglePickerButton },
   props: {
     currentUtility: String,
+    googleCredentials: Object,
   },
   data() {
     return {
@@ -112,7 +127,13 @@ export default {
       showUploadMenu: false,
     };
   },
-  emits: ["utility-change", "uploader-toggled", "create-album-toggled", "back"],
+  emits: [
+    "utility-change",
+    "uploader-toggled",
+    "create-album-toggled",
+    "google-picker-pick",
+    "back",
+  ],
   methods: {
     onUtilityChange(type) {
       this.$emit("utility-change", type);
@@ -135,6 +156,10 @@ export default {
       this.$emit("uploader-toggled");
       this.toggleUploadMenu();
     },
+
+    handleGooglePickerPick(e) {
+      this.$emit("google-picker-pick", e);
+    },
   },
   computed: {
     UtilityTypes: () => photoUtilities,
@@ -149,7 +174,7 @@ export default {
     font-weight: 600;
     padding: 15px 10px;
     background-color: #f1f4f7;
-    z-index: 1040;
+    z-index: 1000;
 
     &-dropdown {
       list-style: none;
