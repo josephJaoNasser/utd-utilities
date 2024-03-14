@@ -64,8 +64,7 @@ export default {
     gisLoaded() {
       this.tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: this.credentials.client_id,
-        scope:
-          "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email",
+        scope: "https://www.googleapis.com/auth/drive.file",
         access_type: "offline",
         callback: this.handleAuthResult,
       });
