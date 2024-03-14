@@ -53,10 +53,10 @@ export default {
     googleCredentials() {
       return {
         client_id: process.env.VUE_APP_GOOGLE_CLIENT_ID,
-        client_secret: process.env.VUE_APP_GOOGLE_CLIENT_SECRET,
         project_id: process.env.VUE_APP_GOOGLE_APP_ID,
         api_key: process.env.VUE_APP_GOOGLE_API_KEY,
-        redirect_uri: process.env.VUE_APP_GOOGLE_REDIRECT_URI,
+        // client_secret: process.env.VUE_APP_GOOGLE_CLIENT_SECRET,
+        // redirect_uri: process.env.VUE_APP_GOOGLE_REDIRECT_URI,
       };
     },
   },
