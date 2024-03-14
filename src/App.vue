@@ -13,11 +13,11 @@
       </button>
       <br />
       <br />
-      <b-img-lazy
-        blankColor="#bbb"
-        fluid
+      <img
         v-if="selectedPhoto"
         :src="selectedPhoto?.url"
+        referrerPolicy="no-referrer"
+        class="w-100"
       />
     </b-container> -->
   </div>

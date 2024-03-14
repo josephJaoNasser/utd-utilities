@@ -143,6 +143,7 @@ import Search from "./components/Search.vue";
 import { photoUtilities, utilities } from "@/constants/UtilityTypes";
 import GoogleDriveViewer from "./GoogleDriveViewer";
 import urlQueryToJson from "@/helpers/urlQueryToJson";
+import GoogleService from "@/services/GoogleService";
 
 export default {
   name: "PhotoUtilities",
@@ -229,8 +230,20 @@ export default {
       this.selectedAlbum.albumDescription = albumDescription;
     },
 
-    handleGooglePickerPick(e) {
-      console.log({ picked: e });
+    async handleGooglePickerPick(e) {
+      try {
+        const { thumbnailLink } = await GoogleService.getDrivePhoto(
+          e.photo.id,
+          e.token
+        );
+
+        const sizeRegex = new RegExp(/=s\d+/, "g");
+        const imageUrl = thumbnailLink.replace(sizeRegex, "=s0");
+
+        this.$emit("photo-selected", { url: imageUrl });
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
   computed: {
@@ -251,10 +264,6 @@ export default {
         queries.state && queries.state.utilityType === utilities.photo;
 
       window.opener.postMessage({ ...queries, code: "utd_utils_gauth" });
-      // localStorage.setItem(
-      //   "photo_utilities_auth_result",
-      //   JSON.stringify(queries)
-      // );
     }
     if (this.isRedirect) {
       this.redirectCountDown = 3;

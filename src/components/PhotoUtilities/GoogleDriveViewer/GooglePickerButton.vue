@@ -9,6 +9,8 @@
 </template>
 <script>
 import UTDButton from "@/components/UTDButton/UTDButton.vue";
+import GoogleService from "@/services/GoogleService";
+
 export default {
   name: "GooglePickerButton",
   props: {
@@ -34,7 +36,8 @@ export default {
 
       this.tokenClient.callback = async (response) => {
         if (response.error !== undefined) {
-          throw response;
+          console.log(response);
+          return;
         }
 
         const credentialsToStore = {
@@ -74,7 +77,7 @@ export default {
 
         const pickerBuilder = new google.picker.PickerBuilder()
           .enableFeature(google.picker.Feature.NAV_HIDDEN)
-          .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+          // .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
           .setAppId(this.credentials.project_id)
           .setOAuthToken(this.accessToken)
           .setDeveloperKey(this.credentials.api_key)
@@ -90,7 +93,7 @@ export default {
     },
     pickerCallback(data) {
       if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
-        this.$emit("picked", data.docs);
+        this.$emit("picked", { photo: data.docs[0], token: this.accessToken });
       }
     },
     isLocalCredentialsValid() {
