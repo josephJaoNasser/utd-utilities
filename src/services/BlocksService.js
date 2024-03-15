@@ -14,7 +14,25 @@ class BlockService extends UTDService {
         `https://www.uptodateconnect.com/api/v1/site-builder/blocks?version=2&developer=true`
       );
 
-      return data;
+      const categories = [];
+      for (const block of data.payload) {
+        if (!categories.includes(block.category)) {
+          categories.push(block.category);
+        }
+      }
+
+      const sortedBlocks = {};
+
+      for (const category of categories) {
+        sortedBlocks[category] = data.payload.filter(
+          (block) => block.category === category
+        );
+      }
+
+      return {
+        blocks: sortedBlocks,
+        categories,
+      };
     } catch (e) {
       throw e;
     }
@@ -38,4 +56,4 @@ class BlockService extends UTDService {
   }
 }
 
-export default BlockService
+export default BlockService;

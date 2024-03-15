@@ -279,15 +279,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-/* Using SCSS variables to store breakpoints */
-$breakpoint-tablet: 768px;
-
-.utd-utilities {
-  &__photo-utilities {
-    // &__main {
-    //   overflow: auto;
-    // }
-  }
-}
-</style>
+<style scoped lang="scss"></style>
