@@ -6,8 +6,12 @@
       :categories="categories"
       @category-change="(e) => (currentCategory = e)"
     />
-    <b-container fluid>
-      <BlocksViewer :blocks="blocks[currentCategory]" />
+    <b-container fluid class="px-0">
+      <BlocksViewer
+        :current-category="currentCategory"
+        :blocks="blocks[currentCategory]"
+        @block-selected="handleBlockSelect"
+      />
     </b-container>
   </b-container>
 </template>
@@ -30,6 +34,7 @@ export default {
     BlocksNav,
     BlocksViewer,
   },
+  emits: ["blocks-selected"],
   data() {
     return {
       blocks: {},
@@ -37,11 +42,16 @@ export default {
       currentCategory: "",
     };
   },
+  methods: {
+    async handleBlockSelect(block) {
+      this.$emit("blocks-selected", block);
+    },
+  },
   async mounted() {
-    const Blocks = new BlockService(this.token);
+    const BlockServ = new BlockService(this.token);
 
     try {
-      const { blocks, categories } = await Blocks.getBlocks();
+      const { blocks, categories } = await BlockServ.getBlocks();
       this.blocks = blocks;
       this.categories = categories;
       this.currentCategory = categories[0];
