@@ -3,7 +3,8 @@ import Uploader from "./components/Uploader.vue";
 import CreateAlbum from "./components/CreateAlbum.vue";
 import PhotoViewer from "./PhotoViewer";
 import AIArtCreator from "./AIArtCreator";
+import { GooglePickerButton } from "./GoogleDriveViewer";
 
-export { Uploader, CreateAlbum, PhotoViewer, AIArtCreator };
+export { Uploader, CreateAlbum, PhotoViewer, AIArtCreator, GooglePickerButton };
 
 export default PhotoUtilities;

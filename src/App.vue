@@ -1,12 +1,17 @@
 <template>
   <div id="app">
-    <PhotoUtilities
+    <BlockUtilities 
+      :account-id="credentials.accountId"
+      :organization-id="credentials.organizationId"
+      :token="credentials.token"
+    />
+    <!-- <PhotoUtilities
       :accountId="credentials.accountId"
       :organization-id="credentials.organizationId"
       :token="credentials.token"
       :google-credentials="googleCredentials"
       @photo-selected="handlePhotoSelect"
-    />
+    /> -->
     <!-- <b-container fluid class="mt-5">
       <button style="margin: 0 auto" @click="selectedPhoto = null">
         Clear image
@@ -26,10 +31,11 @@
 <script>
 import UTDButton from "./components/UTDButton";
 import PhotoUtilities from "./components/PhotoUtilities";
+import BlockUtilities from "./components/BlockUtilities/BlockUtilities.vue";
 
 export default {
   name: "App",
-  components: { UTDButton, PhotoUtilities },
+  components: { UTDButton, PhotoUtilities, BlockUtilities },
   data() {
     return {
       selectedPhoto: null,
