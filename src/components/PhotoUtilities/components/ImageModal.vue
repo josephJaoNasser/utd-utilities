@@ -9,6 +9,13 @@
     hide-header
     size="xl"
   >
+    <UTDButton
+      class="utd-utilities__image-modal__close-btn"
+      type="dark"
+      @click="showPreviewModal = false"
+    >
+      <b-icon-x></b-icon-x>
+    </UTDButton>
     <b-img-lazy
       blankColor="#bbb"
       :src="url"
@@ -18,11 +25,16 @@
 </template>
 
 <script>
+import UTDButton from "@/components/UTDButton/UTDButton.vue";
+
 export default {
   name: "ImageModal",
   props: {
     url: String,
     show: Boolean,
+  },
+  components: {
+    UTDButton,
   },
   model: {
     prop: "show",
@@ -46,4 +58,17 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.utd-utilities {
+  &__image-modal {
+    &__close-btn {
+      padding: 4px 5px;
+      border-radius: 999px;
+      opacity: 0.6;
+      right: -15px;
+      top: -15px;
+      position: absolute;
+    }
+  }
+}
+</style>

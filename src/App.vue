@@ -1,18 +1,18 @@
 <template>
   <div id="app">
-    <BlockUtilities
+    <!-- <BlockUtilities
       :account-id="credentials.accountId"
       :organization-id="credentials.organizationId"
       :token="credentials.token"
-    />
+    /> -->
 
-    <!-- <PhotoUtilities
+    <PhotoUtilities
       :accountId="credentials.accountId"
       :organization-id="credentials.organizationId"
       :token="credentials.token"
       :google-credentials="googleCredentials"
       @photo-selected="handlePhotoSelect"
-    /> -->
+    />
 
     <!-- <b-container fluid class="mt-5">
       <button style="margin: 0 auto" @click="selectedPhoto = null">
