@@ -9,18 +9,20 @@
     hide-header
     size="xl"
   >
-    <UTDButton
-      class="utd-utilities__image-modal__close-btn"
-      type="dark"
-      @click="showPreviewModal = false"
-    >
-      <b-icon-x></b-icon-x>
-    </UTDButton>
-    <b-img-lazy
-      blankColor="#bbb"
-      :src="url"
-      style="margin: 0 auto; max-height: 90vh; max-width: 100%"
-    />
+    <div>
+      <UTDButton
+        class="utd-utilities__image-modal__close-btn"
+        type="dark"
+        @click="showPreviewModal = false"
+      >
+        <b-icon-x></b-icon-x>
+      </UTDButton>
+      <b-img-lazy
+        blankColor="#bbb"
+        :src="url"
+        style="margin: 0 auto; max-height: 90vh; max-width: 100%"
+      />
+    </div>
   </b-modal>
 </template>
 
@@ -64,7 +66,6 @@ export default {
     &__close-btn {
       padding: 4px 5px;
       border-radius: 999px;
-      opacity: 0.6;
       right: -15px;
       top: -15px;
       position: absolute;
