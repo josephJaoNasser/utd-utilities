@@ -341,7 +341,7 @@ export default {
     },
 
     handleScroll() {
-      if (this.isEnd || this.isUsingSearch) return;
+      if (this.isEnd || this.isUsingSearch || !!this.selectedAlbum) return;
 
       const photoGrid = this.$refs["photo-grid"];
       const MARGIN = 2;
