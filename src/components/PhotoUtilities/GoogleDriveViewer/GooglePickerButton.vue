@@ -62,17 +62,25 @@ export default {
       }
     },
     gisLoaded() {
+      const scopes = [
+        "https://www.googleapis.com/auth/drive.readonly",
+        "https://www.googleapis.com/auth/drive.file",
+        "https://www.googleapis.com/auth/drive.metadata",
+        "https://www.googleapis.com/auth/drive.readonly",
+      ].join(" ");
+
       this.tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: this.credentials.client_id,
-        scope: "https://www.googleapis.com/auth/drive.file",
+        scope: scopes,
         access_type: "offline",
         callback: this.handleAuthResult,
       });
     },
     createPicker() {
       if (this.pickerApiLoaded && this.accessToken) {
-        const view = new google.picker.View(google.picker.ViewId.DOCS);
+        const view = new google.picker.DocsView();
         view.setMimeTypes("image/jpeg,image/png,image/jpg,image/webp");
+        view.setIncludeFolders(true);
 
         const pickerBuilder = new google.picker.PickerBuilder()
           .enableFeature(google.picker.Feature.NAV_HIDDEN)
