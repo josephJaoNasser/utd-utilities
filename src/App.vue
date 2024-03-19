@@ -9,8 +9,9 @@
     <PhotoUtilities
       :utdCredentials="credentials"
       :google-credentials="googleCredentials"
-      @photo-selected="handlePhotoSelect"
+      :ai-art-params="aiArtParams"
       v-model="testActiveUtility"
+      @photo-selected="handlePhotoSelect"
     />
 
     <!-- <b-container fluid class="mt-5">
@@ -34,6 +35,7 @@ import UTDButton from "./components/UTDButton";
 import PhotoUtilities from "./components/PhotoUtilities";
 import BlockUtilities from "./components/BlockUtilities/BlockUtilities.vue";
 import { photoUtilities, utilities } from "@/constants/UtilityTypes";
+import AIArtParams from "./constants/AIArtParams";
 
 export default {
   name: "App",
@@ -41,7 +43,7 @@ export default {
   data() {
     return {
       selectedPhoto: null,
-      testActiveUtility: photoUtilities.album,
+      testActiveUtility: photoUtilities.photo,
     };
   },
   methods: {
@@ -68,6 +70,8 @@ export default {
         // redirect_uri: process.env.VUE_APP_GOOGLE_REDIRECT_URI,
       };
     },
+
+    aiArtParams: () => AIArtParams,
   },
 };
 </script>

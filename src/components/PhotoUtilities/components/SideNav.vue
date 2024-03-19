@@ -68,7 +68,7 @@
         </div>
         <div class="d-flex flex-column">
           <UTDButton
-            v-for="item in NavItems"
+            v-for="item in enabledUtilities"
             type="light"
             :class="[
               'nav-item',
@@ -123,6 +123,10 @@ export default {
     currentUtility: String,
     googleCredentials: Object,
     disableBack: Boolean,
+    disabledUtilities: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -166,7 +170,11 @@ export default {
   },
   computed: {
     UtilityTypes: () => photoUtilities,
-    NavItems: () => navItems,
+    enabledUtilities() {
+      return navItems.filter(
+        (navItem) => !this.disabledUtilities.includes(navItem.value)
+      );
+    },
   },
 };
 </script>

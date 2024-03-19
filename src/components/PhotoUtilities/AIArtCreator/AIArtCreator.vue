@@ -148,12 +148,15 @@ import PhotoService from "@/services/PhotoService";
 import PhotoListItem from "../PhotoViewer/PhotoListItem.vue";
 import PhotoWindow from "../components/PhotoWindow.vue";
 import UTDTextArea from "@/components/UTDTextArea";
-import AIArtParams from "@/constants/AIArtParams";
 
 export default {
   name: "AIArtCreator",
   props: {
     utdCredentials: Object,
+    aiArtParams: {
+      type: Array,
+      default: () => []
+    },
     defaultImages: {
       type: Array,
       default: () => [],
@@ -240,9 +243,6 @@ export default {
 
       return prompt;
     },
-  },
-  computed: {
-    aiArtParams: () => AIArtParams,
   },
 };
 </script>

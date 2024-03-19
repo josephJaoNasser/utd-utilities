@@ -8,6 +8,7 @@
       :current-utility="currentUtility"
       :google-credentials="googleCredentials"
       :disable-back="pageHistory?.length < 2"
+      :disabled-utilities="disabledUtilities"
       @utility-change="onUtilityChange"
       @uploader-toggled="toggleUploader"
       @create-album-toggled="toggleCreateAlbum"
@@ -20,6 +21,7 @@
       :current-utility="currentUtility"
       :google-credentials="googleCredentials"
       :disable-back="pageHistory?.length < 2"
+      :disabled-utilities="disabledUtilities"
       @utility-change="onUtilityChange"
       @uploader-toggled="toggleUploader"
       @create-album-toggled="toggleCreateAlbum"
@@ -77,14 +79,12 @@
         @load="(e) => (moments = e)"
         @photo-selected="onSelect"
       />
-      <GoogleDriveViewer
-        v-if="currentUtility === UtilityTypes.googleDrive"
-        :credentials="googleCredentials"
-      />
+
       <AIArtCreator
         v-if="currentUtility === UtilityTypes.ai"
         class="w-100"
         :utd-credentials="utdCredentials"
+        :ai-art-params="aiArtParams"
         :default-images="aiArt"
         @image-created="(e) => (aiArt = e)"
         @photo-selected="onSelect"
@@ -118,7 +118,6 @@ import SideNav from "./components/SideNav.vue";
 import MobileNav from "./components/MobileNav.vue";
 import Search from "./components/Search.vue";
 import { photoUtilities, utilities } from "@/constants/UtilityTypes";
-import GoogleDriveViewer from "./GoogleDriveViewer";
 import GoogleService from "@/services/GoogleService";
 
 export default {
@@ -126,6 +125,15 @@ export default {
   props: {
     utdCredentials: Object,
     googleCredentials: Object,
+    multiSelect: Boolean,
+    aiArtParams: {
+      type: Array,
+      default: () => [],
+    },
+    disabledUtilities: {
+      type: Array,
+      default: () => [],
+    },
     activeUtility: {
       type: String,
       default: photoUtilities.photo,
@@ -147,7 +155,6 @@ export default {
     SideNav,
     MobileNav,
     Search,
-    GoogleDriveViewer,
   },
   emits: ["photo-selected", "utility-change"],
   data() {
@@ -240,6 +247,18 @@ export default {
         this.$emit("utility-change", util);
       },
     },
+  },
+  mounted() {
+    if (this.disabledUtilities.includes(this.currentUtility)) {
+      for (const key in photoUtilities) {
+        if (
+          this.disabledUtilities.includes(this.currentUtility) &&
+          photoUtilities[key] !== photoUtilities.albumViewer
+        ) {
+          this.currentUtility = photoUtilities[key];
+        }
+      }
+    }
   },
 };
 </script>
