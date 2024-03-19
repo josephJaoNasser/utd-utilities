@@ -22,6 +22,7 @@
       class="d-sm-none"
       :current-utility="currentUtility"
       :google-credentials="googleCredentials"
+      :disable-back="pageHistory.length < 2"
       @utility-change="onUtilityChange"
       @uploader-toggled="toggleUploader"
       @create-album-toggled="toggleCreateAlbum"
@@ -33,6 +34,7 @@
       class="d-none d-sm-block"
       :current-utility="currentUtility"
       :google-credentials="googleCredentials"
+      :disable-back="pageHistory.length < 2"
       @utility-change="onUtilityChange"
       @uploader-toggled="toggleUploader"
       @create-album-toggled="toggleCreateAlbum"
@@ -152,6 +154,14 @@ export default {
     organizationId: Number,
     googleCredentials: Object,
     token: String,
+    activeUtility: {
+      type: String,
+      default: photoUtilities.photo,
+    },
+  },
+  model: {
+    prop: "activeUtility",
+    event: "utility-change",
   },
   components: {
     PhotoViewer,
@@ -167,13 +177,13 @@ export default {
     Search,
     GoogleDriveViewer,
   },
-  emits: ["photo-selected"],
+  emits: ["photo-selected", "utility-change"],
   data() {
     return {
-      currentUtility: photoUtilities.photo,
+      activeTab: this.activeUtility,
       showUploader: false,
       showCreateAlbum: false,
-      pageHistory: [photoUtilities.photo],
+      pageHistory: [this.activeUtility],
       pageHistoryIndex: 0,
       photos: [],
       albums: [],
@@ -247,7 +257,18 @@ export default {
     },
   },
   computed: {
-    UtilityTypes: () => photoUtilities,
+    UtilityTypes() {
+      return photoUtilities;
+    },
+    currentUtility: {
+      get() {
+        return this.activeTab;
+      },
+      set(util) {
+        this.activeTab = util;
+        this.$emit("utility-change", util);
+      },
+    },
   },
   mounted() {
     const url = window.location.href;

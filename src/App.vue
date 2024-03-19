@@ -11,6 +11,7 @@
       :organization-id="credentials.organizationId"
       :token="credentials.token"
       :google-credentials="googleCredentials"
+      :active-utility="testActiveUtility"
       @photo-selected="handlePhotoSelect"
     />
 
@@ -34,6 +35,7 @@
 import UTDButton from "./components/UTDButton";
 import PhotoUtilities from "./components/PhotoUtilities";
 import BlockUtilities from "./components/BlockUtilities/BlockUtilities.vue";
+import { photoUtilities, utilities } from "@/constants/UtilityTypes";
 
 export default {
   name: "App",
@@ -41,6 +43,7 @@ export default {
   data() {
     return {
       selectedPhoto: null,
+      testActiveUtility: photoUtilities.album,
     };
   },
   methods: {

@@ -1,6 +1,12 @@
 <template>
   <div class="photo-utilities__mobile-nav d-flex justify-content-between">
-    <UTDButton small type="light" @click="$emit('back')">
+    <UTDButton
+      :disabled="disableBack"
+      :style="disableBack ? 'opacity: 0.2' : ''"
+      small
+      type="light"
+      @click="$emit('back')"
+    >
       <b-icon-chevron-left></b-icon-chevron-left>
     </UTDButton>
     <div class="d-flex">
@@ -78,6 +84,7 @@ export default {
   props: {
     currentUtility: String,
     googleCredentials: Object,
+    disableBack: Boolean,
   },
   data() {
     return {

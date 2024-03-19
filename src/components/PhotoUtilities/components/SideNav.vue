@@ -7,9 +7,11 @@
       <div>
         <div class="border-bottom pb-2 mb-2">
           <UTDButton
+            :disabled="disableBack"
             small
             type="light"
             class="mb-2 w-100"
+            :style="disableBack ? 'opacity: 0.2' : ''"
             @click="$emit('back')"
           >
             <b-icon-chevron-left></b-icon-chevron-left>
@@ -120,6 +122,7 @@ export default {
   props: {
     currentUtility: String,
     googleCredentials: Object,
+    disableBack: Boolean,
   },
   data() {
     return {
