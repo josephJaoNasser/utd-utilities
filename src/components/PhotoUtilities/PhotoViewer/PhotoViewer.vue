@@ -15,8 +15,7 @@
       <Search
         class="w-full"
         :searchSource="SearchSource.photos"
-        :token="token"
-        :userId="userId"
+        :utd-credentials="utdCredentials"
         @search-start="handleSearchStart"
         @search-complete="handleSearchComplete"
         @search-end="handleSearchEnd"
@@ -229,9 +228,7 @@ export default {
     Search,
   },
   props: {
-    token: String,
-    userId: Number,
-    organizationId: Number,
+    utdCredentials: Object,
     selectedAlbum: Object,
     photos: {
       type: Array,
@@ -269,10 +266,10 @@ export default {
       this.isPhotosLoading = true;
 
       try {
-        const UTD = new PhotoService(this.token);
+        const UTD = new PhotoService(this.utdCredentials.token);
         const { rows } = await UTD.getPhotos({
-          userId: this.userId,
-          accountId: this.organizationId,
+          userId: this.utdCredentials.userId,
+          accountId: this.utdCredentials.organizationId,
           limit: PHOTOS_PER_PAGE,
           offset: this.photos.length,
         });
@@ -289,7 +286,7 @@ export default {
     async setAlbumImage() {
       this.isSettingAlbumImage = true;
       try {
-        const UTD = new PhotoService(this.token);
+        const UTD = new PhotoService(this.utdCredentials.token);
         const res = await UTD.editAlbum(this.selectedAlbum.id.toString(), {
           albumImage: this.selectedPhoto.url,
         });

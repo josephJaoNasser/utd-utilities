@@ -150,10 +150,11 @@ import UTDInput from "@/components/UTDInput";
 export default {
   name: "Uploader",
   props: {
-    token: String,
+    // token: String,
+    // organizationId: Number,
+    // accountId: Number,
+    utdCredentials: Object,
     show: Boolean,
-    organizationId: Number,
-    accountId: Number,
     albumId: String,
     siteId: String,
   },
@@ -223,8 +224,8 @@ export default {
     packagePhoto(file) {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("userId", this.accountId);
-      formData.append("accountId", this.organizationId);
+      formData.append("userId", this.utdCredentials.userId);
+      formData.append("accountId", this.utdCredentials.organizationId);
 
       return formData;
     },
@@ -241,7 +242,7 @@ export default {
       }
 
       try {
-        const UTD = new PhotoService(this.token);
+        const UTD = new PhotoService(this.utdCredentials.token);
         const photos = this.files.map((fileObj) => ({
           file: this.packagePhoto(fileObj.file),
           index: fileObj.index,
@@ -265,7 +266,7 @@ export default {
         if (this.albumId) {
           const uploadPromises = photos.map((photoObj) =>
             UTD.addAlbumPhotos({
-              accountId: this.accountId,
+              accountId: this.utdCredentials.organizationId,
               albumId: this.albumId,
               photos: [photoObj.file],
               siteId: this.siteId,

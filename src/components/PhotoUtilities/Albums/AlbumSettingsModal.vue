@@ -56,10 +56,8 @@ export default {
   name: "CreateAlbum",
   props: {
     show: Boolean,
-    token: String,
-    accountId: Number,
+    utdCredentials: Object,
     albumDetails: Object,
-    organizationId: Number,
   },
   components: {
     UTDButton,
@@ -77,7 +75,7 @@ export default {
     async handleUpdateAlbum() {
       this.isUpdatingAlbum = true;
       try {
-        const UTD = new PhotoService();
+        const UTD = new PhotoService(this.utdCredentials.token);
         const res = await UTD.editAlbum(this.albumDetails.id.toString(), {
           albumName: this.albumName,
           albumDescription: this.albumDescription,

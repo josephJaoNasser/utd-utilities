@@ -153,7 +153,7 @@ import AIArtParams from "@/constants/AIArtParams";
 export default {
   name: "AIArtCreator",
   props: {
-    token: String,
+    utdCredentials: Object,
     defaultImages: {
       type: Array,
       default: () => [],
@@ -187,7 +187,7 @@ export default {
 
       try {
         this.images = [];
-        const UTD = new PhotoService(this.token);
+        const UTD = new PhotoService(this.utdCredentials.token);
         const { payload } = await UTD.generateAIImages(prompt, 11);
 
         this.images = payload.data;

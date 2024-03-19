@@ -30,7 +30,7 @@
             v-for="album in filteredMoments"
             :key="album.id"
             class="p-2"
-            @click="selectedAlbum = album"
+            @click="$emit('album-select', album)"
           >
             <div class="card bg-dark text-white border-0 utd-utilities__album">
               <div class="position-relative img-container">
@@ -57,16 +57,16 @@
       </b-col>
     </b-container>
 
-    <AlbumViewer
+    <!-- <AlbumViewer
       v-else
       class="h-100"
-      :token="this.token"
+      :token="utdCredentials.token"
       :selected-album="selectedAlbum"
       :organization-id="organizationId"
       @photo-selected="onSelect"
       @back="selectedAlbum = null"
       @album-details-updated="handleAlbumDetailsUpdate"
-    />
+    /> -->
   </b-container>
 </template>
 
@@ -79,13 +79,11 @@ import AlbumViewer from "../Albums/AlbumViewer.vue";
 export default {
   name: "Moments",
   props: {
+    utdCredentials: Object,
     defaultMoments: {
       type: Array,
       default: () => [],
     },
-    token: String,
-    accountId: Number,
-    organizationId: Number,
   },
   components: { UTDInput, PhotoService, UTDButton, AlbumViewer },
   emits: ["load", "onSelect"],
@@ -101,8 +99,8 @@ export default {
     async getMoments() {
       this.isMomentsLoading = true;
       try {
-        const UTD = new PhotoService(this.token);
-        const { payload } = await UTD.getMoments(this.accountId);
+        const UTD = new PhotoService(this.utdCredentials.token);
+        const { payload } = await UTD.getMoments(this.utdCredentials.userId);
 
         this.moments = payload;
         this.$emit("load", payload);
@@ -112,11 +110,11 @@ export default {
       this.isMomentsLoading = false;
     },
 
-    handleAlbumDetailsUpdate({ albumName, albumDescription, albumImage }) {
-      this.selectedAlbum.albumImage = albumImage;
-      this.selectedAlbum.albumName = albumName;
-      this.selectedAlbum.albumDescription = albumDescription;
-    },
+    // handleAlbumDetailsUpdate({ albumName, albumDescription, albumImage }) {
+    //   this.selectedAlbum.albumImage = albumImage;
+    //   this.selectedAlbum.albumName = albumName;
+    //   this.selectedAlbum.albumDescription = albumDescription;
+    // },
 
     onSelect(e) {
       this.$emit("photo-selected", e);

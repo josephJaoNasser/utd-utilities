@@ -5,7 +5,7 @@
     </b-container>
     <b-container v-else fluid class="photo-viewer-container p-0">
       <PhotoViewer
-        :token="token"
+        :utd-credentials="utdCredentials"
         :photos="formattedGallery"
         :selected-album="selectedAlbum"
         @photo-selected="onSelect"
@@ -62,19 +62,16 @@
       </PhotoViewer>
     </b-container>
     <Uploader
-      :token="token"
       :show="showUploader"
-      :account-id="accountId"
-      :organization-id="organizationId"
-      site-id="ef6c9ff73237e166d797df0b8ded24f5"
+      :utd-credentials="utdCredentials"
+      :site-id="SITE_ID_REMOVE_DURING_PRODUCTION"
       :album-id="selectedAlbum.encryptedId"
       @close="showUploader = false"
       @upload-completed="handleUploadComplete"
     />
     <AlbumSettingsModal
       :show="showAlbumSettings"
-      :account-id="accountId"
-      :organization-id="organizationId"
+      :utd-credentials="utdCredentials"
       :album-details="selectedAlbum"
       @album-updated="handleAlbumDetailsUpdate"
       @close="showAlbumSettings = false"
@@ -95,9 +92,7 @@ export default {
   name: "AlbumViewer",
   components: { PhotoViewer, UTDButton, Uploader, AlbumSettingsModal },
   props: {
-    token: String,
-    accountId: Number,
-    organizationId: Number,
+    utdCredentials: Object,
     selectedAlbum: {
       type: Object,
       default: () => {},
@@ -117,7 +112,7 @@ export default {
     async getAlbumPhotos() {
       this.isPhotosLoading = true;
       try {
-        const UTD = new PhotoService(this.token);
+        const UTD = new PhotoService(this.utdCredentials.token);
         const albumData = await UTD.getAlbumGallery(
           this.selectedAlbum.encryptedId,
           SITE_ID_REMOVE_DURING_PRODUCTION
@@ -132,7 +127,7 @@ export default {
 
     async setAlbumImage(url) {
       try {
-        const UTD = new PhotoService(this.token);
+        const UTD = new PhotoService(this.utdCredentials.token);
         const res = await UTD.editAlbum(this.selectedAlbum.id.toString(), {
           albumImage: url,
         });
@@ -197,6 +192,10 @@ export default {
         thumbnail: image.imageThumbnail || image.thumbnail,
         url: image.image,
       }));
+    },
+
+    SITE_ID_REMOVE_DURING_PRODUCTION() {
+      return SITE_ID_REMOVE_DURING_PRODUCTION;
     },
   },
   async mounted() {

@@ -62,19 +62,17 @@
 import UTDButton from "@/components/UTDButton";
 import UTDInput from "@/components/UTDInput";
 import PhotoService from "@/services/PhotoService.js";
-import AlbumViewer from "./AlbumViewer.vue";
 
 export default {
   name: "Albums",
   props: {
+    utdCredentials: Object,
     defaultAlbums: {
       type: Array,
       default: () => [],
     },
-    token: String,
-    accountId: Number,
   },
-  components: { UTDInput, UTDButton, AlbumViewer },
+  components: { UTDInput, UTDButton },
   emits: ["load", "photo-selected", "album-select"],
   data() {
     return {
@@ -86,8 +84,8 @@ export default {
     async getAlbums() {
       this.isAlbumsLoading = true;
       try {
-        const UTD = new PhotoService(this.token);
-        const { payload } = await UTD.getAlbums(this.accountId);
+        const UTD = new PhotoService(this.utdCredentials.token);
+        const { payload } = await UTD.getAlbums(this.utdCredentials.userId);
         this.albums = payload;
         this.$emit("load", payload);
       } catch (e) {

@@ -1,20 +1,5 @@
 <template>
-  <b-container v-if="isRedirect" class="text-center p-4">
-    <b-icon-check-circle-fill
-      font-scale="5"
-      class="text-success mb-3"
-    ></b-icon-check-circle-fill>
-    <p>
-      Connected successfully! Window will close in
-      {{ redirectCountDown }} seconds...
-    </p>
-    <UTDButton type="light" onclick="window.close()">
-      <b-icon-x></b-icon-x>
-      Close now
-    </UTDButton>
-  </b-container>
   <b-container
-    v-else
     fluid
     class="p-0 m-0 utd-utilities__photo-utilities d-flex h-100 position-relative"
   >
@@ -22,7 +7,7 @@
       class="d-sm-none"
       :current-utility="currentUtility"
       :google-credentials="googleCredentials"
-      :disable-back="pageHistory.length < 2"
+      :disable-back="pageHistory?.length < 2"
       @utility-change="onUtilityChange"
       @uploader-toggled="toggleUploader"
       @create-album-toggled="toggleCreateAlbum"
@@ -34,7 +19,7 @@
       class="d-none d-sm-block"
       :current-utility="currentUtility"
       :google-credentials="googleCredentials"
-      :disable-back="pageHistory.length < 2"
+      :disable-back="pageHistory?.length < 2"
       @utility-change="onUtilityChange"
       @uploader-toggled="toggleUploader"
       @create-album-toggled="toggleCreateAlbum"
@@ -49,9 +34,7 @@
       <!-- Main section -->
       <PhotoViewer
         v-if="currentUtility === UtilityTypes.photo"
-        :token="token"
-        :user-id="accountId"
-        :organization-id="organizationId"
+        :utd-credentials="utdCredentials"
         :photos="JSON.parse(JSON.stringify(photos))"
         @load="(e) => (photos = [...photos, ...e])"
         @photo-selected="onSelect"
@@ -71,8 +54,7 @@
         v-if="currentUtility === UtilityTypes.album"
         id="utd-utilities__album"
         class="w-100"
-        :token="token"
-        :account-id="accountId"
+        :utd-credentials="utdCredentials"
         :default-albums="albums"
         @load="(e) => (albums = e)"
         @photo-selected="onSelect"
@@ -80,10 +62,8 @@
       />
       <AlbumViewer
         v-if="currentUtility === UtilityTypes.albumViewer"
-        :token="token"
+        :utd-credentials="utdCredentials"
         :selected-album="selectedAlbum"
-        :account-id="accountId"
-        :organization-id="organizationId"
         @photo-selected="onSelect"
         @back="selectedAlbum = null"
         @album-details-updated="handleAlbumDetailsUpdate"
@@ -91,12 +71,11 @@
       <Moments
         v-if="currentUtility === UtilityTypes.moments"
         class="w-100"
-        :token="token"
-        :account-id="accountId"
-        :organization-id="organizationId"
+        :utd-credentials="utdCredentials"
+        :default-moments="moments"
+        @album-select="handleAlbumSelect"
         @load="(e) => (moments = e)"
         @photo-selected="onSelect"
-        :default-moments="moments"
       />
       <GoogleDriveViewer
         v-if="currentUtility === UtilityTypes.googleDrive"
@@ -105,25 +84,21 @@
       <AIArtCreator
         v-if="currentUtility === UtilityTypes.ai"
         class="w-100"
-        :token="token"
+        :utd-credentials="utdCredentials"
         :default-images="aiArt"
         @image-created="(e) => (aiArt = e)"
         @photo-selected="onSelect"
       />
     </b-container>
     <Uploader
-      :token="token"
       :show="showUploader"
-      :account-id="accountId"
-      :organization-id="organizationId"
+      :utd-credentials="utdCredentials"
       @close="showUploader = false"
       @upload-completed="handleUploadComplete"
     />
     <CreateAlbum
-      :token="token"
       :show="showCreateAlbum"
-      :account-id="accountId"
-      :organization-id="organizationId"
+      :utd-credentials="utdCredentials"
       @close="showCreateAlbum = false"
       @album-created="handleAlbumCreate"
     />
@@ -144,16 +119,13 @@ import MobileNav from "./components/MobileNav.vue";
 import Search from "./components/Search.vue";
 import { photoUtilities, utilities } from "@/constants/UtilityTypes";
 import GoogleDriveViewer from "./GoogleDriveViewer";
-import urlQueryToJson from "@/helpers/urlQueryToJson";
 import GoogleService from "@/services/GoogleService";
 
 export default {
   name: "PhotoUtilities",
   props: {
-    accountId: Number,
-    organizationId: Number,
+    utdCredentials: Object,
     googleCredentials: Object,
-    token: String,
     activeUtility: {
       type: String,
       default: photoUtilities.photo,
@@ -191,7 +163,6 @@ export default {
       aiArt: [],
       selectedAlbum: null,
       isRedirect: false,
-      redirectCountDown: 0,
     };
   },
   methods: {
@@ -269,33 +240,6 @@ export default {
         this.$emit("utility-change", util);
       },
     },
-  },
-  mounted() {
-    const url = window.location.href;
-
-    const [querySegment] = new URL(url).hash.split("/");
-    const queries = urlQueryToJson(querySegment.substring(1));
-
-    if (queries?.state) {
-      queries.state = JSON.parse(queries.state);
-    }
-
-    if (queries?.access_token) {
-      this.isRedirect =
-        queries.state && queries.state.utilityType === utilities.photo;
-
-      window.opener.postMessage({ ...queries, code: "utd_utils_gauth" });
-    }
-    if (this.isRedirect) {
-      this.redirectCountDown = 3;
-      let countdownInterval = setInterval(() => {
-        this.redirectCountDown -= 1;
-        if (!this.redirectCountDown) {
-          clearInterval(countdownInterval);
-          window.close();
-        }
-      }, 1000);
-    }
   },
 };
 </script>

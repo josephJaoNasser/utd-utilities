@@ -7,12 +7,10 @@
     /> -->
 
     <PhotoUtilities
-      :accountId="credentials.accountId"
-      :organization-id="credentials.organizationId"
-      :token="credentials.token"
+      :utdCredentials="credentials"
       :google-credentials="googleCredentials"
-      :active-utility="testActiveUtility"
       @photo-selected="handlePhotoSelect"
+      v-model="testActiveUtility"
     />
 
     <!-- <b-container fluid class="mt-5">
@@ -56,8 +54,8 @@ export default {
     credentials() {
       return {
         token: process.env.VUE_APP_TOKEN || "",
-        accountId: +process.env.VUE_APP_ACCOUNT_ID || null,
-        organizationId: +process.env.VUE_APP_ORGANIZATION_ID || null,
+        userId: +process.env.VUE_APP_ACCOUNT_ID || null, // userId
+        organizationId: +process.env.VUE_APP_ORGANIZATION_ID || null, // accountId
       };
     },
 

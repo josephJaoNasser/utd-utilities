@@ -31,8 +31,7 @@ export default {
       type: String,
       default: "Search...",
     },
-    token: String,
-    userId: Number,
+    utdCredentials: Object,
     hideCloseButton: Boolean,
   },
   components: {
@@ -57,8 +56,8 @@ export default {
       this.isSearching = true;
       this.$emit("search-start");
       const Search = new SearchHelper({
-        accountId: this.accountId,
-        token: this.token,
+        accountId: this.utdCredentials.userId,
+        token: this.utdCredentials.token,
         searchString: this.searchString,
       });
 
