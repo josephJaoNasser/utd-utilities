@@ -8,6 +8,7 @@
         :utd-credentials="utdCredentials"
         :photos="formattedGallery"
         :selected-album="selectedAlbum"
+        :multi-select="multiSelect"
         @photo-selected="onSelect"
         @album-image-updated="handleAlbumImageUpdate"
       >
@@ -93,6 +94,7 @@ export default {
   components: { PhotoViewer, UTDButton, Uploader, AlbumSettingsModal },
   props: {
     utdCredentials: Object,
+    multiSelect: Boolean,
     selectedAlbum: {
       type: Object,
       default: () => {},

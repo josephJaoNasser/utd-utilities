@@ -56,17 +56,6 @@
         </b-row>
       </b-col>
     </b-container>
-
-    <!-- <AlbumViewer
-      v-else
-      class="h-100"
-      :token="utdCredentials.token"
-      :selected-album="selectedAlbum"
-      :organization-id="organizationId"
-      @photo-selected="onSelect"
-      @back="selectedAlbum = null"
-      @album-details-updated="handleAlbumDetailsUpdate"
-    /> -->
   </b-container>
 </template>
 
@@ -86,7 +75,7 @@ export default {
     },
   },
   components: { UTDInput, PhotoService, UTDButton, AlbumViewer },
-  emits: ["load", "onSelect"],
+  emits: ["load"],
   data() {
     return {
       moments: this.defaultMoments,
@@ -108,16 +97,6 @@ export default {
         console.log(e);
       }
       this.isMomentsLoading = false;
-    },
-
-    // handleAlbumDetailsUpdate({ albumName, albumDescription, albumImage }) {
-    //   this.selectedAlbum.albumImage = albumImage;
-    //   this.selectedAlbum.albumName = albumName;
-    //   this.selectedAlbum.albumDescription = albumDescription;
-    // },
-
-    onSelect(e) {
-      this.$emit("photo-selected", e);
     },
   },
   computed: {

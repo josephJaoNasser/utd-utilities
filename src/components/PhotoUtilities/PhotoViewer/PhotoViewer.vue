@@ -7,6 +7,7 @@
       fluid
       :class="['sticky-top border-bottom']"
       :style="headerStyle"
+      ref="header"
     >
       <slot name="header" :toggleSearch="toggleSearch"> </slot>
     </b-container>
@@ -19,7 +20,7 @@
         @search-start="handleSearchStart"
         @search-complete="handleSearchComplete"
         @search-end="handleSearchEnd"
-        @close="showSearch = false"
+        @close="onSearchClose"
       />
     </div>
 
@@ -70,14 +71,17 @@
             <b-col
               v-for="photo in photos"
               class="photo-grid-item p-1"
-              @click="selectedPhoto = photo"
               :key="photo.id"
             >
               <PhotoListItem
                 class="h-100"
                 :photoDetails="photo"
-                :active="!!selectedPhoto && selectedPhoto.id === photo.id"
-                @quick-select="$emit('photo-selected', photo)"
+                :show-set-album-cover="!!selectedAlbum"
+                :active="isPhotoActive(photo)"
+                @click="onSelect(photo)"
+                @album-cover-set="setAlbumImage(photo)"
+                @quick-select="$emit('photo-selected', [photo])"
+                @quick-edit="openEditSection(photo)"
               />
             </b-col>
           </b-row>
@@ -96,14 +100,18 @@
             <b-col
               v-for="photo in searchResults"
               class="photo-grid-item p-1"
-              @click="selectedPhoto = photo"
+              @click="onSelect(photo)"
               :key="photo.id"
             >
               <PhotoListItem
                 class="h-100"
                 :photoDetails="photo"
-                :active="!!selectedPhoto && selectedPhoto.id === photo.id"
-                @quick-select="$emit('photo-selected', photo)"
+                :active="isPhotoActive(photo)"
+                :show-set-album-cover="!!selectedAlbum"
+                @click="onSelect(photo)"
+                @album-cover-set="setAlbumImage(photo)"
+                @quick-select="$emit('photo-selected', [photo])"
+                @quick-edit="openEditSection(photo)"
               />
             </b-col>
           </b-row>
@@ -136,16 +144,17 @@
           <PhotoDetails
             v-if="!isPhotosLoading"
             class="utd-utilities__photoDetails pt-3"
-            :photo-details="selectedPhoto"
+            :photo-details="editingPhoto"
             @close="showEditSection = false"
-            @photo-selected="onSelect"
+            @photo-selected="onSelectConfirm"
           />
         </b-col>
 
         <b-container
-          v-if="selectedPhoto"
+          v-if="selectedPhotos.length"
           fluid
           class="utd-utilities__photo-actions"
+          ref="photoActions"
         >
           <div class="d-flex">
             <div class="border-right pr-2 mr-2">
@@ -155,7 +164,7 @@
                 class="mr-2"
                 @click="
                   () => {
-                    selectedPhoto = null;
+                    selectedPhotos = [];
                     showEditSection = false;
                   }
                 "
@@ -165,18 +174,19 @@
               </UTDButton>
             </div>
             <UTDButton
+              v-if="selectedPhotos.length < 2"
               type="light"
               size="sm"
               class="mr-2"
-              @click="toggleEditSection"
+              @click="openEditSection(selectedPhotos[0])"
             >
               <b-icon-pencil class="mr-1"></b-icon-pencil>
               <span class="d-none d-sm-inline-block">Edit details</span>
             </UTDButton>
             <UTDButton
-              v-if="selectedAlbum"
+              v-if="selectedAlbum && selectedPhotos.length < 2"
               :loading="isSettingAlbumImage"
-              @click="setAlbumImage"
+              @click="setAlbumImage(selectedPhotos[0])"
               type="light"
               size="sm"
               class="mr-2"
@@ -184,9 +194,9 @@
               <b-icon-image class="mr-1"></b-icon-image>
               <span class="d-none d-sm-inline-block">Set album cover</span>
             </UTDButton>
-            <UTDButton size="sm" @click="onSelect">
+            <UTDButton size="sm" @click="onSelectConfirm">
               <b-icon-plus class="mr-1"></b-icon-plus>
-              <span class="d-none d-sm-inline-block">Add to page</span>
+              <span class="d-none d-sm-inline-block">Add photos</span>
             </UTDButton>
           </div>
         </b-container>
@@ -199,9 +209,9 @@
         checkBreakpoint(windowWidth) === 'sm'
       "
       class="utd-utilities__photoDetails-desktop pt-3 shadow"
-      :photo-details="selectedPhoto"
-      @close="showEditSection = false"
-      @photo-selected="onSelect"
+      :photo-details="editingPhoto"
+      @close="closeEditSection"
+      @photo-selected="onSelectConfirm"
     />
   </b-container>
 </template>
@@ -230,6 +240,7 @@ export default {
   props: {
     utdCredentials: Object,
     selectedAlbum: Object,
+    multiSelect: Boolean,
     photos: {
       type: Array,
       default: () => [],
@@ -246,7 +257,8 @@ export default {
   },
   data() {
     return {
-      selectedPhoto: null,
+      editingPhoto: null,
+      selectedPhotos: [],
       showEditSection: false,
       isPhotosLoading: false,
       isSettingAlbumImage: false,
@@ -283,16 +295,16 @@ export default {
       this.isPhotosLoading = false;
     },
 
-    async setAlbumImage() {
+    async setAlbumImage(photoDetails) {
       this.isSettingAlbumImage = true;
       try {
         const UTD = new PhotoService(this.utdCredentials.token);
         const res = await UTD.editAlbum(this.selectedAlbum.id.toString(), {
-          albumImage: this.selectedPhoto.url,
+          albumImage: photoDetails.url,
         });
 
         if (res.success) {
-          this.$emit("album-image-updated", this.selectedPhoto.url);
+          this.$emit("album-image-updated", photoDetails.url);
         }
       } catch (e) {
         console.log(e);
@@ -300,12 +312,48 @@ export default {
       this.isSettingAlbumImage = false;
     },
 
-    onSelect() {
-      this.$emit("photo-selected", this.selectedPhoto);
+    onSelectConfirm() {
+      this.$emit("photo-selected", this.selectedPhotos);
     },
 
-    toggleEditSection() {
-      this.showEditSection = !this.showEditSection;
+    onSelect(photoDetails) {
+      if (!this.multiSelect) {
+        this.selectedPhotos = [photoDetails];
+        return;
+      }
+
+      const selectedPhotoIndex = this.selectedPhotos.findIndex(
+        (photo) => photo.id === photoDetails.id
+      );
+
+      if (selectedPhotoIndex < 0) {
+        this.selectedPhotos.push(photoDetails);
+      } else {
+        this.selectedPhotos.splice(selectedPhotoIndex, 1);
+      }
+    },
+
+    onSearchClose() {
+      this.showSearch = false;
+      this.isUsingSearch = false;
+    },
+
+    isPhotoActive(photoDetails) {
+      const selectedPhotoIndex = this.selectedPhotos.findIndex(
+        (photo) => photo.id === photoDetails.id
+      );
+
+      return selectedPhotoIndex > -1;
+    },
+
+    openEditSection(photoDetails) {
+      this.editingPhoto = photoDetails;
+      this.showEditSection = true;
+    },
+
+    closeEditSection() {
+      this.editingPhoto = null;
+      this.showEditSection = false;
     },
 
     setWindowWidth() {
@@ -324,7 +372,7 @@ export default {
     handleSearchStart() {
       this.isUsingSearch = true;
       this.isSearching = true;
-      this.selectedPhoto = null;
+      this.selectedPhotos = [];
     },
 
     handleSearchEnd(e) {
@@ -362,9 +410,9 @@ export default {
       };
     },
     gridContainerStyle() {
-      let offsetHeight = this.selectedAlbum ? 230 : 70;
+      let offsetHeight = this.selectedAlbum ? 210 : 70;
 
-      if (this.selectedPhoto) {
+      if (this.selectedPhotos.length) {
         offsetHeight += 50;
       }
 
@@ -375,7 +423,7 @@ export default {
     photoDetailsContainerStyle() {
       let offsetHeight = this.selectedAlbum ? 210 : 75;
 
-      if (this.selectedPhoto) {
+      if (this.selectedPhotos.length) {
         offsetHeight += 50;
       }
 

@@ -73,7 +73,7 @@ export default {
     },
   },
   components: { UTDInput, UTDButton },
-  emits: ["load", "photo-selected", "album-select"],
+  emits: ["load"],
   data() {
     return {
       albums: this.defaultAlbums,
@@ -92,10 +92,6 @@ export default {
         console.log(e);
       }
       this.isAlbumsLoading = false;
-    },
-
-    onSelect(e) {
-      this.$emit("photo-selected", e);
     },
   },
   watch: {

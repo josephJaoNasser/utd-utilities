@@ -36,6 +36,7 @@
       <!-- Main section -->
       <PhotoViewer
         v-if="currentUtility === UtilityTypes.photo"
+        :multi-select="multiSelect"
         :utd-credentials="utdCredentials"
         :photos="JSON.parse(JSON.stringify(photos))"
         @load="(e) => (photos = [...photos, ...e])"
@@ -64,6 +65,7 @@
       />
       <AlbumViewer
         v-if="currentUtility === UtilityTypes.albumViewer"
+        :multi-select="multiSelect"
         :utd-credentials="utdCredentials"
         :selected-album="selectedAlbum"
         @photo-selected="onSelect"

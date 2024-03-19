@@ -5,6 +5,24 @@
         size="sm"
         type="dark"
         class="action-btn"
+        @click="$emit('quick-edit')"
+      >
+        <b-icon icon="pencil" font-scale="1"></b-icon>
+      </UTDButton>
+      <UTDButton
+        v-if="showSetAlbumCover"
+        size="sm"
+        type="dark"
+        class="action-btn"
+        @click="$emit('album-cover-set')"
+      >
+        <b-icon icon="image" font-scale="1"></b-icon>
+      </UTDButton>
+
+      <UTDButton
+        size="sm"
+        type="dark"
+        class="action-btn"
         @click="isPreview = true"
       >
         <b-icon icon="zoom-in" font-scale="1"></b-icon>
@@ -14,16 +32,18 @@
         <b-icon icon="plus" font-scale="1"></b-icon>
       </UTDButton>
     </div>
-    <b-img-lazy
-      :class="[
-        'cursor-pointer rounded border h-100',
-        active && 'img-active border-5 border-primary',
-      ]"
-      fluid-grow
-      blankColor="#bbb"
-      :src="url"
-      style="object-fit: cover"
-    />
+    <div class="h-100" @click="$emit('click')">
+      <b-img-lazy
+        :class="[
+          'cursor-pointer rounded border h-100',
+          active && 'img-active border-5 border-primary',
+        ]"
+        fluid-grow
+        blankColor="#bbb"
+        :src="url"
+        style="object-fit: cover"
+      />
+    </div>
     <ImageModal v-model="isPreview" :url="photoDetails?.url" />
   </div>
 </template>
@@ -38,9 +58,10 @@ export default {
     UTDButton,
     ImageModal,
   },
-  emits: ["click", "quick-select"],
+  emits: ["click", "quick-select", "quick-edit", "album-cover-set"],
   props: {
     photoDetails: Object,
+    showSetAlbumCover: Boolean,
     active: Boolean,
   },
   data() {
@@ -48,11 +69,6 @@ export default {
       isHovered: false,
       isPreview: false,
     };
-  },
-  methods: {
-    onClick() {
-      this.$emit("click");
-    },
   },
   computed: {
     url() {
@@ -80,8 +96,9 @@ export default {
     bottom: 0;
     position: absolute;
     display: flex;
+    flex-wrap: wrap;
     background-color: rgba($color: #fff, $alpha: 0.5);
-    justify-content: flex-end;
+    justify-content: center;
     gap: 5px;
   }
 
