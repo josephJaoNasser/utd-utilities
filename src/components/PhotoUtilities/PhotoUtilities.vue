@@ -91,9 +91,9 @@
             class="mb-3 pt-3 d-flex justify-content-between align-items-center"
           >
             <h2 class="font-weight-bold mb-0">{{ currentExtension.label }}</h2>
-            <UTDButton @click="slotProps.toggleSearch" type="light">
+            <!-- <UTDButton @click="slotProps.toggleSearch" type="light">
               <b-icon-search></b-icon-search>
-            </UTDButton>
+            </UTDButton> -->
           </div>
         </template>
       </PhotoViewer>
