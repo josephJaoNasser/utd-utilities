@@ -11,7 +11,7 @@
       :google-credentials="googleCredentials"
       :ai-art-params="aiArtParams"
       :multi-select="true"
-      v-model="testActiveUtility"
+      :extensions="testExtension"
       @photo-selected="handlePhotoSelect"
     />
 
@@ -37,6 +37,7 @@ import PhotoUtilities from "./components/PhotoUtilities";
 import BlockUtilities from "./components/BlockUtilities/BlockUtilities.vue";
 import { photoUtilities, utilities } from "@/constants/UtilityTypes";
 import AIArtParams from "./constants/AIArtParams";
+import testExtension from "./helpers/testExtension";
 
 export default {
   name: "App",
@@ -45,6 +46,8 @@ export default {
     return {
       selectedPhoto: null,
       testActiveUtility: photoUtilities.photo,
+      aiArtParams: AIArtParams,
+      testExtension: testExtension,
     };
   },
   methods: {
@@ -71,8 +74,6 @@ export default {
         // redirect_uri: process.env.VUE_APP_GOOGLE_REDIRECT_URI,
       };
     },
-
-    aiArtParams: () => AIArtParams,
   },
 };
 </script>

@@ -8,6 +8,7 @@
       :google-credentials="googleCredentials"
       :disable-back="pageHistory?.length < 2"
       :disabled-utilities="disabledUtilities"
+      :extensions="extensions"
       @utility-change="onUtilityChange"
       @uploader-toggled="toggleUploader"
       @create-album-toggled="toggleCreateAlbum"
@@ -77,6 +78,25 @@
         @image-created="(e) => (aiArt = e)"
         @photo-selected="onSelect"
       />
+      <PhotoViewer
+        v-if="!!currentExtension"
+        :multi-select="multiSelect"
+        :utd-credentials="utdCredentials"
+        :photos="JSON.parse(JSON.stringify(currentExtension.photos))"
+        @load="(e) => (photos = [...photos, ...e])"
+        @photo-selected="onSelect"
+      >
+        <template #header="slotProps">
+          <div
+            class="mb-3 pt-3 d-flex justify-content-between align-items-center"
+          >
+            <h2 class="font-weight-bold mb-0">{{ currentExtension.label }}</h2>
+            <UTDButton @click="slotProps.toggleSearch" type="light">
+              <b-icon-search></b-icon-search>
+            </UTDButton>
+          </div>
+        </template>
+      </PhotoViewer>
     </b-container>
     <Uploader
       :show="showUploader"
@@ -113,6 +133,10 @@ export default {
     utdCredentials: Object,
     googleCredentials: Object,
     multiSelect: Boolean,
+    extensions: {
+      type: Array,
+      default: () => [],
+    },
     aiArtParams: {
       type: Array,
       default: () => [],
@@ -233,6 +257,9 @@ export default {
         this.$emit("utility-change", util);
       },
     },
+    currentExtension() {
+      return this.extensions.find((ext) => ext.label === this.currentUtility);
+    },
   },
   mounted() {
     if (this.disabledUtilities.includes(this.currentUtility)) {
@@ -249,4 +276,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>././components/Nav/NavMenu.vuecomponents/Nav/SideNav.vue./components/Nav/MobileNav.vue
+<style scoped lang="scss"></style>

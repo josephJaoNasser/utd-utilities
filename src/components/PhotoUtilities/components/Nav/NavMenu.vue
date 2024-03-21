@@ -23,6 +23,10 @@ export default {
     googleCredentials: Object,
     disableBack: Boolean,
     isGoogleMultiSelect: Boolean,
+    extensions: {
+      type: Array,
+      default: () => [],
+    },
     disabledUtilities: {
       type: Array,
       default: () => [],
@@ -65,6 +69,14 @@ export default {
   },
   computed: {
     enabledUtilities() {
+      const formattedExtenssions = this.extensions.map((ext) => ({
+        label: ext.label,
+        icon: ext.icon,
+        value: ext.label,
+      }));
+      
+      navItems = [...navItems, ...formattedExtenssions];
+
       return navItems.filter(
         (navItem) => !this.disabledUtilities.includes(navItem.value)
       );
