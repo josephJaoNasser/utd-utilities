@@ -15,6 +15,7 @@ export default {
   name: "GooglePickerButton",
   props: {
     credentials: Object,
+    multiSelect: Boolean,
   },
   components: {
     UTDButton,
@@ -84,13 +85,18 @@ export default {
 
         const pickerBuilder = new google.picker.PickerBuilder()
           .enableFeature(google.picker.Feature.NAV_HIDDEN)
-          // .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
           .setAppId(this.credentials.project_id)
           .setOAuthToken(this.accessToken)
           .setDeveloperKey(this.credentials.api_key)
           .setCallback(this.pickerCallback)
           .hideTitleBar()
           .addView(view);
+
+        if (this.multiSelect) {
+          pickerBuilder.enableFeature(
+            google.picker.Feature.MULTISELECT_ENABLED
+          );
+        }
 
         this.$emit("build", pickerBuilder);
 
@@ -100,7 +106,7 @@ export default {
     },
     pickerCallback(data) {
       if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
-        this.$emit("picked", { photo: data.docs[0], token: this.accessToken });
+        this.$emit("picked", { photos: data.docs, token: this.accessToken });
       }
     },
     isLocalCredentialsValid() {

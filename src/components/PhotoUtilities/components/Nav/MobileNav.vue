@@ -16,7 +16,9 @@
           type="light"
           :class="[
             'nav-item',
-            props.currentUtility === item.value ? 'text-primary' : 'text-secondary',
+            props.currentUtility === item.value
+              ? 'text-primary'
+              : 'text-secondary',
           ]"
           @click="navEvents.onUtilityChange(item.value)"
         >
@@ -26,6 +28,7 @@
           type="light"
           :class="['nav-item', 'text-secondary']"
           :credentials="props.googleCredentials"
+          :multi-select="props.isGoogleMultiSelect"
           @picked="navEvents.handleGooglePickerPick"
         >
           <b-icon-google></b-icon-google>
@@ -81,10 +84,10 @@ export default {
   components: { UTDButton, GooglePickerButton },
   computed: {
     props() {
-      return this.navProps()
-    }
+      return this.navProps();
+    },
   },
-  inject: ["navProps", "navEvents"]
+  inject: ["navProps", "navEvents"],
 };
 </script>
 
@@ -92,6 +95,7 @@ export default {
 .photo-utilities {
   &__mobile-nav {
     position: absolute;
+    z-index: 1040;
     width: 100%;
     top: 0;
     display: flex;

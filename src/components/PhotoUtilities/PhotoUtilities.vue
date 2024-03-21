@@ -9,6 +9,7 @@
       :disable-back="pageHistory?.length < 2"
       :disabled-utilities="disabledUtilities"
       :extensions="extensions"
+      :is-google-multi-select="multiSelect"
       @utility-change="onUtilityChange"
       @uploader-toggled="toggleUploader"
       @create-album-toggled="toggleCreateAlbum"
@@ -230,15 +231,19 @@ export default {
 
     async handleGooglePickerPick(e) {
       try {
-        const { thumbnailLink } = await GoogleService.getDrivePhoto(
-          e.photo.id,
-          e.token
-        );
+        const { photos, token } = e;
+        const getPhotoPromises = photos.map((p) => {
+          return GoogleService.getDrivePhoto(p.id, token);
+        });
 
-        const sizeRegex = new RegExp(/=s\d+/, "g");
-        const imageUrl = thumbnailLink.replace(sizeRegex, "=s0");
+        const results = await Promise.all(getPhotoPromises);
+        const imgData = results.map(({ thumbnailLink }) => {
+          const sizeRegex = new RegExp(/=s\d+/, "g");
+          const imageUrl = thumbnailLink.replace(sizeRegex, "=s0");
+          return { url: imageUrl };
+        });
 
-        this.$emit("photo-selected", { url: imageUrl });
+        this.$emit("photo-selected", imgData);
       } catch (e) {
         console.log(e);
       }

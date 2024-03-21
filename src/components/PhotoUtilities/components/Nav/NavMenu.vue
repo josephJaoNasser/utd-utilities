@@ -1,8 +1,12 @@
 <template>
-  <div class="h-100" style="z-index: 1040">
+  <div class="h-100">
     <MobileNav class="d-sm-none" @back="$emit('back')" />
 
-    <SideNav class="d-none d-sm-block" @back="$emit('back')" />
+    <SideNav
+      class="d-none d-sm-block position-relative"
+      style="z-index: 1"
+      @back="$emit('back')"
+    />
   </div>
 </template>
 
@@ -74,7 +78,7 @@ export default {
         icon: ext.icon,
         value: ext.label,
       }));
-      
+
       navItems = [...navItems, ...formattedExtenssions];
 
       return navItems.filter(

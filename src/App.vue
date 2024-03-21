@@ -10,7 +10,7 @@
       :utdCredentials="credentials"
       :google-credentials="googleCredentials"
       :ai-art-params="aiArtParams"
-      :multi-select="true"
+      
       :extensions="testExtension"
       @photo-selected="handlePhotoSelect"
     />

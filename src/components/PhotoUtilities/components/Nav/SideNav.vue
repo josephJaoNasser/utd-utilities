@@ -89,6 +89,7 @@
               type="light"
               :class="['nav-item', 'mb-2', 'text-secondary']"
               :credentials="props.googleCredentials"
+              :multi-select="props.isGoogleMultiSelect"
               @picked="navEvents.handleGooglePickerPick"
             >
               <b-icon-google></b-icon-google>
