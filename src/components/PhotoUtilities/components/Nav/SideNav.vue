@@ -114,7 +114,7 @@
 
 <script>
 import UTDButton from "@/components/UTDButton/UTDButton.vue";
-import GooglePickerButton from "../GoogleDriveViewer/GooglePickerButton.vue";
+import GooglePickerButton from "./GooglePickerButton.vue";
 export default {
   name: "SideNav",
   components: { UTDButton, GooglePickerButton },

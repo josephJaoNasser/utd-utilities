@@ -102,12 +102,10 @@ import UTDButton from "../UTDButton";
 import Uploader from "./components/Uploader.vue";
 import CreateAlbum from "./components/CreateAlbum.vue";
 import Moments from "./Moments";
-import SideNav from "./components/SideNav.vue";
-import MobileNav from "./components/MobileNav.vue";
 import Search from "./components/Search.vue";
 import { photoUtilities, utilities } from "@/constants/UtilityTypes";
 import GoogleService from "@/services/GoogleService";
-import NavMenu from "./components/NavMenu.vue";
+import NavMenu from "./components/Nav/NavMenu.vue";
 
 export default {
   name: "PhotoUtilities",
@@ -142,8 +140,6 @@ export default {
     CreateAlbum,
     Moments,
     NavMenu,
-    SideNav,
-    MobileNav,
     Search,
   },
   emits: ["photo-selected", "utility-change"],
@@ -253,4 +249,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss"></style>././components/Nav/NavMenu.vuecomponents/Nav/SideNav.vue./components/Nav/MobileNav.vue
