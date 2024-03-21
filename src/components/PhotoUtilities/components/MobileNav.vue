@@ -104,7 +104,7 @@ export default {
     &-dropdown {
       list-style: none;
       top: 45px;
-      left: 0;
+      right: 0;
       background: white;
       padding: 0;
       border-radius: 5px;
@@ -131,7 +131,7 @@ export default {
         border-bottom: 10px solid transparent;
         border-left: 10px solid transparent;
         position: absolute;
-        left: 12.5px;
+        right: 12.5px;
         bottom: 70px;
         transform: rotate(315deg);
       }
