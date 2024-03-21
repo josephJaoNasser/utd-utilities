@@ -1,8 +1,8 @@
 <template>
   <div class="photo-utilities__mobile-nav d-flex justify-content-between">
     <UTDButton
-      :disabled="disableBack"
-      :style="disableBack ? 'opacity: 0.2' : ''"
+      :disabled="props.disableBack"
+      :style="props.disableBack ? 'opacity: 0.2' : ''"
       small
       type="light"
       @click="$emit('back')"
@@ -12,21 +12,21 @@
     <div class="d-flex">
       <div class="mobile-nav-items">
         <UTDButton
-          v-for="item in enabledUtilities"
+          v-for="item in props.enabledUtilities"
           type="light"
           :class="[
             'nav-item',
-            currentUtility === item.value ? 'text-primary' : 'text-secondary',
+            props.currentUtility === item.value ? 'text-primary' : 'text-secondary',
           ]"
-          @click="onUtilityChange(item.value)"
+          @click="navEvents.onUtilityChange(item.value)"
         >
           <b-icon :icon="item.icon"></b-icon>
         </UTDButton>
         <GooglePickerButton
           type="light"
           :class="['nav-item', 'text-secondary']"
-          :credentials="googleCredentials"
-          @picked="handleGooglePickerPick"
+          :credentials="props.googleCredentials"
+          @picked="navEvents.handleGooglePickerPick"
         >
           <b-icon-google></b-icon-google>
         </GooglePickerButton>
@@ -34,12 +34,12 @@
       <div class="position-relative">
         <div>
           <div class="border-left pl-2 ml-2">
-            <UTDButton block @click="toggleUploadMenu">
+            <UTDButton block @click="navEvents.toggleUploadMenu">
               <b-icon-plus></b-icon-plus>
             </UTDButton>
           </div>
           <ul
-            v-if="showUploadMenu"
+            v-if="props.showUploadMenu"
             class="photo-utilities__mobile-nav-dropdown text-primary position-absolute top-0"
             style="list-style: none"
           >
@@ -48,7 +48,7 @@
                 block
                 type="light"
                 class="text-primary px-3 py-2"
-                @click="toggleUploader"
+                @click="navEvents.toggleUploader"
               >
                 <b-icon-image class="mr-2"></b-icon-image>
                 Photo
@@ -59,7 +59,7 @@
                 block
                 type="light"
                 class="text-primary px-3 py-2"
-                @click="toggleCreateAlbum"
+                @click="navEvents.toggleCreateAlbum"
               >
                 <b-icon-images class="mr-2"></b-icon-images>
                 Album
@@ -75,69 +75,16 @@
 <script>
 import UTDButton from "@/components/UTDButton/UTDButton.vue";
 import GooglePickerButton from "../GoogleDriveViewer/GooglePickerButton.vue";
-import { photoUtilities } from "@/constants/UtilityTypes";
-import navItems from "./navItems";
 
 export default {
   name: "MobileNav",
   components: { UTDButton, GooglePickerButton },
-  props: {
-    currentUtility: String,
-    googleCredentials: Object,
-    disableBack: Boolean,
-    disabledUtilities: {
-      type: Array,
-      default: () => [],
-    },
-  },
-  data() {
-    return {
-      expandNav: false,
-      showUploadMenu: false,
-    };
-  },
-  emits: [
-    "utility-change",
-    "uploader-toggled",
-    "create-album-toggled",
-    "google-picker-pick",
-    "back",
-  ],
-  methods: {
-    onUtilityChange(type) {
-      this.$emit("utility-change", type);
-    },
-
-    toggleExpandNav() {
-      this.expandNav = !this.expandNav;
-    },
-
-    toggleUploadMenu() {
-      this.showUploadMenu = !this.showUploadMenu;
-    },
-
-    toggleCreateAlbum() {
-      this.$emit("create-album-toggled");
-      this.toggleUploadMenu();
-    },
-
-    toggleUploader() {
-      this.$emit("uploader-toggled");
-      this.toggleUploadMenu();
-    },
-
-    handleGooglePickerPick(e) {
-      this.$emit("google-picker-pick", e);
-    },
-  },
   computed: {
-    UtilityTypes: () => photoUtilities,
-    enabledUtilities() {
-      return navItems.filter(
-        (navItem) => !this.disabledUtilities.includes(navItem.value)
-      );
-    },
+    props() {
+      return this.navProps()
+    }
   },
+  inject: ["navProps", "navEvents"]
 };
 </script>
 
@@ -148,7 +95,6 @@ export default {
     width: 100%;
     top: 0;
     display: flex;
-    z-index: 1040;
     gap: 10px;
     align-items: center;
     padding: 5px;

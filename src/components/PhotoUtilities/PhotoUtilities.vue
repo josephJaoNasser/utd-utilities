@@ -3,21 +3,7 @@
     fluid
     class="p-0 m-0 utd-utilities__photo-utilities d-flex h-100 position-relative"
   >
-    <MobileNav
-      class="d-sm-none"
-      :current-utility="currentUtility"
-      :google-credentials="googleCredentials"
-      :disable-back="pageHistory?.length < 2"
-      :disabled-utilities="disabledUtilities"
-      @utility-change="onUtilityChange"
-      @uploader-toggled="toggleUploader"
-      @create-album-toggled="toggleCreateAlbum"
-      @google-picker-pick="handleGooglePickerPick"
-      @back="handleBack"
-    />
-
-    <SideNav
-      class="d-none d-sm-block"
+    <NavMenu
       :current-utility="currentUtility"
       :google-credentials="googleCredentials"
       :disable-back="pageHistory?.length < 2"
@@ -121,6 +107,7 @@ import MobileNav from "./components/MobileNav.vue";
 import Search from "./components/Search.vue";
 import { photoUtilities, utilities } from "@/constants/UtilityTypes";
 import GoogleService from "@/services/GoogleService";
+import NavMenu from "./components/NavMenu.vue";
 
 export default {
   name: "PhotoUtilities",
@@ -154,6 +141,7 @@ export default {
     Uploader,
     CreateAlbum,
     Moments,
+    NavMenu,
     SideNav,
     MobileNav,
     Search,
