@@ -42,11 +42,6 @@ export default {
     prop: "show",
     event: "toggle",
   },
-  // data() {
-  //   return {
-  //     showPreviewModal: false,
-  //   }
-  // },
   computed: {
     showPreviewModal: {
       get() {

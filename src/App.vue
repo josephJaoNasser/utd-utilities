@@ -1,19 +1,17 @@
 <template>
   <div id="app">
-    <!-- <BlockUtilities
-      :account-id="credentials.accountId"
-      :organization-id="credentials.organizationId"
-      :token="credentials.token"
-    /> -->
-
+    <BlockUtilities
+      :utd-credentials="credentials"
+      @block-selected="handleBlockSelect"
+    />
+    <!-- 
     <PhotoUtilities
       :utdCredentials="credentials"
       :google-credentials="googleCredentials"
       :ai-art-params="aiArtParams"
-      
-      :extensions="testExtension"
+      multi-select
       @photo-selected="handlePhotoSelect"
-    />
+    /> -->
 
     <!-- <b-container fluid class="mt-5">
       <button style="margin: 0 auto" @click="selectedPhoto = null">
@@ -54,6 +52,10 @@ export default {
     handlePhotoSelect(e) {
       console.log(e);
       this.selectedPhoto = e;
+    },
+
+    handleBlockSelect(e) {
+      console.log(e);
     },
   },
   computed: {

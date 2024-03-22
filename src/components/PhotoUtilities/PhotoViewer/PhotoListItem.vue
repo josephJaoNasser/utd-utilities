@@ -50,7 +50,7 @@
 
 <script>
 import UTDButton from "@/components/UTDButton";
-import ImageModal from "../components/ImageModal.vue";
+import ImageModal from "@/components/GeneralUIComponents/ImageModal.vue";
 
 export default {
   name: "PhotoListItem",

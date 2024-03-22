@@ -9,19 +9,9 @@
         <b-col
           v-for="block in blocks"
           class="p-2 cursor-pointer"
-          @click="handleBlockSelect(block)"
+          :key="block.id"
         >
-          <div class="border rounded p-0">
-            <div class="border-bottom">
-              <b-img
-                lazy
-                :src="block.screenshot"
-                class="w-100"
-                style="height: 150px; object-fit: contain"
-              />
-            </div>
-            <p class="p-2">{{ block.name }}</p>
-          </div>
+          <BlockListItem :block="block" @quick-select="handleBlockSelect" />
         </b-col>
       </b-row>
     </b-container>
@@ -29,6 +19,8 @@
 </template>
 
 <script>
+import BlockListItem from "./BlockListItem";
+
 export default {
   name: "BlocksViewer",
   props: {
@@ -37,6 +29,9 @@ export default {
       type: Array,
       defailt: () => [],
     },
+  },
+  components: {
+    BlockListItem,
   },
   emits: ["block-selected"],
   methods: {

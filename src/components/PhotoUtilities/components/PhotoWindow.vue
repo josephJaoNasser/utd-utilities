@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import ImageModal from "./ImageModal.vue";
+import ImageModal from "@/components/GeneralUIComponents/ImageModal.vue";
 
 export default {
   name: "PhotoWindow",
@@ -115,3 +115,4 @@ export default {
   }
 }
 </style>
+../../GeneralUIComponents/ImageModal.vue

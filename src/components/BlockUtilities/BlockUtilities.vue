@@ -25,16 +25,14 @@ import BlocksNav from "./components/BlocksNav.vue";
 export default {
   name: "BlockUtilities",
   props: {
-    accountId: Number,
-    organizationId: Number,
-    token: String,
+    utdCredentials: Object,
   },
   components: {
     UTDButton,
     BlocksNav,
     BlocksViewer,
   },
-  emits: ["blocks-selected"],
+  emits: ["block-selected"],
   data() {
     return {
       blocks: {},
@@ -44,11 +42,11 @@ export default {
   },
   methods: {
     async handleBlockSelect(block) {
-      this.$emit("blocks-selected", block);
+      this.$emit("block-selected", block);
     },
   },
   async mounted() {
-    const BlockServ = new BlockService(this.token);
+    const BlockServ = new BlockService(this.utdCredentials.token);
 
     try {
       const { blocks, categories } = await BlockServ.getBlocks();
