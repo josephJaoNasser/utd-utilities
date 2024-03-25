@@ -61,6 +61,7 @@ export default {
 
     handleLink() {
       this.$emit("image-linked", { url: this.url });
+      this.url = ""
       this.handleClose();
     },
   },
