@@ -150,9 +150,6 @@ import UTDInput from "@/components/UTDInput";
 export default {
   name: "Uploader",
   props: {
-    // token: String,
-    // organizationId: Number,
-    // accountId: Number,
     utdCredentials: Object,
     show: Boolean,
     albumId: String,

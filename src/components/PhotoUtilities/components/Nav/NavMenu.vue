@@ -41,6 +41,7 @@ export default {
     "uploader-toggled",
     "create-album-toggled",
     "google-picker-pick",
+    "url-select-toggled",
     "back",
   ],
   data() {
@@ -64,6 +65,11 @@ export default {
 
     toggleUploader() {
       this.$emit("uploader-toggled");
+      this.toggleUploadMenu();
+    },
+
+    toggleUrlSelect() {
+      this.$emit("url-select-toggled");
       this.toggleUploadMenu();
     },
 
@@ -103,6 +109,7 @@ export default {
         toggleUploadMenu: this.toggleUploadMenu,
         toggleCreateAlbum: this.toggleCreateAlbum,
         toggleUploader: this.toggleUploader,
+        toggleUrlSelect: this.toggleUrlSelect,
         handleGooglePickerPick: this.handleGooglePickerPick,
       },
     };

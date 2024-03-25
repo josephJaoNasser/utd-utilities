@@ -41,34 +41,10 @@
               <b-icon-plus></b-icon-plus>
             </UTDButton>
           </div>
-          <ul
+          <UploadMenu
             v-if="props.showUploadMenu"
             class="photo-utilities__mobile-nav-dropdown text-primary position-absolute top-0"
-            style="list-style: none"
-          >
-            <li>
-              <UTDButton
-                block
-                type="light"
-                class="text-primary px-3 py-2"
-                @click="navEvents.toggleUploader"
-              >
-                <b-icon-image class="mr-2"></b-icon-image>
-                Photo
-              </UTDButton>
-            </li>
-            <li>
-              <UTDButton
-                block
-                type="light"
-                class="text-primary px-3 py-2"
-                @click="navEvents.toggleCreateAlbum"
-              >
-                <b-icon-images class="mr-2"></b-icon-images>
-                Album
-              </UTDButton>
-            </li>
-          </ul>
+          />
         </div>
       </div>
     </div>
@@ -77,11 +53,12 @@
 
 <script>
 import UTDButton from "@/components/UTDButton/UTDButton.vue";
+import UploadMenu from "./UploadMenu.vue";
 import GooglePickerButton from "./GooglePickerButton.vue";
 
 export default {
   name: "MobileNav",
-  components: { UTDButton, GooglePickerButton },
+  components: { UTDButton, UploadMenu, GooglePickerButton },
   computed: {
     props() {
       return this.navProps();
@@ -136,7 +113,7 @@ export default {
         border-left: 10px solid transparent;
         position: absolute;
         right: 12.5px;
-        bottom: 70px;
+        top: -8px;
         transform: rotate(315deg);
       }
     }

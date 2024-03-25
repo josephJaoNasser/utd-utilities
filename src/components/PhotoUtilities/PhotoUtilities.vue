@@ -11,8 +11,9 @@
       :extensions="extensions"
       :is-google-multi-select="multiSelect"
       @utility-change="onUtilityChange"
-      @uploader-toggled="toggleUploader"
-      @create-album-toggled="toggleCreateAlbum"
+      @uploader-toggled="showUploader = true"
+      @create-album-toggled="showCreateAlbum = true"
+      @url-select-toggled="showUrlSelect = true"
       @google-picker-pick="handleGooglePickerPick"
       @back="handleBack"
     />
@@ -111,6 +112,11 @@
       @close="showCreateAlbum = false"
       @album-created="handleAlbumCreate"
     />
+    <UrlSelect
+      :show="showUrlSelect"
+      @close="showUrlSelect = false"
+      @image-linked="(e) => $emit('photo-selected', [e])"
+    />
   </b-container>
 </template>
 
@@ -122,6 +128,7 @@ import AIArtCreator from "./AIArtCreator/AIArtCreator.vue";
 import UTDButton from "../UTDButton";
 import Uploader from "./components/Uploader.vue";
 import CreateAlbum from "./components/CreateAlbum.vue";
+import UrlSelect from "./components/UrlSelect.vue";
 import Moments from "./Moments";
 import Search from "@/components/GeneralUIComponents/Search.vue";
 import { photoUtilities, utilities } from "@/constants/UtilityTypes";
@@ -166,6 +173,7 @@ export default {
     Moments,
     NavMenu,
     Search,
+    UrlSelect,
   },
   emits: ["photo-selected", "utility-change"],
   data() {
@@ -173,6 +181,7 @@ export default {
       activeTab: this.activeUtility,
       showUploader: false,
       showCreateAlbum: false,
+      showUrlSelect: false,
       pageHistory: [this.activeUtility],
       pageHistoryIndex: 0,
       photos: [],
@@ -200,14 +209,6 @@ export default {
 
     handleAlbumCreate(albumData) {
       this.albums.unshift(albumData);
-    },
-
-    toggleCreateAlbum() {
-      this.showCreateAlbum = true;
-    },
-
-    toggleUploader() {
-      this.showUploader = true;
     },
 
     handleBack() {

@@ -37,34 +37,10 @@
               Add Media
             </div>
           </UTDButton>
-          <ul
+          <UploadMenu
             v-if="props.showUploadMenu"
             class="photo-utilities__nav-dropdown text-primary position-absolute top-0"
-            style="list-style: none"
-          >
-            <li>
-              <UTDButton
-                block
-                type="light"
-                class="text-primary px-3 py-2"
-                @click="navEvents.toggleUploader"
-              >
-                <b-icon-image class="mr-2"></b-icon-image>
-                Photo
-              </UTDButton>
-            </li>
-            <li>
-              <UTDButton
-                block
-                type="light"
-                class="text-primary px-3 py-2"
-                @click="navEvents.toggleCreateAlbum"
-              >
-                <b-icon-images class="mr-2"></b-icon-images>
-                Album
-              </UTDButton>
-            </li>
-          </ul>
+          />
         </div>
         <div class="d-flex flex-column">
           <UTDButton
@@ -116,9 +92,11 @@
 <script>
 import UTDButton from "@/components/UTDButton/UTDButton.vue";
 import GooglePickerButton from "./GooglePickerButton.vue";
+import UploadMenu from "./UploadMenu.vue";
+
 export default {
   name: "SideNav",
-  components: { UTDButton, GooglePickerButton },
+  components: { UTDButton, UploadMenu, GooglePickerButton },
   data() {
     return {
       expandNav: false,
@@ -126,8 +104,8 @@ export default {
   },
   computed: {
     props() {
-      return this.navProps()
-    }
+      return this.navProps();
+    },
   },
   inject: ["navProps", "navEvents"],
 };
@@ -146,7 +124,7 @@ export default {
       list-style: none;
       z-index: 1040;
       top: 0;
-      right: -110px;
+      left: 45px;
       background: white;
       padding: 0;
       border-radius: 5px;
