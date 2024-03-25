@@ -22,6 +22,11 @@
         <b-container fluid v-if="!albums.length">
           <p class="text-center p-4">
             <i> You have no albums... </i>
+            <br /><br />
+            <UTDButton @click="$emit('create-album-toggle')">
+              <b-icon-plus></b-icon-plus>
+              Create an album
+            </UTDButton>
           </p>
         </b-container>
         <b-row cols="1" cols-md="2" cols-lg="3" no-gutters>
@@ -73,10 +78,11 @@ export default {
     },
   },
   components: { UTDInput, UTDButton },
-  emits: ["load"],
+  emits: ["load", "create-album-toggle"],
   data() {
     return {
       albums: this.defaultAlbums,
+      showCreateAlbum: false,
       isAlbumsLoading: false,
     };
   },

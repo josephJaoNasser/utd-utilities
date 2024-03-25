@@ -51,6 +51,7 @@
         @load="(e) => (albums = e)"
         @photo-selected="onSelect"
         @album-select="handleAlbumSelect"
+        @create-album-toggle="showCreateAlbum = true"
       />
       <AlbumViewer
         v-if="currentUtility === UtilityTypes.albumViewer"
