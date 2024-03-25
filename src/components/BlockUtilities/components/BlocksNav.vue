@@ -1,6 +1,6 @@
 <template>
   <div class="block-utilities__nav border-right">
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column h-100 overflow-auto">
       <div v-for="category in categories">
         <UTDButton
           type="light"

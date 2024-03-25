@@ -3,11 +3,12 @@
     <BlocksNav
       class="position-sticky"
       style="top: 0px"
-      :categories="categories"
+      :categories="categoryStrings"
       @category-change="(e) => (currentCategory = e)"
     />
     <b-container fluid class="px-0">
       <BlocksViewer
+        :utd-credentials="utdCredentials"
         :current-category="currentCategory"
         :blocks="blocks[currentCategory]"
         @block-selected="handleBlockSelect"
@@ -42,17 +43,26 @@ export default {
   },
   methods: {
     async handleBlockSelect(block) {
-      this.$emit("block-selected", block);
+      const BlockServ = new BlockService(this.utdCredentials.token);
+      try {
+        const blockCodeData = await BlockServ.getBlockCode(block.id);
+        this.$emit("block-selected", blockCodeData);
+      } catch (e) {}
+    },
+  },
+  computed: {
+    categoryStrings() {
+      return this.categories.map((catBlocks) => catBlocks.category);
     },
   },
   async mounted() {
     const BlockServ = new BlockService(this.utdCredentials.token);
 
     try {
-      const { blocks, categories } = await BlockServ.getBlocks();
+      const { blocks, categoryBlocks } = await BlockServ.getBlocks();
       this.blocks = blocks;
-      this.categories = categories;
-      this.currentCategory = categories[0];
+      this.categories = categoryBlocks.map((blck) => blck);
+      this.currentCategory = categoryBlocks[0].category;
     } catch (e) {
       console.log(e);
     }

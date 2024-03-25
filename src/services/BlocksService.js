@@ -16,22 +16,22 @@ class BlockService extends UTDService {
 
       const categories = [];
       for (const block of data.payload) {
-        if (!categories.includes(block.category)) {
-          categories.push(block.category);
+        if (!categories.find((cat) => cat.category === block.category)) {
+          categories.push(block);
         }
       }
 
       const sortedBlocks = {};
 
-      for (const category of categories) {
-        sortedBlocks[category] = data.payload.filter(
-          (block) => block.category === category
+      for (const categoryBlock of categories) {
+        sortedBlocks[categoryBlock.category] = data.payload.filter(
+          (block) => block.category === categoryBlock.category
         );
       }
 
       return {
         blocks: sortedBlocks,
-        categories,
+        categoryBlocks: categories,
       };
     } catch (e) {
       throw e;
@@ -49,7 +49,11 @@ class BlockService extends UTDService {
         `https://www.uptodateconnect.com/api/v1/site-builder/blocks/${blockId}`
       );
 
-      return data;
+      if (!success) {
+        throw new Error("Error while getting block code");
+      }
+
+      return data.payload;
     } catch (e) {
       throw e;
     }

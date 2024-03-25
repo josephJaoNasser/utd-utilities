@@ -4,28 +4,14 @@
       :utd-credentials="credentials"
       @block-selected="handleBlockSelect"
     />
-    <!-- 
-    <PhotoUtilities
+
+    <!-- <PhotoUtilities
       :utdCredentials="credentials"
       :google-credentials="googleCredentials"
       :ai-art-params="aiArtParams"
       multi-select
       @photo-selected="handlePhotoSelect"
     /> -->
-
-    <!-- <b-container fluid class="mt-5">
-      <button style="margin: 0 auto" @click="selectedPhoto = null">
-        Clear image
-      </button>
-      <br />
-      <br />
-      <img
-        v-if="selectedPhoto"
-        :src="selectedPhoto?.url"
-        referrerPolicy="no-referrer"
-        class="w-100"
-      />
-    </b-container> -->
   </div>
 </template>
 

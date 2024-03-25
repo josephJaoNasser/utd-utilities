@@ -1,3 +1,4 @@
+import BlockService from "@/services/BlocksService";
 import PhotoService from "@/services/PhotoService";
 
 class SearchHelper {
@@ -14,6 +15,10 @@ class SearchHelper {
 
   albums() {
     const UTDPhotoService = new PhotoService(this.token);
+  }
+
+  blocks() {
+    const UTDBlockService = new BlockService(this.token);
   }
 }
 

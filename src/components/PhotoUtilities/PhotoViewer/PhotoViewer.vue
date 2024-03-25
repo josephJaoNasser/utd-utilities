@@ -222,7 +222,7 @@ import PhotoListItem from "./PhotoListItem.vue";
 import UTDInput from "@/components/UTDInput";
 import EditPhoto from "./EditPhoto.vue";
 import UTDButton from "@/components/UTDButton";
-import Search from "../components/Search.vue";
+import Search from "@/components/GeneralUIComponents/Search.vue";
 import SearchSource from "@/constants/SearchSource";
 import { PHOTOS_PER_PAGE } from "@/constants/PaginationVariables";
 import { checkBreakpoint } from "@/helpers/breakpoints";

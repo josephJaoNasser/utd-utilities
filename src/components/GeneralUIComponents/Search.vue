@@ -21,7 +21,7 @@
 <script>
 import UTDInput from "@/components/UTDInput";
 import UTDButton from "@/components/UTDButton";
-import SearchHelper from "@/helpers/searchHelper";
+import SearchHelper from "@/helpers/SearchHelper";
 
 export default {
   name: "Search",
@@ -85,3 +85,4 @@ export default {
 </script>
 
 <style lang="scss" scoped></style>
+@/helpers/SearchHelper

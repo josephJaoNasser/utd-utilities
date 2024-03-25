@@ -123,7 +123,7 @@ import UTDButton from "../UTDButton";
 import Uploader from "./components/Uploader.vue";
 import CreateAlbum from "./components/CreateAlbum.vue";
 import Moments from "./Moments";
-import Search from "./components/Search.vue";
+import Search from "@/components/GeneralUIComponents/Search.vue";
 import { photoUtilities, utilities } from "@/constants/UtilityTypes";
 import GoogleService from "@/services/GoogleService";
 import NavMenu from "./components/Nav/NavMenu.vue";
