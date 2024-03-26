@@ -49,9 +49,7 @@
             :class="[
               'nav-item',
               'mb-2',
-              props.currentUtility === item.value
-                ? 'text-primary'
-                : 'text-secondary',
+              props.currentUtility === item.value ? 'text-primary' : 'text-secondary',
             ]"
             @click="navEvents.onUtilityChange(item.value)"
           >
@@ -99,13 +97,25 @@ export default {
   components: { UTDButton, UploadMenu, GooglePickerButton },
   data() {
     return {
-      expandNav: false,
+      expandNav: true,
     };
+  },
+  mounted() {
+    this.checkBreakpoint();
+    window.addEventListener("resize", this.checkBreakpoint);
   },
   computed: {
     props() {
       return this.navProps();
     },
+  },
+  methods: {
+    checkBreakpoint() {
+      this.expandNav = window.innerWidth >= 992;
+    },
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.checkBreakpoint);
   },
   inject: ["navProps", "navEvents"],
 };

@@ -163,7 +163,12 @@ export default {
     .card-body {
       display: flex;
       flex-direction: column;
-      justify-content: end;
+      justify-content: center;
+      align-items: center;
+
+      .card-title {
+        margin-bottom: 0;
+      }
     }
   }
 }
