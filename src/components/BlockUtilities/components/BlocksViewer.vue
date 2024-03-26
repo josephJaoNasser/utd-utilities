@@ -31,7 +31,11 @@
           class="p-2 cursor-pointer"
           :key="block.id"
         >
-          <BlockListItem :block="block" @quick-select="handleBlockSelect" />
+          <BlockListItem
+            :block="block"
+            :utd-credentials="utdCredentials"
+            @quick-select="handleBlockSelect"
+          />
         </b-col>
       </b-row>
     </b-container>

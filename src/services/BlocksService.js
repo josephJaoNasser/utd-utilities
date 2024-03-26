@@ -49,7 +49,7 @@ class BlockService extends UTDService {
         `https://www.uptodateconnect.com/api/v1/site-builder/blocks/${blockId}`
       );
 
-      if (!success) {
+      if (!data.success) {
         throw new Error("Error while getting block code");
       }
 

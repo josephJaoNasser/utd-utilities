@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import BlockService from "@/services/BlocksService";
 import BlocksViewer from "./components/BlocksViewer";
 import UTDButton from "../UTDButton/UTDButton.vue";
 import BlocksNav from "./components/BlocksNav.vue";
+import BlockService from "@/services/BlocksService";
 
 export default {
   name: "BlockUtilities",
@@ -43,11 +43,7 @@ export default {
   },
   methods: {
     async handleBlockSelect(block) {
-      const BlockServ = new BlockService(this.utdCredentials.token);
-      try {
-        const blockCodeData = await BlockServ.getBlockCode(block.id);
-        this.$emit("block-selected", blockCodeData);
-      } catch (e) {}
+      this.$emit("block-selected", block);
     },
   },
   computed: {

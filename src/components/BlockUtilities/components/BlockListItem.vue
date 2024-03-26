@@ -14,7 +14,8 @@
         <UTDButton
           size="sm"
           class="action-btn"
-          @click="$emit('quick-select', block)"
+          :loading="isFetchingBlockCode"
+          @click="handleBlockSelect"
         >
           <b-icon icon="plus" font-scale="1"></b-icon>
         </UTDButton>
@@ -34,10 +35,12 @@
 <script>
 import UTDButton from "@/components/UTDButton/UTDButton.vue";
 import ImageModal from "@/components/GeneralUIComponents/ImageModal.vue";
+import BlockService from "@/services/BlocksService";
 
 export default {
   name: "BlockListItem",
   props: {
+    utdCredentials: Object,
     block: Object,
   },
   components: {
@@ -48,7 +51,21 @@ export default {
   data() {
     return {
       showPreviewModal: false,
+      isFetchingBlockCode: false,
     };
+  },
+  methods: {
+    async handleBlockSelect() {
+      this.isFetchingBlockCode = true;
+      const BlockServ = new BlockService(this.utdCredentials.token);
+      try {
+        const blockCodeData = await BlockServ.getBlockCode(this.block.id);
+        this.$emit("quick-select", blockCodeData);
+      } catch (e) {
+        console.log(e);
+      }
+      this.isFetchingBlockCode = false;
+    },
   },
 };
 </script>

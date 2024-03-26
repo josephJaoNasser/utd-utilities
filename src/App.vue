@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <!-- <BlockUtilities
+    <BlockUtilities
       :utd-credentials="credentials"
       @block-selected="handleBlockSelect"
-    /> -->
+    />
 
-    <PhotoUtilities
+    <!-- <PhotoUtilities
       :utdCredentials="credentials"
       :google-credentials="googleCredentials"
       :ai-art-params="aiArtParams"
       multi-select
       @photo-selected="handlePhotoSelect"
-    />
+    /> -->
   </div>
 </template>
 
