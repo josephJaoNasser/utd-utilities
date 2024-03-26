@@ -4,7 +4,7 @@
 
     <SideNav
       class="d-none d-sm-block position-relative"
-      style="z-index: 1"
+      style="z-index: 1020"
       @back="$emit('back')"
     />
   </div>

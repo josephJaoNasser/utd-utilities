@@ -13,8 +13,17 @@
         <b-icon-x></b-icon-x>
       </b-button>
     </div>
+    <!-- <div class="mb-3 d-flex align-content-center border-bottom pb-3">
+      <span class="mr-2">Drag and drop/select files</span>
+      <span>
+        <b-form-checkbox v-model="isUploadViaUrl" name="check-button" switch>
+          Upload via URL
+        </b-form-checkbox>
+      </span>
+    </div> -->
     <div
       ref="dropArea"
+      v-if="!isUploadViaUrl"
       :class="['drop-area', files.length && 'has-image']"
       @dragover.prevent="handleDragOver"
       @dragleave.prevent="handleDragLeave"
@@ -126,12 +135,12 @@
         </div>
       </div>
     </div>
-    <!-- <div class="mt-3">
+    <!-- <div v-else class="mt-3">
       <label for="urlUpload">
         <h5 class="mb-0">Import using image URL</h5>
       </label>
       <p>Insert image by pasting the image URL of the image</p>
-      <UTDInput icon="link" />
+      <UTDInput icon="link" v-model="imgUrl" />
     </div> -->
     <div class="mt-3">
       <UTDButton @click="handleUpload" :loading="isUploading">
@@ -160,7 +169,9 @@ export default {
   data() {
     return {
       files: [],
+      imgUrl: "",
       isUploading: false,
+      isUploadViaUrl: false,
     };
   },
   computed: {
@@ -240,10 +251,6 @@ export default {
 
       try {
         const UTD = new PhotoService(this.utdCredentials.token);
-        const photos = this.files.map((fileObj) => ({
-          file: this.packagePhoto(fileObj.file),
-          index: fileObj.index,
-        }));
 
         const onUploadComplete = (data, index) => {
           this.$emit("upload-completed", data.payload);
@@ -259,6 +266,26 @@ export default {
             this.files[fileIndex].hasError = true;
           }
         };
+
+        const photos = this.files.map((fileObj) => ({
+          file: this.packagePhoto(fileObj.file),
+          index: fileObj.index,
+        }));
+
+        if (this.isUploadViaUrl) {
+          try {
+            await UTD.uploadImageViaURL(
+              this.imgUrl,
+              this.utdCredentials.userId
+            );
+            this.$emit("upload-completed", {
+              url: this.imgUrl,
+            });
+          } catch (e) {
+            console.log(e);
+          }
+          return;
+        }
 
         if (this.albumId) {
           const uploadPromises = photos.map((photoObj) =>
