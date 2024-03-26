@@ -28,30 +28,26 @@
 
             <div class="">
               <div class="mb-4" v-for="param in aiArtParams">
-                <div class="font-weight-bold mb-2">{{ param.name }}</div>
                 <div class="d-flex flex-wrap">
-                  <div
-                    :class="[
-                      'ai-art-param mr-3 d-flex align-items-center mb-2 position-relative',
-                      isStyleActive(param.name, style.prompt) ? 'active' : '',
-                    ]"
-                    v-for="style in param.params"
-                    @click="onStyleSelect(param.name, style.prompt)"
-                  >
-                    <img :src="style.image" class="mr-2" />
-                    <small>
-                      <b>{{ style.name }}</b>
-                    </small>
-                    <b-badge
-                      v-if="isStyleActive(param.name, style.prompt)"
-                      variant="primary"
-                      class="position-absolute"
-                      style="top: -5px; right: -5px"
-                    >
-                      <b-icon-check></b-icon-check>
-                    </b-badge>
-                  </div>
+                  <div class="font-weight-bold mb-2">{{ param.name }}</div>
                 </div>
+
+                <v-select
+                  :options="param.params"
+                  :placeholder="`Select ${param.name}...`"
+                  label="name"
+                  :clearable="false"
+                  @input="(e) => onStyleSelect(param.name, e.prompt)"
+                >
+                  <template slot="option" slot-scope="option">
+                    <div
+                      class="ai-art-param d-flex align-items-center position-relative"
+                    >
+                      <img :src="option.image" />
+                      {{ option.name }}
+                    </div>
+                  </template>
+                </v-select>
               </div>
             </div>
 
@@ -155,7 +151,7 @@ export default {
     utdCredentials: Object,
     aiArtParams: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     defaultImages: {
       type: Array,
@@ -253,25 +249,14 @@ export default {
   overflow: auto;
 
   .ai-art-param {
-    padding: 5px 8px;
-    border: 1px solid #ddd;
     border-radius: 5px;
-
-    &.active {
-      outline: 2px solid #2a99d6;
-    }
-
-    &:hover {
-      background-color: #eee;
-      cursor: pointer;
-    }
-
+    padding: 4px 0;
     img {
-      height: 40px;
-      width: 40px;
+      margin-right: 15px;
+      height: 30px;
+      width: 30px;
       border-radius: 3px;
     }
   }
 }
 </style>
-../components/PhotoWindow.vue
