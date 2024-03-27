@@ -14,24 +14,32 @@ class BlockService extends UTDService {
         `https://www.uptodateconnect.com/api/v1/site-builder/blocks?version=2&developer=true`
       );
 
+      const AllBlocksString = "All blocks";
+
       const categories = [];
       for (const block of data.payload) {
-        if (!categories.find((cat) => cat.category === block.category)) {
-          categories.push(block);
+        if (!categories.includes(block.category)) {
+          categories.push(block.category);
         }
       }
 
-      const sortedBlocks = {};
+      categories.sort();
 
-      for (const categoryBlock of categories) {
-        sortedBlocks[categoryBlock.category] = data.payload.filter(
-          (block) => block.category === categoryBlock.category
+      const sortedBlocks = {
+        [AllBlocksString]: data.payload,
+      };
+
+      for (const category of categories) {
+        sortedBlocks[category] = data.payload.filter(
+          (block) => block.category === category
         );
       }
 
+      categories.unshift(AllBlocksString);
+
       return {
         blocks: sortedBlocks,
-        categoryBlocks: categories,
+        categories,
       };
     } catch (e) {
       throw e;
@@ -54,6 +62,29 @@ class BlockService extends UTDService {
       }
 
       return data.payload;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  /**
+   * Searches for blocks given a search string
+   * @param {string} searchString
+   * @returns
+   */
+  async searchBlocks(searchString) {
+    const url = `https://www.uptodateconnect.com/api/v1/site-builder/blocks?version=2&developer=true&search=${searchString}`;
+
+    try {
+      const { data } = await this.axiosInstance.get(url);
+      return data;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async getBlocksByCategory() {
+    try {
     } catch (e) {
       throw e;
     }

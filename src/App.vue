@@ -72,6 +72,10 @@ export default {
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-vue/src/index.scss";
 
+:root {
+  --primary: #2a99d6;
+}
+
 html,
 #app {
   height: 100%;

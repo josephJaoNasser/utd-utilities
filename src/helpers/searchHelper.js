@@ -19,6 +19,7 @@ class SearchHelper {
 
   blocks() {
     const UTDBlockService = new BlockService(this.token);
+    return UTDBlockService.searchBlocks(this.searchString);
   }
 }
 

@@ -70,6 +70,7 @@ export default {
         }
 
         this.$emit("search-complete", {
+          searchString: this.searchString,
           searchSource: this.searchSource,
           result: payload,
         });

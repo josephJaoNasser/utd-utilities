@@ -27,7 +27,9 @@
         style="height: 150px; object-fit: contain"
       />
     </div>
-    <p class="p-2">{{ block.name }}</p>
+    <div class="p-2">
+      <b>{{ block.name }}</b>
+    </div>
     <ImageModal v-model="showPreviewModal" :url="block.screenshot" />
   </div>
 </template>
