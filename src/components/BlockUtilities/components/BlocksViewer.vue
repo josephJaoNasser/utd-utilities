@@ -90,7 +90,8 @@ export default {
     offsetHeight() {
       if (!this.isMounted) return "";
 
-      const offsetHeight = this.$refs.blockViewerHeader.clientHeight + 1;
+      // const offsetHeight = this.$refs.blockViewerHeader.clientHeight + 1;
+      const offsetHeight = 70;
       return `height: calc(100% - ${offsetHeight}px)`;
     },
   },
